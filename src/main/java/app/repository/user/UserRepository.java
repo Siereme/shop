@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface UserRepository  extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(value = "select distinct u from User u left join fetch u.role r left join fetch r.permissions where u.id = :id")
+    @Query(value = "select distinct u from User u left join fetch u.role r left join fetch r.permissions left join fetch r.users where u.id = :id")
     Optional<User> findById(Long id);
 
-    @Query(value = "select distinct u from User u left join fetch u.role r left join fetch r.permissions where u.email = :email")
+    @Query(value = "select distinct u from User u left join fetch u.role r left join fetch r.permissions left join fetch r.users where u.email = :email")
     Optional<User> findByEmail(String email);
 }

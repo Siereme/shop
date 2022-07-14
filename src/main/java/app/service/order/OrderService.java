@@ -7,6 +7,7 @@ import app.model.order.Payment;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartItem;
 import app.model.user.User;
+import app.model.user.UserStatus;
 import app.repository.order.OrderRepository;
 import app.repository.payment.PaymentRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
@@ -31,30 +32,36 @@ public class OrderService {
 
 
     @Transactional
-    public void createOrder(OrderDTO orderDTO) {
+    public Order createOrder(OrderDTO orderDTO) {
         User user = userService.findUser(orderDTO.getUser());
         ShoppingCart cart = cartRepo.findByUserId(user.getId());
-        if(cart == null) return;
+        if(cart == null) return null;
 
-        if(Objects.equals(user.getStatus(), UserVariables.STATUS_UNVERIFIED)){
-            user = userService.updateUser(user);
+        if(Objects.equals(user.getStatus(), UserStatus.ANONYMOUS.name())){
+            user = userService.updateUser(orderDTO.getUser());
         }
 
         Order order = new Order();
         order.setUser(cart.getUser());
+
         Set<ShoppingCartItem> cartItems = cart.getCartItems();
+        Double total = 0d;
         for (ShoppingCartItem cartItem : cartItems) {
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setOrder(order);
             orderProduct.setProduct(cartItem.getProduct());
             orderProduct.setCount(cartItem.getCount());
             order.addOrderProduct(orderProduct);
+            total += orderProduct.getProduct().getPrice() * orderProduct.getCount();
         }
+
+        order.setTotal(total);
+
         Payment payment = paymentRepo.findById(orderDTO.getPayment().getId()).orElse(null);
         order.setPayment(payment);
 
-        orderRepo.saveAndFlush(order);
         cartService.refreshShoppingCart(user.getId());
+        return orderRepo.saveAndFlush(order);
     }
 
     @Transactional

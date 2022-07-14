@@ -2,6 +2,7 @@ package app.model.order;
 
 import app.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {"role", "status", "password"}, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -34,6 +35,8 @@ public class Order {
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     private Payment payment;
 
+    @Column(name = "total")
+    private Double total;
 
     public void addOrderProduct(OrderProduct orderProduct) {
         this.orderItems.add(orderProduct);

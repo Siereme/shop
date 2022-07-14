@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,7 +28,7 @@ public class ShoppingCart {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval=true)
-    private Set<ShoppingCartItem> cartItems;
+    private Set<ShoppingCartItem> cartItems = new HashSet<>();
 
     public void setCartItem(ShoppingCartItem cartItem) {
         cartItems.add(cartItem);

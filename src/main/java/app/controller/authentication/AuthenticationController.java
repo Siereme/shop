@@ -1,9 +1,12 @@
 package app.controller.authentication;
 
+import app.model.dto.user.AuthenticationUserDTO;
 import app.model.user.User;
-import app.repository.user.UserRepository;
 import app.model.dto.authentication.AuthenticationRequestDTO;
 import app.security.JwtTokenProvider;
+import app.service.authentication.AuthenticationService;
+import app.service.user.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,47 +20,52 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/auth")
 public class AuthenticationController {
 
+    @Value("${jwt.header}")
+    private String authorizationHeader;
+
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
+    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationService authenticationService, UserService userService, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
+        this.authenticationService = authenticationService;
+        this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> authenticate(AuthenticationRequestDTO request){
+    public ResponseEntity<AuthenticationUserDTO> authenticate(@RequestBody AuthenticationRequestDTO request){
         try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            User user = userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
-            String token = jwtTokenProvider.createToken(request.getEmail(), user.getRole().getName());
-            Map<Object, Object> response = new HashMap<>();
-            response.put("email", request.getEmail());
-            response.put("token", token);
+            String email = request.getEmail();
+            String password = request.getPassword();
 
-            return ResponseEntity.ok(response);
+            AuthenticationUserDTO authenticationUserDTO = authenticationService.authenticate(email, password);
+
+            return ResponseEntity.ok().body(authenticationUserDTO);
         }catch (AuthenticationException ex){
-            return new ResponseEntity<>("Invalid email or password", HttpStatus.FORBIDDEN);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
     @PostMapping(value = "/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response){
-        CookieClearingLogoutHandler cookieClearingLogoutHandler = new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY);
-        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
-        cookieClearingLogoutHandler.logout(request, response, null);
-        securityContextLogoutHandler.logout(request, response, null);
-        securityContextLogoutHandler.setClearAuthentication(true);
+        authenticationService.logout(request, response);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/info")
+    public ResponseEntity<?> info(HttpServletRequest request){
+        String token = request.getHeader(authorizationHeader);
+        User user = userService.findByEmail(jwtTokenProvider.getUsername(token))
+                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+        AuthenticationUserDTO authenticationUserDTO = new AuthenticationUserDTO(token, user);
+        return ResponseEntity.ok().body(authenticationUserDTO);
     }
 }

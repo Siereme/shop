@@ -3,6 +3,7 @@ package app.service.shoppingCart;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartItem;
+import app.model.user.User;
 import app.repository.product.ProductRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import org.apache.log4j.Logger;
@@ -23,6 +24,12 @@ public class ShoppingCartService {
         this.productRepository = productRepository;
     }
 
+
+    public ShoppingCart addShoppingCart(User user){
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        return cartRepository.save(shoppingCart);
+    }
 
     @Transactional
     public void setCartItem(Long userId, Long productId, int count) {

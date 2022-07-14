@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class SecurityUser implements UserDetails {
 
@@ -61,10 +62,10 @@ public class SecurityUser implements UserDetails {
     public static UserDetails fromUser(User user) {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(),
-                user.getStatus().equals(UserStatus.ACTIVE.name()),
-                user.getStatus().equals(UserStatus.ACTIVE.name()),
-                user.getStatus().equals(UserStatus.ACTIVE.name()),
-                user.getStatus().equals(UserStatus.ACTIVE.name()),
+                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
+                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
+                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
+                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
                 user.getRole().getAuthorities()
         );
     }

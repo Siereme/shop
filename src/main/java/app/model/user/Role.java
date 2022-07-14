@@ -1,5 +1,6 @@
 package app.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -24,12 +25,16 @@ public class Role {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(name = "role_permission",
             joinColumns = {@JoinColumn(name = "role_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "permission_id", nullable = false)}
     )
     Set<UserPermission> permissions;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="role", cascade = CascadeType.MERGE)
+    private Set<User> users;
 
     public Set<SimpleGrantedAuthority> getAuthorities() {
         return getPermissions().stream()

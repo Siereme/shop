@@ -1,13 +1,10 @@
 package app.controller.user;
 
-import app.model.order.Order;
 import app.model.user.User;
 import app.repository.user.UserRepository;
+import app.service.user.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,9 +13,11 @@ import java.util.List;
 public class UserController {
 
     private final UserRepository userRepo;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepo) {
+    public UserController(UserRepository userRepo, UserService userService) {
         this.userRepo = userRepo;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/all")
@@ -33,6 +32,12 @@ public class UserController {
     @GetMapping(value = "/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
         User user = userRepo.findById(id).orElse(null);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping(value = "/add/anonymous")
+    public ResponseEntity<User> addAnonymousUser(){
+        User user = userService.addAnonymousUser();
         return ResponseEntity.ok().body(user);
     }
 }
