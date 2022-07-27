@@ -95,6 +95,8 @@ public class ProductService {
     }
 
     public List<Product> findByCategoryId(Long id) {
-        return productRepo.findByCategoryId(id);
+        Category category = categoryRepo.findById(id).orElse(null);
+        if(category == null) return null;
+        return productRepo.findByCategoryId(category.getId(), category.getLineage(), category.getDepth());
     }
 }
