@@ -1,7 +1,7 @@
 <template>
   <div class="product-snippet" v-if="product">
     <div class="image-wrapper">
-        <img :src="getImage(product.image_link)" alt="">
+        <!-- <img :src="getImage(product.image_link)" alt=""> -->
     </div>
     <div class="product-snippet-main">
         <div class="product-snippet-title">

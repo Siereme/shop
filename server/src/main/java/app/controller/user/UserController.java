@@ -35,6 +35,12 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    @PostMapping(value = "/add")
+    public ResponseEntity<User> addUser(@RequestBody User userDTO){
+        User user = userService.addUser(userDTO);
+        return ResponseEntity.ok().body(user);
+    }
+
     @PostMapping(value = "/add/anonymous")
     public ResponseEntity<User> addAnonymousUser(){
         User user = userService.addAnonymousUser();

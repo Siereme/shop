@@ -20,8 +20,6 @@ import ProductList from './product/ProductList.vue'
 import FacetsVue from './facets/Facets.vue'
 import {computed, watch, onMounted } from 'vue'
 import {useStore} from "vuex"
-// import {ref} from 'vue'
-// import { useRoute } from 'vue-router'
 
 export default defineComponent({
     name: 'CategoryPage',
@@ -40,7 +38,7 @@ export default defineComponent({
         let loadData = categoryId => {
             if(token.value){
                 api.loadCategoryById(categoryId)
-                api.loadCategoryByIdAndDepth(categoryId, 1)
+                .then(() => api.loadCategoriesByLineageAndDepth(currentCategory.value.lineage, 1))
                 store.commit('setProducts', [])
                 api.loadProductsByCategoryId(categoryId)
             }

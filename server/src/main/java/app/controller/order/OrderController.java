@@ -4,6 +4,7 @@ import app.model.dto.order.OrderDTO;
 import app.model.dto.order.OrderResponseDTO;
 import app.model.dto.user.AuthenticationUserDTO;
 import app.model.order.Order;
+import app.model.user.UserStatus;
 import app.repository.order.OrderRepository;
 import app.service.authentication.AuthenticationService;
 import app.service.order.OrderService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
@@ -55,12 +57,17 @@ public class OrderController {
             Order order = service.createOrder(orderDTO);
             if(order == null) throw new Exception("Create order error");
 
-            authenticationService.logout(request, response);
-            String email = order.getUser().getEmail();
-            String password = order.getUser().getPhone();
-            AuthenticationUserDTO userDTO = authenticationService.authenticate(email, password);
+            OrderResponseDTO orderResponseDTO;
+            if(Objects.equals(order.getUser().getStatus(), UserStatus.ANONYMOUS.name())){
+                authenticationService.logout(request, response);
+                String email = order.getUser().getEmail();
+                String password = order.getUser().getPhone();
+                AuthenticationUserDTO userDTO = authenticationService.authenticate(email, password);
+                orderResponseDTO = new OrderResponseDTO(userDTO.getToken(), userDTO.getUser(), order);
+            } else {
+                orderResponseDTO = new OrderResponseDTO(order);
+            }
 
-            OrderResponseDTO orderResponseDTO = new OrderResponseDTO(userDTO.getToken(), userDTO.getUser(), order);
             return ResponseEntity.ok().body(orderResponseDTO);
         } catch (Exception ex){
             return ResponseEntity.status(400).body(ex.getMessage());

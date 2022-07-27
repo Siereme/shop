@@ -134,20 +134,6 @@ export default {
             return res
         })
     },
-    loadCategoryByIdAndDepth: (id, depth) =>  {
-        return axiosApi({
-            method: 'get',
-            url: `/category/id-depth?id=${id}&depth=${depth}`,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
-        })
-        .then(res => {
-            store.commit('setMainCategory', res.data)
-            return res
-        })
-    },
     loadCategoriesByLineageAndDepth: (lineage, depth) =>  {
         return axiosApi({
             method: 'get',
@@ -156,6 +142,10 @@ export default {
                 "Authorization": token.value
             },
             data : {}
+        })
+        .then(res => {
+            store.commit('setMainCategory', res.data[0])
+            return res
         })
     },
     loadProducts: () =>  {
@@ -211,7 +201,7 @@ export default {
             data : {}
         })
         .then(res => {
-            store.commit('setCartProducts', res.data.cartItems)
+            store.commit('setCartProducts', res.data.cartItems ?? [])
             return res
         })
     },

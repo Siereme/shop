@@ -68,10 +68,4 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-
-    @PostMapping(value = "/add/option")
-    public ResponseEntity<?> addProductOption(){
-        service.addOption();
-        return ResponseEntity.ok().build();
-    }
 }

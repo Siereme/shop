@@ -1,7 +1,7 @@
 <template>
   <div class="product-item">
       <div class="product-image-wrapper">
-        <img :src="getImage(product.image_link)" alt="" class="product-image">
+        <!-- <img :src="getImage(product.image_link)" alt="" class="product-image"> -->
       </div>
       <div class="product-main">
         <div class="product-main__title">

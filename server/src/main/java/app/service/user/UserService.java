@@ -1,5 +1,6 @@
 package app.service.user;
 
+import app.model.order.Order;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.user.Role;
 import app.model.user.User;
@@ -31,6 +32,13 @@ public class UserService {
     }
 
     public User addUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(UserStatus.ACTIVE.name());
+        Role role = roleRepo.findByName(UserVariables.ROLE_USER);
+        user.setRole(role);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        cartRepo.save(shoppingCart);
         return userRepo.save(user);
     }
 

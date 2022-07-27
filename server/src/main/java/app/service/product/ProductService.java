@@ -73,22 +73,6 @@ public class ProductService {
         logger.info("Added new product " + product.getName());
     }
 
-    public void addOption() {
-//        Product product1 = productRepository.findById(1);
-//        Product product2 = productRepository.findById(2);
-//
-//        ProductOption option1 = new ProductOption();
-//        option1.setName("Вес");
-//        option1.setValue("200г");
-//
-//
-//        ProductOption option2 = new ProductOption();
-//        option2.setName("Вес");
-//        option2.setValue("250г");
-//
-//        product1.getAttributes().getOptions().add(option1);
-//        product2.getAttributes().getOptions().add(option2);
-    }
 
     public void deleteProduct(Long id) {
         Product product = productRepo.findById(id).orElse(null);

@@ -2,7 +2,9 @@ package app.model.product;
 
 import app.model.category.Category;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -20,11 +22,17 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
+    @Column(name = "article_id")
+    private Long article;
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "price")
     private Double price;
+
+    @Column(name = "image_link")
+    private String imageLink;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "desc_id", referencedColumnName = "description_id")
@@ -32,8 +40,8 @@ public class Product {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "product_attribute_option",
-            joinColumns = {@JoinColumn(name = "product_id", nullable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "option_id", nullable = false) }
+            joinColumns = {@JoinColumn(name = "product_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "option_id", nullable = false)}
     )
     private Set<ProductOption> options = new HashSet<>();
 
