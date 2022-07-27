@@ -1,10 +1,10 @@
 const path = require("path");
-const vueSrc = "../server/src/main/resources/assets/img";
+const vueSrc = "src/assets/";
 module.exports = {
   devServer: {
     proxy: {
       '^/api': {
-        target: 'http://localhost:8080',
+        target: process.env.PROXY_API || "http://localhost:8080/",
         ws: false,
       }
     }
