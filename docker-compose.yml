@@ -10,6 +10,8 @@ services:
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
       - "3307:3307"
+    volumes:
+      - db:/var/lib/mysql
   server:
     build:
       context: ./server
@@ -41,3 +43,5 @@ services:
     command: npm run serve
     depends_on:
       - server
+volumes:
+  db:
