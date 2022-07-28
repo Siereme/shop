@@ -16,7 +16,7 @@ services:
     build:
       context: ./server
       dockerfile: server.dockerfile
-    restart: on-failure
+    restart: always
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url"  : "jdbc:mysql://db:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE",

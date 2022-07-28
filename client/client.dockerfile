@@ -1,9 +1,10 @@
 FROM node:alpine3.14
 RUN mkdir -p /app
 WORKDIR /app
-COPY client/package*.json ./
+ARG PACKAGE_JSON_FILE=package*.json
+COPY ${PACKAGE_JSON_FILE} ./
 RUN npm install
-COPY client/ .
+COPY . .
 RUN npm run build
 EXPOSE $PORT
 ENV PROXY_API=$PROXY_API
