@@ -41,5 +41,15 @@ services:
     command: npm run serve
     depends_on:
       - server
+  proxy:
+    image: nginx:1.23
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - server
 volumes:
   db:
+  proxy:
