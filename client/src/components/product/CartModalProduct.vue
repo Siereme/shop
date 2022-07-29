@@ -1,7 +1,7 @@
 <template>
   <div class="cart-modal-product-item">
       <div class="product-image-wrapper">
-        <!-- <img :src="getImage(cart.product.image_link)" alt="" class="product-image"> -->
+        <img :src="product.imageLink || '/assets/img/plugs/not_found.png'" alt="" class="product-image">
       </div>
       <div class="product-main">
         <div class="product-main__title">
@@ -29,14 +29,7 @@ export default defineComponent({
             default: () => { }
         }
     },
-    components: { CartCarousel: CartCarouselVue },
-    setup() {
-      let getImage = link => require('@images/' + (link ?? 'plugs/not_found.png'))
-
-      return {
-          getImage
-      }
-    }
+    components: { CartCarousel: CartCarouselVue }
 })
 </script>
 

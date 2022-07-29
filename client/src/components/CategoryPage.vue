@@ -69,7 +69,7 @@ export default defineComponent({
 
         let products = computed(() => store.state.product.products)
         
-        const shown = computed(() => mainCategory.value !== null && currentCategory.value !== null && products.value !== null)
+        const shown = computed(() => mainCategory.value !== null && currentCategory.value !== null && products.value !== null && products.value.length)
 
         return {
             shown,

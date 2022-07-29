@@ -1,7 +1,7 @@
 <template>
   <div class="product-snippet" v-if="product">
     <div class="image-wrapper">
-        <!-- <img :src="getImage(product.image_link)" alt=""> -->
+        <img :src="product.imageLink || '/assets/img/plugs/not_found.png'" alt="">
     </div>
     <div class="product-snippet-main">
         <div class="product-snippet-title">
@@ -26,13 +26,6 @@ export default defineComponent({
     props: {
         product: {
             default: () => {}
-        }
-    },
-    setup() {
-        let getImage = link => require('@images/' + (link ?? 'plugs/not_found.png'))
-
-        return {
-            getImage
         }
     }
 })

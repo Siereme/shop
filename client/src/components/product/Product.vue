@@ -1,7 +1,7 @@
 <template>
-  <div class="product-item">
+  <div class="product-item" v-if="product">
       <div class="product-image-wrapper">
-        <!-- <img :src="getImage(product.image_link)" alt="" class="product-image"> -->
+        <img :src="product.imageLink || '/assets/img/plugs/not_found.png'" alt="" class="product-image">
       </div>
       <div class="product-main">
         <div class="product-main__title">
@@ -27,14 +27,7 @@ export default defineComponent({
             default: () => { }
         }
     },
-    components: { CartButton },
-    setup() {
-      let getImage = link => require('@images/' + (link ?? 'plugs/not_found.png'))
-
-      return {
-          getImage
-      }
-    }
+    components: { CartButton }
 })
 </script>
 

@@ -3,7 +3,7 @@ const vueSrc = "src/assets/";
 module.exports = {
   devServer: {
     proxy: {
-      '^/api': {
+      '^/api|^/assets': {
         target: process.env.PROXY_API || "http://localhost:8080/",
         ws: false,
       }
