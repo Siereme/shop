@@ -1,7 +1,7 @@
 <template>
   <div class="cart-modal-product-item">
       <div class="product-image-wrapper">
-        <img :src="product.imageLink || '/assets/img/plugs/not_found.png'" alt="" class="product-image">
+        <img :src="cart.product.imageLink || '/assets/img/plugs/not_found.png'" alt="" class="product-image">
       </div>
       <div class="product-main">
         <div class="product-main__title">
@@ -20,7 +20,6 @@
 <script>
 import { defineComponent } from 'vue'
 import CartCarouselVue from '../cart/CartCarousel.vue'
-// import api from "@/api/backend-api"
 
 export default defineComponent({
     name: "CartModalProduct",
