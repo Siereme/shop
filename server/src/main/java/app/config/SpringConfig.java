@@ -37,7 +37,7 @@ public class SpringConfig {
     public DataSource dataSource() {
         try {
             SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-            Class<? extends Driver> driver = (Class<? extends Driver>) Class.forName("com.mysql.jdbc.Driver");
+            Class<? extends Driver> driver = (Class<? extends Driver>) Class.forName("com.mysql.cj.jdbc.Driver");
             dataSource.setDriverClass(driver);
             dataSource.setUrl(url);
             dataSource.setUsername(username);
