@@ -1,4 +1,4 @@
-package app.model.user;
+package app.utils.constants.user;
 
 public enum UserStatus {
     ACTIVE, ANONYMOUS, BANNED

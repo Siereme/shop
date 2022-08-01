@@ -1,5 +1,7 @@
 package app.model.user;
 
+import app.model.user.role.Role;
+import app.utils.constants.user.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class User {
+public class User implements IUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class User {
 
     @Column(name = "name")
     private String name;
-    
+
     @Column(name = "surname")
     private String surname;
 
@@ -43,6 +45,7 @@ public class User {
     private Role role;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
 }

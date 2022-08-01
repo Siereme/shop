@@ -4,7 +4,7 @@ import app.model.dto.order.OrderDTO;
 import app.model.dto.order.OrderResponseDTO;
 import app.model.dto.user.AuthenticationUserDTO;
 import app.model.order.Order;
-import app.model.user.UserStatus;
+import app.utils.constants.user.UserStatus;
 import app.repository.order.OrderRepository;
 import app.service.authentication.AuthenticationService;
 import app.service.order.OrderService;

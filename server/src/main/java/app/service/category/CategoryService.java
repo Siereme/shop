@@ -10,26 +10,26 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class CategoryService {
+public class CategoryService implements ICategoryService<Category> {
     private static final Logger logger = Logger.getLogger(CategoryService.class);
 
     @Autowired
     CategoryRepository categoryRepo;
 
 
-    public List<Category> findAll(){
+    public List<Category> findAll() {
         return categoryRepo.findAll();
     }
 
-    public Category findById(Long id){
+    public Category findById(Long id) {
         return categoryRepo.findById(id).orElse(null);
     }
 
-    public Set<Category> findByIds(List<Long> ids){
+    public Set<Category> findByIds(List<Long> ids) {
         return new HashSet<>(categoryRepo.findAllById(ids));
     }
 
-    public Set<Category> findAllFirstLevel(){
+    public Set<Category> findAllFirstLevel() {
         return categoryRepo.findAllFirstLevel();
     }
 
@@ -41,7 +41,7 @@ public class CategoryService {
         return categoryRepo.findByLineageAndDepth(lineage, depth);
     }
 
-    public void addCategory(CategoryDTO categoryDTO){
+    public Category addCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
 
         category.setName(categoryDTO.getName());
@@ -51,13 +51,13 @@ public class CategoryService {
         Category parentCategory = categoryRepo.findById(categoryDTO.getParentId()).orElse(null);
         category.setParent(parentCategory);
 
-        //save category
-        category = categoryRepo.saveAndFlush(category);
-
         logger.info("Added new product " + category.getName());
+
+        //save category
+        return categoryRepo.saveAndFlush(category);
     }
 
-    public void deleteCategory(Long categoryId){
+    public void deleteCategory(Long categoryId) {
         categoryRepo.deleteById(categoryId);
     }
 }

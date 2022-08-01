@@ -1,6 +1,6 @@
 package app.security;
 
-import app.model.user.UserStatus;
+import app.utils.constants.user.UserStatus;
 import app.model.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

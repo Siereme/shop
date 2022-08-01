@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ProductService {
+public class ProductService implements IProductService<Product> {
 
     private static final Logger logger = Logger.getLogger(ProductService.class);
 
@@ -33,7 +33,7 @@ public class ProductService {
     @Autowired
     CategoryRepository categoryRepo;
 
-    public void addProduct(Product productDTO) {
+    public Product addProduct(Product productDTO) {
         Product product = new Product();
 
         product.setName(productDTO.getName());
@@ -52,7 +52,7 @@ public class ProductService {
             try {
                 addOption = productOptionRepo.findByNameAndValue(option.getName(), option.getValue())
                         .orElseThrow(() -> new IllegalArgumentException("The given id is invalid"));
-            }catch (IllegalArgumentException ex){
+            } catch (IllegalArgumentException ex) {
                 addOption = new ProductOption();
                 addOption.setName(option.getName());
                 addOption.setValue(option.getValue());
@@ -67,16 +67,16 @@ public class ProductService {
         Set<Category> categories = new HashSet<>(categoryRepo.findAllById(categoriesIds));
         product.setCategories(categories);
 
-        //save product
-        productRepo.saveAndFlush(product);
-
         logger.info("Added new product " + product.getName());
+
+        //save product
+        return productRepo.saveAndFlush(product);
     }
 
 
     public void deleteProduct(Long id) {
         Product product = productRepo.findById(id).orElse(null);
-        if(product != null){
+        if (product != null) {
             product.getOptions().clear();
             product.getCategories().clear();
             productRepo.deleteById(id);
@@ -96,7 +96,7 @@ public class ProductService {
 
     public List<Product> findByCategoryId(Long id) {
         Category category = categoryRepo.findById(id).orElse(null);
-        if(category == null) return null;
+        if (category == null) return null;
         return productRepo.findByCategoryId(category.getId(), category.getLineage(), category.getDepth());
     }
 }

@@ -1,5 +1,6 @@
 package app.controller.user;
 
+import app.model.user.IUser;
 import app.model.user.User;
 import app.repository.user.UserRepository;
 import app.service.user.UserService;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<User> addUser(@RequestBody User userDTO){
-        User user = userService.addUser(userDTO);
+    public ResponseEntity<IUser> addUser(@RequestBody User userDTO){
+        IUser user = userService.addUser(userDTO);
         return ResponseEntity.ok().body(user);
     }
 

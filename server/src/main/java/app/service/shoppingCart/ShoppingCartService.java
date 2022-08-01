@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 @Service
-public class ShoppingCartService {
+public class ShoppingCartService implements IShoppingCartService {
     private static final Logger logger = Logger.getLogger(ShoppingCartService.class);
 
     private final ShoppingCartRepository cartRepository;
@@ -25,7 +25,7 @@ public class ShoppingCartService {
     }
 
 
-    public ShoppingCart addShoppingCart(User user){
+    public ShoppingCart addShoppingCart(User user) {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         return cartRepository.save(shoppingCart);
@@ -37,7 +37,7 @@ public class ShoppingCartService {
         if (cart == null) return;
 
         for (ShoppingCartItem cartItem : cart.getCartItems()) {
-            if(Objects.equals(cartItem.getProduct().getId(), productId)){
+            if (Objects.equals(cartItem.getProduct().getId(), productId)) {
                 cartItem.setCount(count);
                 return;
             }

@@ -1,58 +1,46 @@
 package app.service.user;
 
-import app.model.order.Order;
-import app.model.shoppingCart.ShoppingCart;
-import app.model.user.Role;
+import app.constructor.user.AbstractUserConstructor;
+import app.constructor.user.IUserConstructor;
+import app.constructor.user.UserFactory;
+import app.model.user.IUser;
 import app.model.user.User;
-import app.model.user.UserStatus;
+import app.utils.constants.user.UserRole;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
 import app.repository.user.UserRoleRepository;
-import app.service.shoppingCart.ShoppingCartService;
-import app.utils.constants.UserVariables;
+import app.utils.constants.user.UserStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements IUserService<User> {
 
-    private final UserRepository userRepo;
-    private final UserRoleRepository roleRepo;
-    private final ShoppingCartRepository cartRepo;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private UserFactory userFactory;
 
-    public UserService(UserRepository userRepo, UserRoleRepository roleRepo, ShoppingCartService cartService, ShoppingCartRepository cartRepo, PasswordEncoder passwordEncoder, UserRoleRepository roleRepo1, ShoppingCartRepository cartRepo1, PasswordEncoder passwordEncoder1) {
-        this.userRepo = userRepo;
-        this.roleRepo = roleRepo1;
-        this.cartRepo = cartRepo1;
-        this.passwordEncoder = passwordEncoder1;
+    public UserRole getUserRole(User user){
+        return user.getRole() != null && user.getRole().getName() != null
+                ? UserRole.valueOf(user.getRole().getName())
+                : UserRole.USER;
     }
 
-    public User addUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setStatus(UserStatus.ACTIVE.name());
-        Role role = roleRepo.findByName(UserVariables.ROLE_USER);
-        user.setRole(role);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        cartRepo.save(shoppingCart);
-        return userRepo.save(user);
+    public User addUser(User user) {
+        UserRole role = getUserRole(user);
+        IUserConstructor<User> constructor = userFactory.getFactory(role);
+        User newUser = constructor.createUser(user);
+        return userRepo.save(newUser);
     }
 
     public User updateUser(User newUser) {
-        User user = userRepo.findById(newUser.getId()).orElse(null);
-        if(user == null) return null;
-        user.setName(newUser.getName());
-        user.setSurname(newUser.getSurname());
-        user.setPatronymic(newUser.getPatronymic());
-        user.setPhone(newUser.getPhone());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(passwordEncoder.encode(newUser.getPhone()));
-        user.setStatus(newUser.getStatus());
-        return user;
+        UserRole role = getUserRole(newUser);
+        IUserConstructor<User> constructor = userFactory.getFactory(role);
+        return constructor.updateUser(newUser);
     }
 
     public User findUser(User user) {
@@ -65,15 +53,8 @@ public class UserService {
 
     public User addAnonymousUser() {
         User user = new User();
-        String hash = UUID.randomUUID().toString();
-        user.setEmail(hash);
-        user.setPassword(passwordEncoder.encode(hash));
-        user.setStatus(UserStatus.ANONYMOUS.name());
-        Role role = roleRepo.findByName(UserVariables.ROLE_USER);
-        user.setRole(role);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        cartRepo.save(shoppingCart);
-        return userRepo.save(user);
+        IUserConstructor<User> constructor = userFactory.getFactory(UserRole.ANONYMOUS);
+        User newUser = constructor.createUser(user);
+        return userRepo.save(newUser);
     }
 }

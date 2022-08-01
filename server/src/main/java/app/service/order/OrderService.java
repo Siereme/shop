@@ -7,7 +7,7 @@ import app.model.order.Payment;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartItem;
 import app.model.user.User;
-import app.model.user.UserStatus;
+import app.utils.constants.user.UserStatus;
 import app.repository.order.OrderRepository;
 import app.repository.payment.PaymentRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
@@ -21,22 +21,27 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
-public class OrderService {
+public class OrderService implements IOrderService<Order> {
 
-    @Autowired private OrderRepository orderRepo;
-    @Autowired private ShoppingCartRepository cartRepo;
-    @Autowired private PaymentRepository paymentRepo;
-    @Autowired private ShoppingCartService cartService;
-    @Autowired private UserService userService;
+    @Autowired
+    private OrderRepository orderRepo;
+    @Autowired
+    private ShoppingCartRepository cartRepo;
+    @Autowired
+    private PaymentRepository paymentRepo;
+    @Autowired
+    private ShoppingCartService cartService;
+    @Autowired
+    private UserService userService;
 
 
     @Transactional
     public Order createOrder(OrderDTO orderDTO) {
         User user = userService.findUser(orderDTO.getUser());
         ShoppingCart cart = cartRepo.findByUserId(user.getId());
-        if(cart == null) return null;
+        if (cart == null) return null;
 
-        if(Objects.equals(user.getStatus(), UserStatus.ANONYMOUS.name())){
+        if (Objects.equals(user.getStatus(), UserStatus.ANONYMOUS.name())) {
             user = userService.updateUser(orderDTO.getUser());
         }
 

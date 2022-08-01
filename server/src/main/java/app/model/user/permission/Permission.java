@@ -1,19 +1,17 @@
-package app.model.user;
+package app.model.user.permission;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "permission")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class UserPermission {
+public class Permission implements IPermission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "permission_id")
