@@ -36,6 +36,8 @@ services:
       - "8090:8090"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - server
   client:
     build:
       context: ./client
