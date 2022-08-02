@@ -30,7 +30,7 @@ public class UserService implements IUserService<User> {
                 : UserRole.USER;
     }
 
-    public User addUser(User user) {
+    public User createUser(User user) {
         UserRole role = getUserRole(user);
         IUserConstructor<User> constructor = userFactory.getFactory(role);
         User newUser = constructor.createUser(user);
@@ -43,18 +43,14 @@ public class UserService implements IUserService<User> {
         return constructor.updateUser(newUser);
     }
 
-    public User findUser(User user) {
-        return userRepo.findById(user.getId()).orElse(null);
-    }
-
     public Optional<User> findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
 
-    public User addAnonymousUser() {
+    public User createAnonymousUser() {
         User user = new User();
         IUserConstructor<User> constructor = userFactory.getFactory(UserRole.ANONYMOUS);
         User newUser = constructor.createUser(user);
-        return userRepo.save(newUser);
+        return userRepo.saveAndFlush(newUser);
     }
 }

@@ -4,6 +4,7 @@ import app.model.user.IUser;
 import app.model.user.User;
 import app.repository.user.UserRepository;
 import app.service.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,11 @@ import java.util.List;
 @RequestMapping(path = "api/v1/user")
 public class UserController {
 
-    private final UserRepository userRepo;
-    private final UserService userService;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private UserService userService;
 
-    public UserController(UserRepository userRepo, UserService userService) {
-        this.userRepo = userRepo;
-        this.userService = userService;
-    }
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<User>> getUsers(){
@@ -38,13 +37,13 @@ public class UserController {
 
     @PostMapping(value = "/add")
     public ResponseEntity<IUser> addUser(@RequestBody User userDTO){
-        IUser user = userService.addUser(userDTO);
+        IUser user = userService.createUser(userDTO);
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping(value = "/add/anonymous")
     public ResponseEntity<User> addAnonymousUser(){
-        User user = userService.addAnonymousUser();
+        User user = userService.createAnonymousUser();
         return ResponseEntity.ok().body(user);
     }
 }

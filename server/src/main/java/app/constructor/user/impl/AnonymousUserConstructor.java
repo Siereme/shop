@@ -9,6 +9,7 @@ import app.utils.constants.user.UserRole;
 import app.utils.constants.user.UserStatus;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.UUID;
 
 @Component
@@ -21,20 +22,17 @@ public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
 
     @Override
     public User createUser(User user, UserStatus status) {
-        String hash = UUID.randomUUID().toString();
-        user.setEmail(hash);
-        user.setPassword(passwordEncoder.encode(hash));
+        user.setEmail(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
         user.setStatus(status);
-        Role role = roleRepo.findByName(UserRole.ANONYMOUS.name());
-        user.setRole(role);
+        user.setRole(roleRepo.findByName(UserRole.ANONYMOUS.name()));
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         cartRepo.save(shoppingCart);
         return user;
     }
 
-    @Override
-    public User updateUser(User user) {
+    public User updateUser(User user){
         User newUser = userRepo.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User is not found"));
 
@@ -43,9 +41,10 @@ public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
         newUser.setPatronymic(user.getPatronymic());
         newUser.setPhone(user.getPhone());
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(passwordEncoder.encode(user.getPhone()));
-        newUser.setRole(user.getRole());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(roleRepo.findByName(UserRole.ANONYMOUS.name()));
         newUser.setStatus(user.getStatus());
         return newUser;
     }
+
 }

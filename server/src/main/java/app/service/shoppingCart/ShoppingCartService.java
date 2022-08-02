@@ -1,5 +1,6 @@
 package app.service.shoppingCart;
 
+import app.exception.EntityNotFoundException;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartItem;
@@ -33,8 +34,8 @@ public class ShoppingCartService implements IShoppingCartService {
 
     @Transactional
     public void setCartItem(Long userId, Long productId, int count) {
-        ShoppingCart cart = cartRepository.findByUserId(userId);
-        if (cart == null) return;
+        ShoppingCart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
         for (ShoppingCartItem cartItem : cart.getCartItems()) {
             if (Objects.equals(cartItem.getProduct().getId(), productId)) {
@@ -53,15 +54,17 @@ public class ShoppingCartService implements IShoppingCartService {
 
     @Transactional
     public void removeCartItem(Long userId, Long productId) {
-        ShoppingCart cart = cartRepository.findByUserId(userId);
-        if (cart == null) return;
+        ShoppingCart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
+
         cart.getCartItems().removeIf(cartItem -> Objects.equals(cartItem.getProduct().getId(), productId));
     }
 
     @Transactional
     public void refreshShoppingCart(Long userId) {
-        ShoppingCart cart = cartRepository.findByUserId(userId);
-        if (cart == null) return;
+        ShoppingCart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
+
         cart.getCartItems().clear();
     }
 }

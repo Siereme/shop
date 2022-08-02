@@ -1,5 +1,6 @@
 package app.service.order;
 
+import app.exception.EntityNotFoundException;
 import app.model.dto.order.OrderDTO;
 import app.model.order.Order;
 import app.model.order.OrderProduct;
@@ -7,6 +8,7 @@ import app.model.order.Payment;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartItem;
 import app.model.user.User;
+import app.repository.user.UserRepository;
 import app.utils.constants.user.UserStatus;
 import app.repository.order.OrderRepository;
 import app.repository.payment.PaymentRepository;
@@ -14,6 +16,7 @@ import app.repository.shoppingCart.ShoppingCartRepository;
 import app.service.shoppingCart.ShoppingCartService;
 import app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,15 +36,19 @@ public class OrderService implements IOrderService<Order> {
     private ShoppingCartService cartService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepo;
 
 
     @Transactional
     public Order createOrder(OrderDTO orderDTO) {
-        User user = userService.findUser(orderDTO.getUser());
-        ShoppingCart cart = cartRepo.findByUserId(user.getId());
-        if (cart == null) return null;
+        User user = userRepo.findById(orderDTO.getUser().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
 
-        if (Objects.equals(user.getStatus(), UserStatus.ANONYMOUS.name())) {
+        ShoppingCart cart = cartRepo.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
+
+        if (Objects.equals(user.getStatus(), UserStatus.ANONYMOUS)) {
             user = userService.updateUser(orderDTO.getUser());
         }
 
@@ -49,7 +56,7 @@ public class OrderService implements IOrderService<Order> {
         order.setUser(cart.getUser());
 
         Set<ShoppingCartItem> cartItems = cart.getCartItems();
-        Double total = 0d;
+        double total = 0d;
         for (ShoppingCartItem cartItem : cartItems) {
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setOrder(order);
@@ -68,13 +75,4 @@ public class OrderService implements IOrderService<Order> {
         return orderRepo.saveAndFlush(order);
     }
 
-    @Transactional
-    public void removeOrder(Long orderId) {
-        orderRepo.deleteById(orderId);
-    }
-
-    @Transactional
-    public void removeAll() {
-        orderRepo.deleteAll();
-    }
 }

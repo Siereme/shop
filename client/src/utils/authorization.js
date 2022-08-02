@@ -1,5 +1,4 @@
 import api from "@/api/backend-api"
-import store from "@/store";
 import cookies from "./cookies.js"
 
 
@@ -7,11 +6,7 @@ const handleAuth = async () => {
     let token = cookies.getCookie('Authorization')
 
     if(!token){
-        return await api.createAnonymousUser()
-        .then(async () => {
-            let user = store.getters.getUser()
-            return await Promise.resolve(api.login(user.email, user.email))
-        })
+        return await Promise.resolve(api.loginAnonymous())
     } else {
         return await Promise.resolve(api.authInfo(token))
     }

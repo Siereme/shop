@@ -29,6 +29,18 @@ export default {
             return res
         })
     },
+    loginAnonymous: () => {
+        return axiosApi({
+            method: 'post',
+            url: '/auth/login-anonymous'
+        })
+        .then(res => {
+            store.commit('setUser', res.data.user)
+            store.commit('setToken', res.data.token)
+            cookies.setCookie('Authorization', res.data.token)
+            return res
+        })
+    },
     logout: () => {
         return axiosApi({
             method: 'post',

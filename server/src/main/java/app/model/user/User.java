@@ -3,6 +3,7 @@ package app.model.user;
 import app.model.user.role.Role;
 import app.utils.constants.user.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -39,7 +40,7 @@ public class User implements IUser {
     @Column(name = "phone")
     private String phone;
 
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {"users", "permissions", "authorities"}, allowSetters = true)
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
     private Role role;
