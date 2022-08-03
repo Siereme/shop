@@ -214,6 +214,8 @@ export default {
         })
         .then(res => {
             store.commit('setCartProducts', res.data.cartItems ?? [])
+            store.commit('setCartCount', res.data.count ?? 0)
+            store.commit('setCartTotal', res.data.total ?? 0)
             return res
         })
     },
