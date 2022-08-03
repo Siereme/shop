@@ -1,6 +1,5 @@
-package app.model.order;
+package app.model.order.payment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Payment {
+public class Payment implements IPayment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,7 @@
 package app.controller.payment;
 
-import app.model.order.Payment;
-import app.repository.payment.PaymentRepository;
+import app.model.order.payment.Payment;
+import app.repository.order.PaymentRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

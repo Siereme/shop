@@ -1,5 +1,6 @@
 package app.model.order;
 
+import app.model.order.payment.Payment;
 import app.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Order {
+public class Order implements IOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +29,7 @@ public class Order {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval=true)
-    private Set<OrderProduct> orderItems = new HashSet<>();
+    private Set<OrderProductItem> orderItems = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
@@ -37,7 +38,8 @@ public class Order {
     @Column(name = "total")
     private Double total;
 
-    public void addOrderProduct(OrderProduct orderProduct) {
-        this.orderItems.add(orderProduct);
+    @Override
+    public void setOrderProduct(OrderProductItem orderProductItem) {
+        this.orderItems.add(orderProductItem);
     }
 }

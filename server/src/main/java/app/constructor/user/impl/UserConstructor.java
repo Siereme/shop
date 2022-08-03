@@ -1,6 +1,7 @@
 package app.constructor.user.impl;
 
 import app.constructor.user.AbstractUserConstructor;
+import app.exception.EntityNotFoundException;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.user.User;
 import app.model.user.role.Role;
@@ -20,11 +21,10 @@ public class UserConstructor extends AbstractUserConstructor<User> {
     public User createUser(User user, UserStatus status) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(status);
-        Role role = roleRepo.findByName(UserRole.USER.name());
+        Role role = roleRepo.findByName(UserRole.USER.name())
+                .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
         user.setRole(role);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        cartRepo.save(shoppingCart);
+        cartService.createShoppingCart(user);
         return user;
     }
 }

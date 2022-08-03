@@ -1,4 +1,4 @@
-package app.model.product;
+package app.model.product.option;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class ProductOption {
+public class ProductOption implements IOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

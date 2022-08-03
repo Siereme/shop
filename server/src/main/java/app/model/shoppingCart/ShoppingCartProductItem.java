@@ -1,6 +1,8 @@
 package app.model.shoppingCart;
 
+import app.model.product.IProductItem;
 import app.model.product.Product;
+import app.model.shoppingCart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class ShoppingCartItem{
+public class ShoppingCartProductItem implements IProductItem<Product> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

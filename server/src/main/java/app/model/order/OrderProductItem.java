@@ -1,5 +1,7 @@
 package app.model.order;
 
+import app.model.order.Order;
+import app.model.product.IProductItem;
 import app.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class OrderProduct {
+public class OrderProductItem implements IProductItem<Product> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

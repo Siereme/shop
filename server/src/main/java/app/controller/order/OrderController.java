@@ -58,8 +58,6 @@ public class OrderController {
     public ResponseEntity<?> addOrder(@RequestBody OrderDTO orderDTO, HttpServletRequest request, HttpServletResponse response){
         try {
             Order order = orderService.createOrder(orderDTO);
-            if(order == null) throw new Exception("Create order error");
-
             if(Objects.equals(order.getUser().getStatus(), UserStatus.ANONYMOUS)){
                 authenticationService.logout(request, response);
                 AuthenticationUserDTO userDTO = authenticationService.anonymousAuthenticate(order.getUser());

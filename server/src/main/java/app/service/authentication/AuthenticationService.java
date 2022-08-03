@@ -7,6 +7,7 @@ import app.security.JwtTokenProvider;
 import app.security.SecurityUser;
 import app.service.user.UserService;
 import app.utils.constants.user.UserStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationProvider;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,15 +27,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class AuthenticationService implements IAuthenticationService {
-    private final AuthenticationManager authenticationManager;
-    private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationService(AuthenticationManager authenticationManager, UserService userService, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     public AuthenticationUserDTO authenticate(String email, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -51,9 +50,8 @@ public class AuthenticationService implements IAuthenticationService {
         return createToken(user.getEmail());
     }
 
-    public AuthenticationUserDTO createToken(String email){
-        User user = userService.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+    protected AuthenticationUserDTO createToken(String email){
+        User user = userService.findByEmail(email);
         String token = jwtTokenProvider.createToken(user.getEmail(), user.getRole().getName());
         return new AuthenticationUserDTO(token, user);
     }

@@ -9,7 +9,6 @@ import app.utils.constants.user.UserRole;
 import app.utils.constants.user.UserStatus;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.UUID;
 
 @Component
@@ -25,26 +24,11 @@ public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
         user.setEmail(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
         user.setStatus(status);
-        user.setRole(roleRepo.findByName(UserRole.ANONYMOUS.name()));
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        cartRepo.save(shoppingCart);
+        Role role = roleRepo.findByName(UserRole.ANONYMOUS.name())
+                .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
+        user.setRole(role);
+        cartService.createShoppingCart(user);
         return user;
-    }
-
-    public User updateUser(User user){
-        User newUser = userRepo.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User is not found"));
-
-        newUser.setName(user.getName());
-        newUser.setSurname(user.getSurname());
-        newUser.setPatronymic(user.getPatronymic());
-        newUser.setPhone(user.getPhone());
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setRole(roleRepo.findByName(UserRole.ANONYMOUS.name()));
-        newUser.setStatus(user.getStatus());
-        return newUser;
     }
 
 }

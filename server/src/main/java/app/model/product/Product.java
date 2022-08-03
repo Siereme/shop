@@ -1,6 +1,8 @@
 package app.model.product;
 
 import app.model.category.Category;
+import app.model.product.description.ProductDescription;
+import app.model.product.option.ProductOption;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements IProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

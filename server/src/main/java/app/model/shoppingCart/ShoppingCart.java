@@ -28,9 +28,15 @@ public class ShoppingCart {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval=true)
-    private Set<ShoppingCartItem> cartItems = new HashSet<>();
+    private Set<ShoppingCartProductItem> cartItems = new HashSet<>();
 
-    public void setCartItem(ShoppingCartItem cartItem) {
+    @Column(name = "total")
+    private Double total;
+
+    @Column(name = "count_items")
+    private int count;
+
+    public void setCartItem(ShoppingCartProductItem cartItem) {
         cartItems.add(cartItem);
     }
 }

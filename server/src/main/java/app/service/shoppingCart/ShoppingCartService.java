@@ -3,11 +3,11 @@ package app.service.shoppingCart;
 import app.exception.EntityNotFoundException;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCart;
-import app.model.shoppingCart.ShoppingCartItem;
+import app.model.shoppingCart.ShoppingCartProductItem;
 import app.model.user.User;
 import app.repository.product.ProductRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,18 +15,14 @@ import java.util.Objects;
 
 @Service
 public class ShoppingCartService implements IShoppingCartService {
-    private static final Logger logger = Logger.getLogger(ShoppingCartService.class);
 
-    private final ShoppingCartRepository cartRepository;
-    private final ProductRepository productRepository;
-
-    public ShoppingCartService(ShoppingCartRepository cartRepository, ProductRepository productRepository) {
-        this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
-    }
+    @Autowired
+    private ShoppingCartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
 
-    public ShoppingCart addShoppingCart(User user) {
+    public ShoppingCart createShoppingCart(User user) {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         return cartRepository.save(shoppingCart);
@@ -37,26 +33,37 @@ public class ShoppingCartService implements IShoppingCartService {
         ShoppingCart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
-        for (ShoppingCartItem cartItem : cart.getCartItems()) {
+        for (ShoppingCartProductItem cartItem : cart.getCartItems()) {
             if (Objects.equals(cartItem.getProduct().getId(), productId)) {
                 cartItem.setCount(count);
+                calculateTotal(cart);
                 return;
             }
         }
 
-        Product product = productRepository.findById(productId).orElse(null);
-        ShoppingCartItem cartItem = new ShoppingCartItem();
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product is not found"));
+
+        ShoppingCartProductItem cartItem = new ShoppingCartProductItem();
         cartItem.setShoppingCart(cart);
         cartItem.setProduct(product);
         cartItem.setCount(count);
         cart.setCartItem(cartItem);
+        cart.setCount(cart.getCartItems().size());
+        calculateTotal(cart);
+    }
+
+    private void calculateTotal(ShoppingCart cart){
+        double total = cart.getCartItems().stream()
+                .map(item -> item.getProduct().getPrice() * item.getCount())
+                .reduce(0d, Double::sum);
+        cart.setTotal(total);
     }
 
     @Transactional
     public void removeCartItem(Long userId, Long productId) {
         ShoppingCart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
-
         cart.getCartItems().removeIf(cartItem -> Objects.equals(cartItem.getProduct().getId(), productId));
     }
 
@@ -64,7 +71,6 @@ public class ShoppingCartService implements IShoppingCartService {
     public void refreshShoppingCart(Long userId) {
         ShoppingCart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
-
         cart.getCartItems().clear();
     }
 }

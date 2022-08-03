@@ -1,5 +1,6 @@
-package app.model.product;
+package app.model.product.description;
 
+import app.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class ProductDescription {
+public class ProductDescription implements IDescription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

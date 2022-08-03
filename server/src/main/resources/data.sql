@@ -233,8 +233,8 @@ INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id
 INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-99', 2, 'ACTIVE');
 
 
-INSERT INTO shopping_cart (id, user_id) VALUES (1, 1);
-INSERT INTO shopping_cart (id, user_id) VALUES (2, 2);
+INSERT INTO shopping_cart (id, user_id, total, count_items) VALUES (1, 1, 194500, 0);
+INSERT INTO shopping_cart (id, user_id, total, count_items) VALUES (2, 2, 194500, 3);
 
 INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (1, 2, 1, 1);
 INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (2, 2, 2, 1);

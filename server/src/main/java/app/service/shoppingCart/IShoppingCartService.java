@@ -5,7 +5,7 @@ import app.model.user.User;
 
 public interface IShoppingCartService {
 
-    ShoppingCart addShoppingCart(User user);
+    ShoppingCart createShoppingCart(User user);
 
     void setCartItem(Long userId, Long productId, int count);
 

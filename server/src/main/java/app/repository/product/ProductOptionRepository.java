@@ -1,6 +1,6 @@
 package app.repository.product;
 
-import app.model.product.ProductOption;
+import app.model.product.option.ProductOption;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -2,9 +2,11 @@ package app.constructor.user;
 
 import app.exception.EntityNotFoundException;
 import app.model.user.IUser;
+import app.model.user.role.Role;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
 import app.repository.user.UserRoleRepository;
+import app.service.shoppingCart.ShoppingCartService;
 import app.utils.constants.user.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +19,8 @@ public abstract class AbstractUserConstructor<T extends IUser> implements IUserC
     protected UserRoleRepository roleRepo;
     @Autowired
     protected ShoppingCartRepository cartRepo;
+    @Autowired
+    protected ShoppingCartService cartService;
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
@@ -34,7 +38,9 @@ public abstract class AbstractUserConstructor<T extends IUser> implements IUserC
         newUser.setPhone(user.getPhone());
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setRole(user.getRole());
+        Role role = roleRepo.findByName(user.getRole().getName())
+                .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
+        newUser.setRole(role);
         newUser.setStatus(user.getStatus());
         return newUser;
     }

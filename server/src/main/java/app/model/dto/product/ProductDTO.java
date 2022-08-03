@@ -1,8 +1,8 @@
 package app.model.dto.product;
 
 import app.model.category.Category;
-import app.model.product.ProductDescription;
-import app.model.product.ProductOption;
+import app.model.product.description.ProductDescription;
+import app.model.product.option.ProductOption;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

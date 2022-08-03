@@ -23,7 +23,6 @@ public class AuthenticationController {
 
     @Value("${jwt.header}")
     private String authorizationHeader;
-
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
@@ -35,9 +34,9 @@ public class AuthenticationController {
     @PostMapping(value = "/login")
     public ResponseEntity<AuthenticationUserDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
         try {
-            String email = request.getEmail();
-            String password = request.getPassword();
-            AuthenticationUserDTO authenticationUserDTO = authenticationService.authenticate(email, password);
+            AuthenticationUserDTO authenticationUserDTO = authenticationService.authenticate(
+                    request.getEmail(), request.getPassword()
+            );
             return ResponseEntity.ok().body(authenticationUserDTO);
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -64,8 +63,7 @@ public class AuthenticationController {
     @GetMapping(value = "/info")
     public ResponseEntity<?> info(HttpServletRequest request) {
         String token = request.getHeader(authorizationHeader);
-        User user = userService.findByEmail(jwtTokenProvider.getUsername(token))
-                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+        User user = userService.findByEmail(jwtTokenProvider.getUsername(token));
         AuthenticationUserDTO authenticationUserDTO = new AuthenticationUserDTO(token, user);
         return ResponseEntity.ok().body(authenticationUserDTO);
     }

@@ -3,7 +3,7 @@ package app.utils.specification;
 import app.model.dto.filter.Filter;
 import app.model.dto.filter.FilterOption;
 import app.model.product.Product;
-import app.model.product.ProductOption;
+import app.model.product.option.ProductOption;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
