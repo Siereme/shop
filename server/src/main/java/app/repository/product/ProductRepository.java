@@ -20,8 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     List<Product> findAllById(Iterable<Long> ids);
 
     @Query(value = "select distinct p.id from Product p")
-    List<Long> findPopularIds();
+    Optional<List<Long>> findPopularIds();
 
     @Query(value = "select distinct p from Product p left join fetch p.categories c left join fetch p.description left join fetch p.options where c.id = :id or c.lineage = :lineage and c.depth > :depth")
-    List<Product> findByCategoryId(Long id, Long lineage, int depth);
+    Optional<List<Product>> findByCategoryId(Long id, Long lineage, int depth);
 }

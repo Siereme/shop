@@ -1,7 +1,8 @@
 package app.controller.authentication;
 
-import app.model.dto.authentication.AuthenticationRequestDTO;
-import app.model.dto.user.AuthenticationUserDTO;
+import app.exception.JwtAuthenticationException;
+import app.model.dto.authentication.AuthenticationRequest;
+import app.model.dto.user.AuthenticationUserResponse;
 import app.model.user.User;
 import app.security.JwtTokenProvider;
 import app.service.authentication.AuthenticationService;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(path = "api/v1/auth")
 public class AuthenticationController {
 
-    @Value("${jwt.header}")
-    private String authorizationHeader;
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
@@ -32,23 +30,37 @@ public class AuthenticationController {
 
 
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthenticationUserDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
+    public ResponseEntity<AuthenticationUserResponse> authenticate(@RequestBody AuthenticationRequest request) {
         try {
-            AuthenticationUserDTO authenticationUserDTO = authenticationService.authenticate(
+            AuthenticationUserResponse authenticationUserResponse = authenticationService.authenticate(
                     request.getEmail(), request.getPassword()
             );
-            return ResponseEntity.ok().body(authenticationUserDTO);
+            return ResponseEntity.ok().body(authenticationUserResponse);
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
     @PostMapping(value = "/login-anonymous")
-    public ResponseEntity<AuthenticationUserDTO> anonymousAuthenticate() {
+    public ResponseEntity<AuthenticationUserResponse> anonymousAuthenticate() {
         try {
             User user = userService.createAnonymousUser();
-            AuthenticationUserDTO authenticationUserDTO = authenticationService.anonymousAuthenticate(user);
-            return ResponseEntity.ok().body(authenticationUserDTO);
+            AuthenticationUserResponse authenticationUserResponse = authenticationService.anonymousAuthenticate(user);
+            return ResponseEntity.ok().body(authenticationUserResponse);
+        } catch (AuthenticationException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @PostMapping(value = "/refresh")
+    public ResponseEntity<AuthenticationUserResponse> refreshAuthenticate(HttpServletRequest request) {
+        try {
+            String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
+            if(refreshToken != null && jwtTokenProvider.validateRefreshToken(refreshToken)){
+                AuthenticationUserResponse authenticationUserResponse = authenticationService.refreshAuthenticate(refreshToken);
+                return ResponseEntity.ok().body(authenticationUserResponse);
+            }
+            throw new JwtAuthenticationException("JWT token is expired or invalid");
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -62,9 +74,10 @@ public class AuthenticationController {
 
     @GetMapping(value = "/info")
     public ResponseEntity<?> info(HttpServletRequest request) {
-        String token = request.getHeader(authorizationHeader);
-        User user = userService.findByEmail(jwtTokenProvider.getUsername(token));
-        AuthenticationUserDTO authenticationUserDTO = new AuthenticationUserDTO(token, user);
-        return ResponseEntity.ok().body(authenticationUserDTO);
+        String accessToken = jwtTokenProvider.resolveAccessToken(request);
+        String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
+        User user = userService.findByEmail(jwtTokenProvider.getUsername(accessToken));
+        AuthenticationUserResponse authenticationUserResponse = new AuthenticationUserResponse(accessToken, refreshToken, user);
+        return ResponseEntity.ok().body(authenticationUserResponse);
     }
 }

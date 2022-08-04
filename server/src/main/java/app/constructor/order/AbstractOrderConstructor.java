@@ -37,7 +37,7 @@ public abstract class AbstractOrderConstructor implements IOrderConstructor<Orde
     @Override
     public void setUser(User user) {
         User orderUser = userRepo.findById(user.getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+                .orElseThrow(() -> new UsernameNotFoundException("Order constructor - User doesn't exist"));
         this.order.setUser(orderUser);
     }
 

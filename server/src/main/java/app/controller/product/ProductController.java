@@ -1,6 +1,7 @@
 package app.controller.product;
 
-import app.model.dto.filter.Filter;
+import app.exception.EntityNotFoundException;
+import app.model.order.Order;
 import app.model.product.Product;
 import app.repository.product.ProductRepository;
 import app.service.product.ProductService;
@@ -15,57 +16,75 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    ProductRepository repository;
+    ProductRepository productRepo;
     @Autowired
     ProductService service;
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<Product>> findAll(){
-        return ResponseEntity.ok().body(repository.findAll());
+        return ResponseEntity.ok().body(productRepo.findAll());
     }
 
-    @GetMapping(value = "/filters")
-    public ResponseEntity<List<Product>> filter(@app.utils.httpHandler.Filter List<Filter> filter,
-                                                @RequestParam(required = false) String sort){
-        return ResponseEntity.ok().body(service.filterProducts(filter));
-    }
 
     @GetMapping(value = "/id/{id}")
-    public ResponseEntity<Product> findById(@PathVariable Long id){
-        Product product = repository.findById(id).orElse(null);
-
-        if(product == null) return ResponseEntity.noContent().build();
-
-        return ResponseEntity.ok().body(product);
+    public ResponseEntity<?> findById(@PathVariable Long id){
+        try{
+            Product product = productRepo.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Product is not found"));
+            return ResponseEntity.ok().body(product);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @GetMapping(value = "/ids/{ids}")
-    public ResponseEntity<List<Product>> findByIds(@PathVariable List<Long> ids){
-        return ResponseEntity.ok().body(repository.findAllById(ids));
+    public ResponseEntity<?> findByIds(@PathVariable List<Long> ids){
+        try{
+            List<Product> products = productRepo.findAllById(ids);
+            return ResponseEntity.ok().body(products);
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @GetMapping(value = "/category_id/{id}")
-    public ResponseEntity<List<Product>> findByCategoryId(@PathVariable Long id){
-        List<Product> products = service.findByCategoryId(id);
-        return ResponseEntity.ok().body(products);
+    public ResponseEntity<?> findByCategoryId(@PathVariable Long id){
+        try{
+            List<Product> products = service.findByCategoryId(id);
+            return ResponseEntity.ok().body(products);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @GetMapping(value = "/popular")
-    public ResponseEntity<List<Product>> findPopularProducts(){
-        List<Product> products = service.getPopular();
-        return ResponseEntity.ok().body(products);
+    public ResponseEntity<?> findPopularProducts(){
+        try{
+            List<Product> products = service.getPopular();
+            return ResponseEntity.ok().body(products);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/add")
     public ResponseEntity<?> addProduct(@RequestBody Product product){
-        service.addProduct(product);
-        return ResponseEntity.ok().build();
+        try{
+            service.addProduct(product);
+            return ResponseEntity.ok().build();
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
-        service.deleteProduct(id);
-        return ResponseEntity.ok().build();
+        try{
+            service.deleteProduct(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
 }

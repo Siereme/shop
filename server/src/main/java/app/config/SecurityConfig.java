@@ -37,7 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/assets/**").permitAll()
-                .antMatchers("/api/v1/auth/login", "/api/v1/auth/login-anonymous").permitAll()
+                .antMatchers(
+                        "/api/v1/auth/login",
+                        "/api/v1/auth/login-anonymous",
+                        "/api/v1/auth/refresh"
+                ).permitAll()
                 .antMatchers("/api/v1/user/add/anonymous").permitAll()
                 .antMatchers("/api/v1/shopping-cart/add").hasAnyAuthority("site:write")
                 .anyRequest()

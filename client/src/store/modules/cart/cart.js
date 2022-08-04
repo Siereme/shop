@@ -40,6 +40,12 @@ export default {
         },
         setCartTotal: (state, total) => {
             state.cartTotal = total
+        },
+        clearCart: (state) => {
+            state.cartProducts = []
+            state.cartCount = 0
+            state.cartTotal = 0
+            state.cartModalShown = false
         }
     }
 }

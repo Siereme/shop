@@ -72,5 +72,7 @@ public class ShoppingCartService implements IShoppingCartService {
         ShoppingCart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
         cart.getCartItems().clear();
+        cart.setCount(0);
+        cart.setTotal(0d);
     }
 }

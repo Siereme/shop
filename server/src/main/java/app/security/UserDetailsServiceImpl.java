@@ -24,4 +24,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 new UsernameNotFoundException("User doesn't exists"));
         return SecurityUser.fromUser(user);
     }
+
+    public UserDetails loadUserById(long id) throws UsernameNotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UsernameNotFoundException("User doesn't exists"));
+        return SecurityUser.fromUser(user);
+    }
 }

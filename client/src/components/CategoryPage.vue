@@ -52,7 +52,7 @@ export default defineComponent({
             id => loadData(id)
         )
 
-        let token = computed(() => store.getters.getToken())
+        let token = computed(() => store.getters.getAccessToken())
         watch(
             () => token.value,
             () => loadData(props.categoryId)

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class AuthenticationRequestDTO {
+public class AuthenticationRequest {
 
     private String email;
     private String password;

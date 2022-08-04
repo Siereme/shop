@@ -1,5 +1,6 @@
 package app.service.product;
 
+import app.exception.EntityNotFoundException;
 import app.model.category.Category;
 import app.model.dto.filter.Filter;
 import app.model.product.Product;
@@ -70,7 +71,7 @@ public class ProductService implements IProductService<Product> {
         logger.info("Added new product " + product.getName());
 
         //save product
-        return productRepo.saveAndFlush(product);
+        return productRepo.save(product);
     }
 
 
@@ -84,19 +85,21 @@ public class ProductService implements IProductService<Product> {
     }
 
     public List<Product> getPopular() {
-        List<Long> productIds = productRepo.findPopularIds().subList(0, 10);
+        List<Long> productIds = productRepo.findPopularIds()
+                .orElseThrow(() -> new EntityNotFoundException("Products is not found"))
+                .subList(0, 10);
         return productRepo.findAllById(productIds);
     }
 
     public List<Product> filterProducts(List<Filter> filters) {
         ProductSpecificationBuilder specificationBuilder = new ProductSpecificationBuilder(filters);
-        List<Product> products = productRepo.findAll(specificationBuilder.build());
-        return products;
+        return productRepo.findAll(specificationBuilder.build());
     }
 
     public List<Product> findByCategoryId(Long id) {
-        Category category = categoryRepo.findById(id).orElse(null);
-        if (category == null) return null;
-        return productRepo.findByCategoryId(category.getId(), category.getLineage(), category.getDepth());
+        Category category = categoryRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
+        return productRepo.findByCategoryId(category.getId(), category.getLineage(), category.getDepth())
+                .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 }

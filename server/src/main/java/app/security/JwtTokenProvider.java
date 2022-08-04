@@ -2,13 +2,12 @@ package app.security;
 
 import app.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -19,39 +18,68 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-    @Value("${jwt.header}")
-    private String authorizationHeader;
-    @Value("${jwt.expiration}")
-    private long validityInMilliseconds;
-
-    public JwtTokenProvider(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    @Value("${jwt.accessSecretKey}")
+    private String accessSecretKey;
+    @Value("${jwt.refreshSecretKey}")
+    private String refreshSecretKey;
+    @Value("${jwt.accessHeader}")
+    private String accessHeader;
+    @Value("${jwt.refreshHeader}")
+    private String refreshHeader;
+    @Value("${jwt.expirationMs}")
+    private long expirationMs;
+    @Value("${jwt.refreshExpirationMs}")
+    private long refreshExpirationMs;
+    
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        accessSecretKey = Base64.getEncoder().encodeToString(accessSecretKey.getBytes());
+        refreshSecretKey = Base64.getEncoder().encodeToString(refreshSecretKey.getBytes());
     }
 
-    public String createToken(String username, String role) {
-        Claims claims = Jwts.claims().setSubject(username);
+    public String createAccessToken(String username, String role) {
+        Claims claims = Jwts.claims();
+        claims.put("username", username);
         claims.put("role", role);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds * 1000);
+        Date validity = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, accessSecretKey)
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public String createRefreshToken(long id, String role){
+        Claims claims = Jwts.claims();
+        claims.put("id", id);
+        claims.put("role", role);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + expirationMs);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, refreshSecretKey)
+                .compact();
+    }
+
+    public boolean validateAccessToken(String accessToken){
+        return validateToken(accessToken, accessSecretKey);
+    }
+
+    public boolean validateRefreshToken(String refreshToken){
+        return validateToken(refreshToken, refreshSecretKey);
+    }
+
+    public boolean validateToken(String token, String secretKey) {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
@@ -66,10 +94,19 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return (String) Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token).getBody().get("username");
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(authorizationHeader);
+    public Long getId(String token) {
+        return Long.valueOf((Integer) Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(token).getBody().get("id"));
+    }
+
+
+    public String resolveAccessToken(HttpServletRequest request) {
+        return request.getHeader(accessHeader);
+    }
+
+    public String resolveRefreshToken(HttpServletRequest request) {
+        return request.getHeader(refreshHeader);
     }
 }

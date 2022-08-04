@@ -16,31 +16,6 @@ public class CategoryService implements ICategoryService<Category> {
     @Autowired
     CategoryRepository categoryRepo;
 
-
-    public List<Category> findAll() {
-        return categoryRepo.findAll();
-    }
-
-    public Category findById(Long id) {
-        return categoryRepo.findById(id).orElse(null);
-    }
-
-    public Set<Category> findByIds(List<Long> ids) {
-        return new HashSet<>(categoryRepo.findAllById(ids));
-    }
-
-    public Set<Category> findAllFirstLevel() {
-        return categoryRepo.findAllFirstLevel();
-    }
-
-    public Set<Category> findByDepth(int depth) {
-        return categoryRepo.findByDepth(depth);
-    }
-
-    public Set<Category> findByLineageAndDepth(Long lineage, int depth) {
-        return categoryRepo.findByLineageAndDepth(lineage, depth);
-    }
-
     public Category addCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
 
@@ -57,7 +32,4 @@ public class CategoryService implements ICategoryService<Category> {
         return categoryRepo.saveAndFlush(category);
     }
 
-    public void deleteCategory(Long categoryId) {
-        categoryRepo.deleteById(categoryId);
-    }
 }

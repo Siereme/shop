@@ -20,11 +20,12 @@ public class PaymentController {
     }
 
     @GetMapping(value = "/all")
-    public ResponseEntity<List<Payment>> getOrders(){
-        List<Payment> payments = paymentRepo.findAll();
-
-        if(payments.isEmpty()) return ResponseEntity.noContent().build();
-
-        return ResponseEntity.ok().body(payments);
+    public ResponseEntity<?> getOrders(){
+        try{
+            List<Payment> payments = paymentRepo.findAll();
+            return ResponseEntity.ok().body(payments);
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 }

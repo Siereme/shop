@@ -1,22 +1,15 @@
-import axios from 'axios'
-import store from "@/store";
+import axiosApi from "./api"
+import store from "@/store"
 import cookies from "@/utils/cookies/"
 import { computed } from "vue"
 
-let token = computed(() => store.getters.getToken())
-
-const axiosApi = axios.create({
-    baseURL: '/api/v1',
-    timeout: 1000,
-    headers: { 'Content-Type': 'application/json' }
-});
+let refreshToken = computed(() => store.getters.getRefreshToken())
 
 export default {
     login: (email, password) => {
         return axiosApi({
             method: 'post',
             url: '/auth/login',
-            headers: {},
             data : {
                 "email": email,
                 "password": password
@@ -24,8 +17,10 @@ export default {
         })
         .then(res => {
             store.commit('setUser', res.data.user)
-            store.commit('setToken', res.data.token)
-            cookies.setCookie('Authorization', res.data.token)
+            store.commit('setAccessToken', res.data.accessToken)
+            cookies.setCookie('Access_Authorization', res.data.accessToken)
+            store.commit('setRefreshToken', res.data.refreshToken)
+            cookies.setCookie('Refresh_Authorization', res.data.refreshToken)
             return res
         })
     },
@@ -36,23 +31,41 @@ export default {
         })
         .then(res => {
             store.commit('setUser', res.data.user)
-            store.commit('setToken', res.data.token)
-            cookies.setCookie('Authorization', res.data.token)
+            store.commit('setAccessToken', res.data.accessToken)
+            cookies.setCookie('Access_Authorization', res.data.accessToken)
+            store.commit('setRefreshToken', res.data.refreshToken)
+            cookies.setCookie('Refresh_Authorization', res.data.refreshToken)
+            return res
+        })
+    },
+    refreshAccessToken: () => {
+        return axiosApi({
+            method: 'post',
+            url: '/auth/refresh',
+            headers: {
+                'Refresh_Authorization': refreshToken.value
+            }
+        })
+        .then(res => {
+            store.commit('setUser', res.data.user)
+            store.commit('setAccessToken', res.data.accessToken)
+            cookies.setCookie('Access_Authorization', res.data.accessToken)
+            store.commit('setRefreshToken', res.data.refreshToken)
+            cookies.setCookie('Refresh_Authorization', res.data.refreshToken)
             return res
         })
     },
     logout: () => {
         return axiosApi({
             method: 'post',
-            url: '/auth/logout',
-            headers: {
-                "Authorization": token.value
-            },
+            url: '/auth/logout'
         })
         .then(res => {
-            cookies.deleteCookie('Authorization')
+            cookies.deleteCookie('Access_Authorization')
+            cookies.deleteCookie('Refresh_Authorization')
             store.commit('setUser', {})
-            store.commit('setToken', '')
+            store.commit('setAccessToken', '')
+            store.commit('setRefreshToken', '')
             return res
         })
     },
@@ -61,11 +74,11 @@ export default {
             method: 'get',
             url: '/auth/info',
             headers: {
-                "Authorization": token
-            },
+                'Access_Authorization': token
+            }
         })
         .then(res => {
-            store.commit('setToken', res.data.token)
+            store.commit('setAccessToken', res.data.accessToken)
             store.commit('setUser', res.data.user)
             return res
         })
@@ -74,9 +87,6 @@ export default {
         return axiosApi({
             method: 'post',
             url: '/user/add',
-            headers: {
-                "Authorization": token.value
-            },
             data: user
         })
     },
@@ -94,9 +104,6 @@ export default {
         return axiosApi({
             method: 'post',
             url: '/user/edit',
-            headers: {
-                "Authorization": token.value
-            },
             data: user
         })
         .then(res => {
@@ -107,11 +114,7 @@ export default {
     loadAllCategories: () =>  {
         return axiosApi({
             method: 'get',
-            url: '/category/all',
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/category/all'
         })
         .then(res => {
             store.commit('setCategories', res.data)
@@ -121,11 +124,7 @@ export default {
     loadCategoryById: (id) =>  {
         return axiosApi({
             method: 'get',
-            url: '/category/id/' + id,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/category/id/' + id
         })
         .then(res => {
             store.commit('setCurrentCategory', res.data)
@@ -135,11 +134,7 @@ export default {
     loadCategoriesByDepth: (depth) =>  {
         return axiosApi({
             method: 'get',
-            url: '/category/depth?depth=' + depth,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/category/depth?depth=' + depth
         })
         .then(res => {
             store.commit('setCategories', res.data)
@@ -149,11 +144,7 @@ export default {
     loadCategoriesByLineageAndDepth: (lineage, depth) =>  {
         return axiosApi({
             method: 'get',
-            url: '/category/lineage-depth?lineage=' + lineage + '&depth=' + depth,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/category/lineage-depth?lineage=' + lineage + '&depth=' + depth
         })
         .then(res => {
             store.commit('setMainCategory', res.data[0])
@@ -163,11 +154,7 @@ export default {
     loadProducts: () =>  {
         return axiosApi({
             method: 'get',
-            url: '/product/all',
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/product/all'
         })
         .then(res => {
             store.commit('setProducts', res.data)
@@ -177,11 +164,7 @@ export default {
     loadProductsByCategoryId: (categoryId) =>  {
         return axiosApi({
             method: 'get',
-            url: '/product/category_id/' + categoryId,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/product/category_id/' + categoryId
         })
         .then(res => {
             store.commit('setProducts', res.data)
@@ -191,11 +174,7 @@ export default {
     loadPopularProducts: () =>  {
         return axiosApi({
             method: 'get',
-            url: '/product/popular',
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/product/popular'
         })
         .then(res => {
             store.commit('setPopularProducts', res.data)
@@ -206,11 +185,7 @@ export default {
         const userId = store.getters.getUserId()
         return axiosApi({
             method: 'get',
-            url: '/shopping-cart/user-id/' + userId,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: '/shopping-cart/user-id/' + userId
         })
         .then(res => {
             store.commit('setCartProducts', res.data.cartItems ?? [])
@@ -223,71 +198,46 @@ export default {
         const userId = store.getters.getUserId()
         return axiosApi({
             method: 'post',
-            url: `/shopping-cart/add?userId=${userId}&productId=${productId}&count=${count}`,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: `/shopping-cart/add?userId=${userId}&productId=${productId}&count=${count}`
         })
     },
     removeCartProduct: (productId) =>  {
         const userId = store.getters.getUserId()
         return axiosApi({
             method: 'post',
-            url: `/shopping-cart/remove?userId=${userId}&productId=${productId}`,
-            headers: {
-                "Authorization": token.value
-            },
-            data : {}
+            url: `/shopping-cart/remove?userId=${userId}&productId=${productId}`
         })
     },
     getOrders: function(){
         const userId = store.getters.getUserId()
         return axiosApi({
             method: 'get',
-            url: `/order/user-id/${userId}`,
-            headers: {
-                "Authorization": token.value
-            }
+            url: `/order/user-id/${userId}`
         })
         .then(res => {
             store.commit('setOrders', [...res.data])
             return res
-        })       
+        })
     },
     createOrder: function(user, payment){
         return axiosApi({
             method: 'post',
             url: `/order/add`,
-            headers: {
-                "Authorization": token.value
-            },
             data : {
                 user,
                 payment
             }
         })
         .then(res => {
-            if(res.data.token){
-                store.commit('setToken', res.data.token)
-                cookies.setCookie('Authorization', res.data.token)
-            }
-            if(res.data.user){
-                store.commit('setUser', res.data.user)
-            }
-            if(res.data.order){
-                store.commit('setOrder', res.data.order)
-            }
+            store.commit('setOrder', res.data.order)
+            store.commit('clearCart')
             return res
         })
     },
     getPayments: function(){
         return axiosApi({
             method: 'get',
-            url: `/payment/all`,
-            headers: {
-                "Authorization": token.value
-            }
+            url: `/payment/all`
         })
         .then(res => {
             store.commit('setPayments', res.data)

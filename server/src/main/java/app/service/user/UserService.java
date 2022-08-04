@@ -43,6 +43,11 @@ public class UserService implements IUserService<User> {
         return constructor.updateUser(newUser);
     }
 
+    public User findById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+    }
+
     public User findByEmail(String email) {
         return userRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
