@@ -5,7 +5,7 @@
                 <div class="order-success__tatus-title">Готово!</div>
                 <div class="order-success__status-num">Заказ №{{order.id}}</div>
                 <div class="order-success__status-description">Ваш заказ успешно оформлен и принят в обработку.</div>
-                <div class="order-success__status-contacts">{{order.user.phone}}, {{order.user.email}}</div>
+                <div class="order-success__status-contacts">{{order.userDetails.phone}}, {{order.userDetails.email}}</div>
             </div>
             <OrderSummary :products="order.orderItems" :payment="order.payment" :total="order.total" />
         </div>
