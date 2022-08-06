@@ -12,11 +12,15 @@ public class AnonymousOrderConstructor extends AbstractOrderConstructor {
     @Override
     public Order createOrder(OrderDTO orderDTO) {
         User user = updateUser(orderDTO.getUser());
+        init();
         setUser(user);
+        setUserDetails(user);
         setProductItems(user.getId());
         setPayment(orderDTO.getPayment().getId());
         setTotal();
-        return super.order;
+        getUser().setOrder(getOrder());
+        refreshShoppingCart();
+        return getOrder();
     }
 
 }

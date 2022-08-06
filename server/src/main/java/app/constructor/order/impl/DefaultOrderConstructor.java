@@ -12,10 +12,14 @@ public class DefaultOrderConstructor extends AbstractOrderConstructor {
     @Override
     public Order createOrder(OrderDTO orderDTO) {
         User user = orderDTO.getUser();
+        init();
+        setUserDetails(user);
         setUser(user);
         setProductItems(user.getId());
         setPayment(orderDTO.getPayment().getId());
         setTotal();
-        return super.order;
+        getUser().setOrder(getOrder());
+        refreshShoppingCart();
+        return getOrder();
     }
 }

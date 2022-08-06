@@ -229,41 +229,41 @@ INSERT INTO role_permission (role_id, permission_id) VALUES (1, 2);
 INSERT INTO role_permission (role_id, permission_id) VALUES (2, 2);
 INSERT INTO role_permission (role_id, permission_id) VALUES (3, 2);
 
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','+7-999-999-99-99', 1, 'ACTIVE');
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-99', 2, 'ACTIVE');
-
-
-INSERT INTO shopping_cart (id, user_id, total, count_items) VALUES (1, 1, 194500, 0);
-INSERT INTO shopping_cart (id, user_id, total, count_items) VALUES (2, 2, 194500, 3);
-
-INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (1, 2, 1, 1);
-INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (2, 2, 2, 1);
-INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (3, 2, 3, 1);
-
-
 INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
 
-INSERT INTO orders (id, user_id, payment_id, total) VALUES (1, 1, 1, 194500);
-INSERT INTO orders (id, user_id, payment_id, total) VALUES (2, 1, 1, 194500);
-INSERT INTO orders (id, user_id, payment_id, total) VALUES (3, 2, 1, 194500);
+--INSERT INTO orders (id, payment_id, total) VALUES (1, 1, 194500);
+--INSERT INTO orders (id, payment_id, total) VALUES (2, 1, 194500);
+--INSERT INTO orders (id, payment_id, total) VALUES (3, 1, 194500);
+--
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 1, 2);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 3, 8);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 4, 10);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 5, 3);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 6, 4);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 7, 3);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 8, 5);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 9, 4);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 10, 1);
+--
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 1, 3);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 2, 7);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 3, 2);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 4, 1);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 5, 6);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 6, 1);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 7, 3);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 8, 1);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 9, 2);
+--INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 10, 4);
 
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 1, 2);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 3, 8);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 4, 10);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 5, 3);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 6, 4);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 7, 3);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 8, 5);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 9, 4);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 10, 1);
+INSERT INTO shopping_cart (id, total, count_items) VALUES (1, 194500, 0);
+INSERT INTO shopping_cart (id, total, count_items) VALUES (2, 194500, 3);
 
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 1, 3);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 2, 7);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 3, 2);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 4, 1);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 5, 6);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 6, 1);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 7, 3);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 8, 1);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 9, 2);
-INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 10, 4);
+INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','+7-999-999-99-99', 1, 'ACTIVE', 1);
+INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-99', 2, 'ACTIVE', 2);
+
+--
+--INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (1, 2, 1, 1);
+--INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (2, 2, 2, 1);
+--INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (3, 2, 3, 1);
+

@@ -4,7 +4,9 @@ import app.exception.EntityNotFoundException;
 import app.model.order.Order;
 import app.model.shoppingCart.ShoppingCart;
 import app.repository.shoppingCart.ShoppingCartRepository;
+import app.repository.user.UserRepository;
 import app.service.shoppingCart.ShoppingCartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +17,12 @@ import java.util.Optional;
 @RequestMapping(path = "api/v1/shopping-cart")
 public class ShoppingCartController {
 
-    private final ShoppingCartRepository repository;
-    private final ShoppingCartService service;
-
-    public ShoppingCartController(ShoppingCartRepository repository, ShoppingCartService service) {
-        this.repository = repository;
-        this.service = service;
-    }
+    @Autowired
+    private ShoppingCartRepository repository;
+    @Autowired
+    private ShoppingCartService service;
+    @Autowired
+    private UserRepository userRepo;
 
     @GetMapping(value = "/all")
     public ResponseEntity<?> findAll(){
@@ -36,7 +37,7 @@ public class ShoppingCartController {
     @GetMapping(value = "/user-id/{id}")
     public ResponseEntity<?> findByUserId(@PathVariable Long id){
         try{
-            ShoppingCart cart = repository.findByUserId(id)
+            ShoppingCart cart = userRepo.findShoppingCartById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
             return ResponseEntity.ok().body(cart);
         } catch (EntityNotFoundException e){

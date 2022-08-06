@@ -3,10 +3,9 @@ package app.controller.order;
 import app.exception.EntityNotFoundException;
 import app.model.dto.order.OrderDTO;
 import app.model.dto.order.OrderResponseDTO;
-import app.model.dto.user.AuthenticationUserResponse;
 import app.model.order.Order;
-import app.utils.constants.user.UserStatus;
 import app.repository.order.OrderRepository;
+import app.repository.user.UserRepository;
 import app.service.authentication.AuthenticationService;
 import app.service.order.OrderService;
 import app.service.user.UserService;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
@@ -29,7 +27,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private UserService userService;
+    private UserRepository userRepo;
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
@@ -49,7 +47,7 @@ public class OrderController {
     @GetMapping(value = "/user-id/{id}")
     public ResponseEntity<?> getOrdersByUserId(@PathVariable Long id){
         try{
-            List<Order> orders = orderRepo.findAllByUserId(id)
+            List<Order> orders = userRepo.findAllOrdersById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Orders is not found"));
             return ResponseEntity.ok().body(orders);
         } catch (EntityNotFoundException e){
@@ -58,7 +56,7 @@ public class OrderController {
     }
 
     @PostMapping(value = "/add", consumes = {"application/json"})
-    public ResponseEntity<?> addOrder(@RequestBody OrderDTO orderDTO, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> addOrder(@RequestBody OrderDTO orderDTO){
         try {
             Order order = orderService.createOrder(orderDTO);
             return ResponseEntity.ok().body(new OrderResponseDTO(order));

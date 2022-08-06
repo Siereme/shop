@@ -7,6 +7,7 @@ import app.model.shoppingCart.ShoppingCartProductItem;
 import app.model.user.User;
 import app.repository.product.ProductRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
+import app.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,20 +18,16 @@ import java.util.Objects;
 public class ShoppingCartService implements IShoppingCartService {
 
     @Autowired
-    private ShoppingCartRepository cartRepository;
+    private ShoppingCartRepository cartRepo;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductRepository productRepo;
+    @Autowired
+    private UserRepository userRepo;
 
-
-    public ShoppingCart createShoppingCart(User user) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        return cartRepository.save(shoppingCart);
-    }
 
     @Transactional
     public void setCartItem(Long userId, Long productId, int count) {
-        ShoppingCart cart = cartRepository.findByUserId(userId)
+        ShoppingCart cart = userRepo.findShoppingCartById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
         for (ShoppingCartProductItem cartItem : cart.getCartItems()) {
@@ -41,7 +38,7 @@ public class ShoppingCartService implements IShoppingCartService {
             }
         }
 
-        Product product = productRepository.findById(productId)
+        Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product is not found"));
 
         ShoppingCartProductItem cartItem = new ShoppingCartProductItem();
@@ -62,14 +59,14 @@ public class ShoppingCartService implements IShoppingCartService {
 
     @Transactional
     public void removeCartItem(Long userId, Long productId) {
-        ShoppingCart cart = cartRepository.findByUserId(userId)
+        ShoppingCart cart = userRepo.findShoppingCartById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
         cart.getCartItems().removeIf(cartItem -> Objects.equals(cartItem.getProduct().getId(), productId));
     }
 
     @Transactional
     public void refreshShoppingCart(Long userId) {
-        ShoppingCart cart = cartRepository.findByUserId(userId)
+        ShoppingCart cart = userRepo.findShoppingCartById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
         cart.getCartItems().clear();
         cart.setCount(0);

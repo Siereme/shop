@@ -27,7 +27,8 @@ public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
         Role role = roleRepo.findByName(UserRole.ANONYMOUS.name())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
         user.setRole(role);
-        cartService.createShoppingCart(user);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        user.setShoppingCart(shoppingCart);
         return user;
     }
 

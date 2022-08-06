@@ -29,7 +29,6 @@ public class OrderService implements IOrderService<Order> {
         IOrderConstructor<Order, User> constructor = orderFactory.getFactory(role);
         Order order = constructor.createOrder(orderDTO);
 
-        cartService.refreshShoppingCart(order.getUser().getId());
         return orderRepo.save(order);
     }
 

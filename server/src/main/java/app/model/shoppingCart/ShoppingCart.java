@@ -22,11 +22,6 @@ public class ShoppingCart {
     @Column(name = "id")
     private Long id;
 
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval=true)
     private Set<ShoppingCartProductItem> cartItems = new HashSet<>();
 
@@ -38,5 +33,11 @@ public class ShoppingCart {
 
     public void setCartItem(ShoppingCartProductItem cartItem) {
         cartItems.add(cartItem);
+    }
+
+    public void clear(){
+        this.cartItems.clear();
+        this.count = 0;
+        this.total = 0d;
     }
 }
