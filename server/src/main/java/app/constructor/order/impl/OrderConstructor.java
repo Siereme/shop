@@ -1,7 +1,7 @@
-package app.constructor.order;
+package app.constructor.order.impl;
 
+import app.constructor.order.IOrderConstructor;
 import app.exception.EntityNotFoundException;
-import app.model.dto.order.OrderDTO;
 import app.model.order.Order;
 import app.model.order.OrderProductItem;
 import app.model.order.delivery.Delivery;
@@ -17,10 +17,12 @@ import app.service.shoppingCart.ShoppingCartService;
 import app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-public abstract class AbstractOrderConstructor implements IOrderConstructor<Order, User>{
+@Component
+public class OrderConstructor implements IOrderConstructor<Order, User> {
 
     @Autowired
     protected UserRepository userRepo;
@@ -37,7 +39,7 @@ public abstract class AbstractOrderConstructor implements IOrderConstructor<Orde
     private User user;
 
     @Override
-    public void init() {
+    public void create() {
         this.order = new Order();
     }
 
@@ -104,15 +106,13 @@ public abstract class AbstractOrderConstructor implements IOrderConstructor<Orde
     }
 
     @Override
-    public Order getOrder() {
-        return this.order;
-    }
-
-    @Override
     public void refreshShoppingCart() {
         this.user.getShoppingCart().clear();
     }
 
     @Override
-    public abstract Order createOrder(OrderDTO orderDTO);
+    public Order getOrder() {
+        return this.order;
+    }
+
 }

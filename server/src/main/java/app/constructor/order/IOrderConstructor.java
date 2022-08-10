@@ -1,14 +1,14 @@
 package app.constructor.order;
 
-import app.model.dto.order.OrderDTO;
 import app.model.order.IOrder;
 import app.model.order.Order;
 import app.model.order.delivery.Delivery;
+import app.model.order.userDetails.IOrderUserDetails;
 import app.model.user.IUser;
 
-public interface IOrderConstructor<R extends IOrder, U extends IUser> {
+public interface IOrderConstructor<R extends IOrder<? extends IOrderUserDetails>, U extends IUser> {
 
-    void init();
+    void create();
 
     U getUser();
 
@@ -29,7 +29,5 @@ public interface IOrderConstructor<R extends IOrder, U extends IUser> {
     Order getOrder();
 
     void refreshShoppingCart();
-
-    R createOrder(OrderDTO orderDTO);
 
 }

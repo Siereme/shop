@@ -4,7 +4,6 @@ import app.exception.EntityNotFoundException;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
-import app.model.user.User;
 import app.repository.product.ProductRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
@@ -26,16 +25,18 @@ public class ShoppingCartService implements IShoppingCartService {
 
 
     @Transactional
-    public void setCartItem(Long userId, Long productId, int count) {
+    public ShoppingCartProductItem setCartItem(Long userId, Long productId, int count) {
         ShoppingCart cart = userRepo.findShoppingCartById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
-        for (ShoppingCartProductItem cartItem : cart.getCartItems()) {
-            if (Objects.equals(cartItem.getProduct().getId(), productId)) {
-                cartItem.setCount(count);
-                calculateTotal(cart);
-                return;
-            }
+
+        ShoppingCartProductItem cartProductItem = cart.getCartItems().stream()
+                .filter(item -> Objects.equals(item.getProduct().getId(), productId))
+                .findFirst().orElse(null);
+
+        if(cartProductItem != null){
+            cartProductItem.setCount(count);
+            return cartProductItem;
         }
 
         Product product = productRepo.findById(productId)
@@ -48,6 +49,7 @@ public class ShoppingCartService implements IShoppingCartService {
         cart.setCartItem(cartItem);
         cart.setCount(cart.getCartItems().size());
         calculateTotal(cart);
+        return cartItem;
     }
 
     private void calculateTotal(ShoppingCart cart){
@@ -64,12 +66,4 @@ public class ShoppingCartService implements IShoppingCartService {
         cart.getCartItems().removeIf(cartItem -> Objects.equals(cartItem.getProduct().getId(), productId));
     }
 
-    @Transactional
-    public void refreshShoppingCart(Long userId) {
-        ShoppingCart cart = userRepo.findShoppingCartById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
-        cart.getCartItems().clear();
-        cart.setCount(0);
-        cart.setTotal(0d);
-    }
 }

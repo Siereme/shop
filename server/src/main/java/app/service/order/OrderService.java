@@ -1,6 +1,7 @@
 package app.service.order;
 
 import app.constructor.order.IOrderConstructor;
+import app.constructor.order.IOrderManager;
 import app.constructor.order.OrderFactory;
 import app.model.dto.order.OrderDTO;
 import app.model.order.Order;
@@ -26,8 +27,8 @@ public class OrderService implements IOrderService<Order> {
     @Transactional
     public Order createOrder(OrderDTO orderDTO) {
         UserRole role = UserRole.valueOf(orderDTO.getUser().getRole().getName());
-        IOrderConstructor<Order, User> constructor = orderFactory.getFactory(role);
-        Order order = constructor.createOrder(orderDTO);
+        IOrderManager<Order> constructor = orderFactory.getFactory(role);
+        Order order = constructor.construct(orderDTO);
 
         return orderRepo.save(order);
     }

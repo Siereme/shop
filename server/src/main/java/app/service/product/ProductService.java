@@ -91,10 +91,6 @@ public class ProductService implements IProductService<Product> {
         return productRepo.findAllById(productIds);
     }
 
-    public List<Product> filterProducts(List<Filter> filters) {
-        ProductSpecificationBuilder specificationBuilder = new ProductSpecificationBuilder(filters);
-        return productRepo.findAll(specificationBuilder.build());
-    }
 
     public List<Product> findByCategoryId(Long id) {
         Category category = categoryRepo.findById(id)

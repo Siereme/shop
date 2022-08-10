@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ public class ShoppingCart {
     @Column(name = "total")
     private Double total;
 
+    @Formula("count(cartItems)")
     @Column(name = "count_items")
     private int count;
 

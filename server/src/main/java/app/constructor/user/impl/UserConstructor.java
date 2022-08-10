@@ -24,8 +24,7 @@ public class UserConstructor extends AbstractUserConstructor<User> {
         Role role = roleRepo.findByName(UserRole.USER.name())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
         user.setRole(role);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        user.setShoppingCart(shoppingCart);
+        user.setShoppingCart(new ShoppingCart());
         return user;
     }
 }
