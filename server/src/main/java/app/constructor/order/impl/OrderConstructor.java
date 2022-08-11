@@ -77,7 +77,7 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
 
     @Override
     public void setProductItems(long userId) {
-        ShoppingCart cart = userRepo.findShoppingCartById(userId)
+        ShoppingCart cart = cartRepo.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
         Set<ShoppingCartProductItem> cartItems = cart.getCartItems();

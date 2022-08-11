@@ -37,7 +37,7 @@ INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (32, 
 
 
 
-INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (1, 412235, 'Смартфон Vivo Y53s 128Gb 6Gb глубокое море', 19599, '/assets/img/products/smartphones/product_7_412235.jpg');
+INSERT INTO product (product_id, article_id, name, price, image_link, short_description, long_description) VALUES (1, 412235, 'Смартфон Vivo Y53s 128Gb 6Gb глубокое море', 19599, '/assets/img/products/smartphones/product_7_412235.jpg', 'Новый смартфон', 'Супер крутой новый смартфон с множеством камер');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (2, 359195, 'Смартфон Samsung Galaxy S21 SM-G991 256Gb 8Gb белый', 77990, '/assets/img/products/smartphones/product_7_359195.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (3, 430931, 'Смартфон Samsung GALAXY A23 64GB SM-A235FZKUSKZ черный', 19490, '/assets/img/products/smartphones/product_7_430931.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (4, 433896, 'Смартфон Samsung Galaxy А33 5G 128GB SM-A336BZKGSKZ черный', 27990, '/assets/img/products/smartphones/product_7_433896.jpg');

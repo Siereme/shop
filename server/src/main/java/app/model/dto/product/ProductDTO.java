@@ -1,6 +1,5 @@
 package app.model.dto.product;
 
-import app.model.category.Category;
 import app.model.product.description.ProductDescription;
 import app.model.product.option.ProductOption;
 import lombok.Getter;
@@ -15,12 +14,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ProductDTO {
 
-    private Long productId;
+    private Long article;
     private String name;
     private Double price;
+    private String imageLink;
     private ProductDescription description;
-    private Set<ProductOption> attributes = new HashSet<>();
-    private Set<Category> categories = new HashSet<>();
+    private Set<ProductOption> options = new HashSet<>();
+    private Set<Long> categoriesIds = new HashSet<>();
     private int count;
 
 }

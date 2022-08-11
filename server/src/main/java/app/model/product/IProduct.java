@@ -3,6 +3,8 @@ package app.model.product;
 import app.model.product.description.ProductDescription;
 import app.model.product.option.ProductOption;
 
+import java.util.Set;
+
 public interface IProduct {
     Long getId();
 
@@ -16,9 +18,8 @@ public interface IProduct {
 
     ProductDescription getDescription();
 
-    java.util.Set<ProductOption> getOptions();
+    Set<ProductOption> getOptions();
 
-    java.util.Set<app.model.category.Category> getCategories();
 
     void setId(Long id);
 
@@ -34,5 +35,4 @@ public interface IProduct {
 
     void setOptions(java.util.Set<ProductOption> options);
 
-    void setCategories(java.util.Set<app.model.category.Category> categories);
 }

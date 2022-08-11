@@ -26,12 +26,11 @@ public class ShoppingCart {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval=true)
     private Set<ShoppingCartProductItem> cartItems = new HashSet<>();
 
-    @Column(name = "total")
-    private Double total;
-
-    @Formula("count(cartItems)")
     @Column(name = "count_items")
     private int count;
+
+    @Column(name = "total")
+    private Double total;
 
     public void setCartItem(ShoppingCartProductItem cartItem) {
         cartItems.add(cartItem);

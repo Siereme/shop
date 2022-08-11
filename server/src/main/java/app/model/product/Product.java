@@ -36,8 +36,11 @@ public class Product implements IProduct {
     @Column(name = "image_link")
     private String imageLink;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "desc_id", referencedColumnName = "description_id")
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "shortDescription", column = @Column(name = "short_description")),
+            @AttributeOverride( name = "longDescription", column = @Column(name = "long_description")),
+    })
     private ProductDescription description;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -46,7 +49,6 @@ public class Product implements IProduct {
             inverseJoinColumns = {@JoinColumn(name = "option_id", nullable = false)}
     )
     private Set<ProductOption> options = new HashSet<>();
-
 
     @JsonIgnoreProperties(value = "categories", allowSetters = true)
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

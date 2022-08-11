@@ -1,11 +1,11 @@
 package app.model.product.description;
 
 public interface IDescription {
-    Long getId();
+    String getShortDescription();
 
-    String getDescription();
+    String getLongDescription();
 
-    void setId(Long id);
+    void setShortDescription(String shortDescription);
 
-    void setDescription(String description);
+    void setLongDescription(String longDescription);
 }

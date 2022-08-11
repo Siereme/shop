@@ -1,6 +1,7 @@
 package app.model.category;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -41,4 +42,5 @@ public class Category implements ICategory{
 
     @Column(name = "depth")
     private int depth;
+
 }

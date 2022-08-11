@@ -2,15 +2,13 @@ package app.service.product;
 
 import app.exception.EntityNotFoundException;
 import app.model.category.Category;
-import app.model.dto.filter.Filter;
+import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.model.product.description.ProductDescription;
 import app.model.product.option.ProductOption;
 import app.repository.category.CategoryRepository;
-import app.repository.product.ProductDescriptionRepository;
 import app.repository.product.ProductOptionRepository;
 import app.repository.product.ProductRepository;
-import app.utils.specification.ProductSpecificationBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,45 +26,40 @@ public class ProductService implements IProductService<Product> {
     @Autowired
     ProductRepository productRepo;
     @Autowired
-    ProductDescriptionRepository productDescriptionRepo;
-    @Autowired
-    ProductOptionRepository productOptionRepo;
+    ProductOptionRepository optionRepo;
     @Autowired
     CategoryRepository categoryRepo;
 
-    public Product addProduct(Product productDTO) {
+    public Product addProduct(ProductDTO productDTO) {
         Product product = new Product();
 
+        product.setArticle(productDTO.getArticle());
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
+        product.setImageLink(productDTO.getImageLink());
 
         //add description
         ProductDescription description = new ProductDescription();
-        description.setDescription(productDTO.getDescription().getDescription());
-        description = productDescriptionRepo.save(description);
+        description.setShortDescription(productDTO.getDescription().getShortDescription());
+        description.setLongDescription(productDTO.getDescription().getLongDescription());
         product.setDescription(description);
 
         //add options
-        Set<ProductOption> options = new HashSet<>();
-        for (ProductOption option : productDTO.getOptions()) {
-            ProductOption addOption;
+        Set<ProductOption> options = productDTO.getOptions().stream().map(option -> {
             try {
-                addOption = productOptionRepo.findByNameAndValue(option.getName(), option.getValue())
+                return optionRepo.findByNameAndValue(option.getName(), option.getValue())
                         .orElseThrow(() -> new IllegalArgumentException("The given id is invalid"));
             } catch (IllegalArgumentException ex) {
-                addOption = new ProductOption();
+                ProductOption addOption = new ProductOption();
                 addOption.setName(option.getName());
                 addOption.setValue(option.getValue());
-                addOption = productOptionRepo.save(addOption);
+                return optionRepo.save(addOption);
             }
-            options.add(addOption);
-        }
+        }).collect(Collectors.toSet());
         product.setOptions(options);
 
         //add categories
-        List<Long> categoriesIds = productDTO.getCategories().stream().map(Category::getId).collect(Collectors.toList());
-        Set<Category> categories = new HashSet<>(categoryRepo.findAllById(categoriesIds));
-        product.setCategories(categories);
+        product.setCategories(new HashSet<>(categoryRepo.findAllById(productDTO.getCategoriesIds())));
 
         logger.info("Added new product " + product.getName());
 
@@ -76,12 +69,11 @@ public class ProductService implements IProductService<Product> {
 
 
     public void deleteProduct(Long id) {
-        Product product = productRepo.findById(id).orElse(null);
-        if (product != null) {
-            product.getOptions().clear();
-            product.getCategories().clear();
-            productRepo.deleteById(id);
-        }
+        Product product = productRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
+        product.getOptions().clear();
+        product.getCategories().clear();
+        productRepo.deleteById(id);
     }
 
     public List<Product> getPopular() {

@@ -1,7 +1,7 @@
 package app.controller.product;
 
 import app.exception.EntityNotFoundException;
-import app.model.order.Order;
+import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.repository.product.ProductRepository;
 import app.service.product.ProductService;
@@ -68,10 +68,10 @@ public class ProductController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<?> addProduct(@RequestBody Product product){
+    public ResponseEntity<?> addProduct(@RequestBody ProductDTO productDTO){
         try{
-            service.addProduct(product);
-            return ResponseEntity.ok().build();
+            Product product = service.addProduct(productDTO);
+            return ResponseEntity.ok().body(product);
         } catch (Exception e){
             return ResponseEntity.status(400).body(e.getMessage());
         }

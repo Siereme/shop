@@ -6,4 +6,6 @@ public interface ICategory {
     String getName();
 
     String getImageLink();
+
+
 }
