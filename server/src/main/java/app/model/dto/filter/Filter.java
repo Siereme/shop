@@ -12,7 +12,7 @@ public class Filter {
     private String name;
     private List<FilterOption> options;
 
-    public Filter(String key, List<FilterOption> options){
+    public Filter(String key, List<FilterOption> options) {
         this.name = key;
         this.options = options;
     }

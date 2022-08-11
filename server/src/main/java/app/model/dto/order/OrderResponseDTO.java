@@ -18,9 +18,11 @@ public class OrderResponseDTO {
     public OrderResponseDTO(Order order) {
         this.order = order;
     }
+
     public OrderResponseDTO(String token, User user, Order order) {
         this.token = token;
         this.user = user;
         this.order = order;
     }
+
 }

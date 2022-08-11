@@ -1,6 +1,5 @@
 package app.controller.order;
 
-import app.exception.EntityNotFoundException;
 import app.model.dto.order.OrderDTO;
 import app.model.dto.order.OrderResponseDTO;
 import app.model.order.Order;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController

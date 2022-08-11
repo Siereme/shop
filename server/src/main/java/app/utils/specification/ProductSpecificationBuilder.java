@@ -23,7 +23,7 @@ public class ProductSpecificationBuilder {
 
         Specification specification = specifications.get(0);
 
-        for (int i = 1; i < specifications.size(); i++){
+        for (int i = 1; i < specifications.size(); i++) {
             specification = Specification.where(specification).and(specifications.get(i));
         }
 

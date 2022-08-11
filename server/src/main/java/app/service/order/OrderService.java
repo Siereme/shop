@@ -1,11 +1,9 @@
 package app.service.order;
 
-import app.constructor.order.IOrderConstructor;
 import app.constructor.order.IOrderManager;
 import app.constructor.order.OrderFactory;
 import app.model.dto.order.OrderDTO;
 import app.model.order.Order;
-import app.model.user.User;
 import app.repository.order.OrderRepository;
 import app.service.shoppingCart.ShoppingCartService;
 import app.utils.constants.user.UserRole;

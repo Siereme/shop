@@ -1,6 +1,5 @@
 package app.service.shoppingCart;
 
-import app.exception.EntityNotFoundException;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
 @Service

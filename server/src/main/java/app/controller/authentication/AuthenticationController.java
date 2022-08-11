@@ -8,7 +8,6 @@ import app.security.JwtTokenProvider;
 import app.service.authentication.AuthenticationService;
 import app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -56,7 +55,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationUserResponse> refreshAuthenticate(HttpServletRequest request) {
         try {
             String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
-            if(refreshToken != null && jwtTokenProvider.validateRefreshToken(refreshToken)){
+            if (refreshToken != null && jwtTokenProvider.validateRefreshToken(refreshToken)) {
                 AuthenticationUserResponse authenticationUserResponse = authenticationService.refreshAuthenticate(refreshToken);
                 return ResponseEntity.ok().body(authenticationUserResponse);
             }

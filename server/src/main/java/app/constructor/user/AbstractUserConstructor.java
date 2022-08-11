@@ -1,15 +1,14 @@
 package app.constructor.user;
 
-import app.exception.EntityNotFoundException;
 import app.model.user.IUser;
 import app.model.user.role.Role;
-import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
 import app.repository.user.UserRoleRepository;
-import app.service.shoppingCart.ShoppingCartService;
 import app.utils.constants.user.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.persistence.EntityNotFoundException;
 
 public abstract class AbstractUserConstructor<T extends IUser> implements IUserConstructor<T> {
 
@@ -18,17 +17,13 @@ public abstract class AbstractUserConstructor<T extends IUser> implements IUserC
     @Autowired
     protected UserRoleRepository roleRepo;
     @Autowired
-    protected ShoppingCartRepository cartRepo;
-    @Autowired
-    protected ShoppingCartService cartService;
-    @Autowired
     protected PasswordEncoder passwordEncoder;
 
     public abstract T createUser(T user);
 
     public abstract T createUser(T user, UserStatus status);
 
-    public T updateUser(T user){
+    public T updateUser(T user) {
         T newUser = (T) userRepo.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User is not found"));
 

@@ -38,8 +38,8 @@ public class Product implements IProduct {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride( name = "shortDescription", column = @Column(name = "short_description")),
-            @AttributeOverride( name = "longDescription", column = @Column(name = "long_description")),
+            @AttributeOverride(name = "shortDescription", column = @Column(name = "short_description")),
+            @AttributeOverride(name = "longDescription", column = @Column(name = "long_description")),
     })
     private ProductDescription description;
 

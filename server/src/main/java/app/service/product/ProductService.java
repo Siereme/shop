@@ -1,6 +1,5 @@
 package app.service.product;
 
-import app.exception.EntityNotFoundException;
 import app.model.category.Category;
 import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
@@ -14,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import javax.persistence.EntityNotFoundException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

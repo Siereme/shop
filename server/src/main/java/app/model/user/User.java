@@ -63,7 +63,7 @@ public class User implements IUser {
     @JoinColumn(name = "user_id")
     private Set<Order> orders = new HashSet<>();
 
-    public void setOrder(Order order){
+    public void setOrder(Order order) {
         this.orders.add(order);
     }
 

@@ -1,11 +1,8 @@
 package app.model.shoppingCart;
 
-import app.model.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -23,7 +20,7 @@ public class ShoppingCart {
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval=true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval = true)
     private Set<ShoppingCartProductItem> cartItems = new HashSet<>();
 
     @Column(name = "count_items")
@@ -36,7 +33,7 @@ public class ShoppingCart {
         cartItems.add(cartItem);
     }
 
-    public void clear(){
+    public void clear() {
         this.cartItems.clear();
         this.count = 0;
         this.total = 0d;

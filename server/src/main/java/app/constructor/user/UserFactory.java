@@ -18,9 +18,9 @@ public class UserFactory {
     public IUserConstructor<User> getFactory(UserRole role) {
         if (role == UserRole.USER) {
             return context.getBean(UserConstructor.class);
-        } else if(role == UserRole.ADMIN){
+        } else if (role == UserRole.ADMIN) {
             return context.getBean(AdminConstructor.class);
-        } else if(role == UserRole.ANONYMOUS){
+        } else if (role == UserRole.ANONYMOUS) {
             return context.getBean(AnonymousUserConstructor.class);
         } else {
             throw new UnknownConstructorTypeException();

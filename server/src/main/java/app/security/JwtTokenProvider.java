@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     private long expirationMs;
     @Value("${jwt.refreshExpirationMs}")
     private long refreshExpirationMs;
-    
+
 
     @PostConstruct
     protected void init() {
@@ -48,34 +48,24 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + expirationMs);
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, accessSecretKey)
-                .compact();
+        return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(validity).signWith(SignatureAlgorithm.HS256, accessSecretKey).compact();
     }
 
-    public String createRefreshToken(long id, String role){
+    public String createRefreshToken(long id, String role) {
         Claims claims = Jwts.claims();
         claims.put("id", id);
         claims.put("role", role);
         Date now = new Date();
         Date validity = new Date(now.getTime() + expirationMs);
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, refreshSecretKey)
-                .compact();
+        return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(validity).signWith(SignatureAlgorithm.HS256, refreshSecretKey).compact();
     }
 
-    public boolean validateAccessToken(String accessToken){
+    public boolean validateAccessToken(String accessToken) {
         return validateToken(accessToken, accessSecretKey);
     }
 
-    public boolean validateRefreshToken(String refreshToken){
+    public boolean validateRefreshToken(String refreshToken) {
         return validateToken(refreshToken, refreshSecretKey);
     }
 

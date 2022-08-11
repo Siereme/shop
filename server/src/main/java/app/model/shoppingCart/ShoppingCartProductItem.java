@@ -2,7 +2,6 @@ package app.model.shoppingCart;
 
 import app.model.product.IProductItem;
 import app.model.product.Product;
-import app.model.shoppingCart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -32,7 +31,6 @@ public class ShoppingCartProductItem implements IProductItem<Product> {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cart_product_id", referencedColumnName = "product_id")
     private Product product;
-
 
     @Column(name = "count")
     private int count;

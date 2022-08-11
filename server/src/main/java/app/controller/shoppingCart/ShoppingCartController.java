@@ -1,6 +1,5 @@
 package app.controller.shoppingCart;
 
-import app.exception.EntityNotFoundException;
 import app.model.shoppingCart.ShoppingCart;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.service.shoppingCart.ShoppingCartService;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController

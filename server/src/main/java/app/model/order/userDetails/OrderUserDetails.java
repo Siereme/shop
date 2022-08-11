@@ -1,9 +1,6 @@
 package app.model.order.userDetails;
 
 import app.model.order.delivery.Delivery;
-import app.model.user.role.Role;
-import app.utils.constants.user.UserStatus;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

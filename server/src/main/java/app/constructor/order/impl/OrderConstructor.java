@@ -1,7 +1,6 @@
 package app.constructor.order.impl;
 
 import app.constructor.order.IOrderConstructor;
-import app.exception.EntityNotFoundException;
 import app.model.order.Order;
 import app.model.order.OrderProductItem;
 import app.model.order.delivery.Delivery;
@@ -13,12 +12,12 @@ import app.model.user.User;
 import app.repository.order.PaymentRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
-import app.service.shoppingCart.ShoppingCartService;
 import app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Set;
 
 @Component
@@ -32,8 +31,6 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
     private ShoppingCartRepository cartRepo;
     @Autowired
     private PaymentRepository paymentRepo;
-    @Autowired
-    ShoppingCartService cartService;
 
     private Order order;
     private User user;

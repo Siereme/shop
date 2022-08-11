@@ -17,4 +17,5 @@ public class AuthenticationUserResponse {
         this.refreshToken = refreshToken;
         this.user = user;
     }
+
 }

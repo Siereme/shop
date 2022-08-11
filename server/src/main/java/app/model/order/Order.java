@@ -28,7 +28,7 @@ public class Order implements IOrder<OrderUserDetails> {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderUserDetails userDetails;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval=true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true)
     private Set<OrderProductItem> orderItems = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

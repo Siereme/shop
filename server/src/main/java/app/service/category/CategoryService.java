@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService implements ICategoryService<Category> {
@@ -23,13 +23,14 @@ public class CategoryService implements ICategoryService<Category> {
         category.setImageLink(categoryDTO.getImageLink());
 
         //add parent category
-        Category parentCategory = categoryRepo.findById(categoryDTO.getParentId()).orElse(null);
+        Category parentCategory = categoryRepo.findById(categoryDTO.getParentId())
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
         category.setParent(parentCategory);
 
         logger.info("Added new product " + category.getName());
 
         //save category
-        return categoryRepo.saveAndFlush(category);
+        return categoryRepo.save(category);
     }
 
 }

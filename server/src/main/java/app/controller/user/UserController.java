@@ -1,7 +1,5 @@
 package app.controller.user;
 
-import app.exception.EntityNotFoundException;
-import app.model.order.Order;
 import app.model.user.IUser;
 import app.model.user.User;
 import app.repository.user.UserRepository;
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -23,42 +22,42 @@ public class UserController {
 
 
     @GetMapping(value = "/all")
-    public ResponseEntity<?> getUsers(){
+    public ResponseEntity<?> getUsers() {
         try {
             List<User> users = userRepo.findAll();
             return ResponseEntity.ok().body(users);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @GetMapping(value = "/id/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id){
-        try{
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        try {
             User user = userRepo.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Orders is not found"));
             return ResponseEntity.ok().body(user);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<?> addUser(@RequestBody User userDTO){
-        try{
+    public ResponseEntity<?> addUser(@RequestBody User userDTO) {
+        try {
             IUser user = userService.createUser(userDTO);
             return ResponseEntity.ok().body(user);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @PostMapping(value = "/add/anonymous")
-    public ResponseEntity<?> addAnonymousUser(){
-        try{
+    public ResponseEntity<?> addAnonymousUser() {
+        try {
             User user = userService.createAnonymousUser();
             return ResponseEntity.ok().body(user);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

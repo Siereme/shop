@@ -1,7 +1,6 @@
 package app.model.category;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "category")
-public class Category implements ICategory{
+public class Category implements ICategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +33,7 @@ public class Category implements ICategory{
     @JoinColumn(name = "parent_id")
     public Category parent;
 
-    @OneToMany(mappedBy="parent", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Category> categories = new HashSet<>();
 
     @Column(name = "lineage")

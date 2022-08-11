@@ -1,6 +1,5 @@
 package app.model.order;
 
-import app.model.order.Order;
 import app.model.product.IProductItem;
 import app.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,7 +31,6 @@ public class OrderProductItem implements IProductItem<Product> {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "order_product_id", referencedColumnName = "product_id")
     private Product product;
-
 
     @Column(name = "count")
     private int count;

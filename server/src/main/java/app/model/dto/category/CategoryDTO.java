@@ -11,9 +11,11 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 public class CategoryDTO implements ICategory {
+
     private Long id;
     private String name;
     private String imageLink;
     private Long parentId;
     private List<Long> subCategoriesIds;
+
 }

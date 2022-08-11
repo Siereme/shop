@@ -1,7 +1,5 @@
 package app.model.product;
 
-import app.model.product.IProduct;
-
 public interface IProductItem<T extends IProduct> {
     Long getId();
 

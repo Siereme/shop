@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
@@ -45,13 +44,13 @@ public class AuthenticationService implements IAuthenticationService {
         return createToken(user);
     }
 
-    public AuthenticationUserResponse refreshAuthenticate(String refreshToken){
+    public AuthenticationUserResponse refreshAuthenticate(String refreshToken) {
         User user = userService.findById(jwtTokenProvider.getId(refreshToken));
         SecurityContextHolder.clearContext();
         return createToken(user);
     }
 
-    protected AuthenticationUserResponse createToken(User user){
+    protected AuthenticationUserResponse createToken(User user) {
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole().getName());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getRole().getName());
         return new AuthenticationUserResponse(accessToken, refreshToken, user);

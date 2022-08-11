@@ -1,14 +1,13 @@
 package app.security;
 
-import app.utils.constants.user.UserStatus;
 import app.model.user.User;
+import app.utils.constants.user.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 public class SecurityUser implements UserDetails {
 
@@ -68,10 +67,10 @@ public class SecurityUser implements UserDetails {
     public static UserDetails fromUser(User user) {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(),
-                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
-                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
-                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
-                !Objects.equals(user.getStatus(), UserStatus.BANNED.name()),
+                user.getStatus() != UserStatus.BANNED,
+                user.getStatus() != UserStatus.BANNED,
+                user.getStatus() != UserStatus.BANNED,
+                user.getStatus() != UserStatus.BANNED,
                 user.getRole().getAuthorities()
         );
     }
