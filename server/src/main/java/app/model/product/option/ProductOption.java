@@ -26,4 +26,8 @@ public class ProductOption implements IOption {
     @Column(name = "value")
     private String value;
 
+    public ProductOption(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 }

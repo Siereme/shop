@@ -1,7 +1,6 @@
 package app.constructor.user.impl;
 
 import app.constructor.user.AbstractUserConstructor;
-import app.model.shoppingCart.ShoppingCart;
 import app.model.user.User;
 import app.model.user.role.Role;
 import app.utils.constants.user.UserRole;
@@ -25,7 +24,6 @@ public class UserConstructor extends AbstractUserConstructor<User> {
         Role role = roleRepo.findByName(UserRole.USER.name())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
         user.setRole(role);
-        user.setShoppingCart(new ShoppingCart());
         return user;
     }
 }

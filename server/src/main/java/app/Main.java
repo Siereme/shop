@@ -11,5 +11,4 @@ public class Main {
         BasicConfigurator.configure();
         SpringApplication.run(Main.class, args);
     }
-
 }

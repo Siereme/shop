@@ -12,6 +12,7 @@ import app.model.user.User;
 import app.repository.order.PaymentRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
+import app.service.shoppingCart.ShoppingCartService;
 import app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,6 +30,8 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
     private UserService userService;
     @Autowired
     private ShoppingCartRepository cartRepo;
+    @Autowired
+    private ShoppingCartService cartService;
     @Autowired
     private PaymentRepository paymentRepo;
 
@@ -96,10 +99,8 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
 
     @Override
     public void setTotal() {
-        double total = this.order.getOrderItems().stream()
-                .map(orderItem -> orderItem.getProduct().getPrice() * orderItem.getCount())
-                .reduce(0d, Double::sum);
-        this.order.setTotal(total);
+        Set<OrderProductItem> orderItems = this.order.getOrderItems();
+        this.order.setTotal(cartService.calculateTotal(orderItems));
     }
 
     @Override

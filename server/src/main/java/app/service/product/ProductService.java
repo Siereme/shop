@@ -50,18 +50,15 @@ public class ProductService implements IProductService<Product> {
         Set<ProductOption> options = productDTO.getOptions().stream().map(option -> {
             try {
                 return optionRepo.findByNameAndValue(option.getName(), option.getValue())
-                        .orElseThrow(() -> new IllegalArgumentException("The given id is invalid"));
-            } catch (IllegalArgumentException ex) {
-                ProductOption addOption = new ProductOption();
-                addOption.setName(option.getName());
-                addOption.setValue(option.getValue());
-                return optionRepo.save(addOption);
+                        .orElseThrow(() -> new EntityNotFoundException("Option is not found"));
+            } catch (EntityNotFoundException ex) {
+                return new ProductOption(option.getName(), option.getValue());
             }
         }).collect(Collectors.toSet());
         product.setOptions(options);
 
         //add categories
-        product.setCategories(new HashSet<>(categoryRepo.findAllById(productDTO.getCategoriesIds())));
+        product.setCategories(Set.copyOf(categoryRepo.findAllById(productDTO.getCategoriesIds())));
 
         logger.info("Added new product " + product.getName());
 

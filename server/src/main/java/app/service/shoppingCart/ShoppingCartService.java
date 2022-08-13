@@ -1,5 +1,6 @@
 package app.service.shoppingCart;
 
+import app.model.product.IProductItem;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collection;
 import java.util.Objects;
 
 @Service
@@ -33,6 +35,7 @@ public class ShoppingCartService implements IShoppingCartService {
 
         if (cartProductItem != null) {
             cartProductItem.setCount(count);
+            cart.setTotal(calculateTotal(cart.getCartItems()));
             return cartProductItem;
         }
 
@@ -45,15 +48,14 @@ public class ShoppingCartService implements IShoppingCartService {
         cartItem.setCount(count);
         cart.setCartItem(cartItem);
         cart.setCount(cart.getCartItems().size());
-        calculateTotal(cart);
+        cart.setTotal(calculateTotal(cart.getCartItems()));
         return cartItem;
     }
 
-    private void calculateTotal(ShoppingCart cart) {
-        double total = cart.getCartItems().stream()
+    public <T extends IProductItem> double calculateTotal(Collection<T> cartItems) {
+        return cartItems.stream()
                 .map(item -> item.getProduct().getPrice() * item.getCount())
                 .reduce(0d, Double::sum);
-        cart.setTotal(total);
     }
 
     @Transactional
