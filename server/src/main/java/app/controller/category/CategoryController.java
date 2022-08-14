@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
@@ -57,7 +56,7 @@ public class CategoryController {
     @GetMapping(value = "/first-level")
     public ResponseEntity<?> findAllFirstLevel() {
         try {
-            Set<Category> categories = categoryRepo.findAllFirstLevel()
+            List<Category> categories = categoryRepo.findAllFirstLevel()
                     .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
             return ResponseEntity.ok().body(categories);
         } catch (EntityNotFoundException e) {
@@ -68,7 +67,7 @@ public class CategoryController {
     @GetMapping(value = "/depth")
     public ResponseEntity<?> findByDepth(@RequestParam int depth) {
         try {
-            Set<Category> categories = categoryRepo.findByDepth(depth)
+            List<Category> categories = categoryRepo.findByDepth(depth)
                     .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
             return ResponseEntity.ok().body(categories);
         } catch (EntityNotFoundException e) {
@@ -79,7 +78,7 @@ public class CategoryController {
     @GetMapping(value = "/lineage-depth")
     public ResponseEntity<?> findByLineageAndDepth(@RequestParam Long lineage, @RequestParam int depth) {
         try {
-            Set<Category> categories = categoryRepo.findByLineageAndDepth(lineage, depth)
+            List<Category> categories = categoryRepo.findByLineageAndDepth(lineage, depth)
                     .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
             return ResponseEntity.ok().body(categories);
         } catch (EntityNotFoundException e) {

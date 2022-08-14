@@ -23,9 +23,8 @@ public class Order implements IOrder<OrderUserDetails> {
     @Column(name = "order_id")
     private Long id;
 
-    @JsonIgnoreProperties(value = {"role", "status", "password"}, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_details_id", referencedColumnName = "id")
     private OrderUserDetails userDetails;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true)

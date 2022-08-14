@@ -259,8 +259,27 @@ INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
 INSERT INTO shopping_cart (id, total, count_items) VALUES (1, 194500, 0);
 INSERT INTO shopping_cart (id, total, count_items) VALUES (2, 194500, 3);
 
+--INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (1, 2, 1, 1);
+--INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (2, 2, 2, 1);
+--INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (3, 2, 3, 1);
+
 INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','+7-999-999-99-99', 1, 'ACTIVE', 1);
 INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-99', 2, 'ACTIVE', 2);
+
+
+
+INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (1, 'User1', 'User1', 'User1', 'userdetails1@mail.com', '+79999999999');
+INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (2, 'User2', 'User2', 'User2', 'userdetails2@mail.com', '+78888888888');
+
+INSERT INTO orders (order_id, user_id, user_details_id, payment_id, total) VALUES (1, 1, 1, 1, 194500);
+INSERT INTO orders (order_id, user_id, user_details_id, payment_id, total) VALUES (2, 2, 2, 1, 214500);
+--INSERT INTO orders (id, payment_id, total) VALUES (2, 1, 194500);
+--INSERT INTO orders (id, payment_id, total) VALUES (3, 1, 194500);
+--
+INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 1, 2);
+INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 3, 8);
+INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 4, 10);
+INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 5, 3);
 
 --
 --INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (1, 2, 1, 1);

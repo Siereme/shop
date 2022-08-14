@@ -26,5 +26,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "left join fetch p.categories c " +
             "left join fetch p.options " +
             "where c.id = :id or c.lineage = :lineage and c.depth > :depth")
-    Optional<List<Product>> findByCategoryId(Long id, Long lineage, int depth);
+    Optional<List<Product>> findByLineageDepthAndCategoryId(Long lineage, int depth, Long id);
 }

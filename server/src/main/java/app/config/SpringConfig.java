@@ -33,11 +33,27 @@ public class SpringConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
+    @Value("${spring.datasource.driverClassName}")
+    private String sqlDriver;
+
+    @Value("${spring.jpa.properties.hibernate.dialect}")
+    private String hibernateDialect;
+
+    @Value("${spring.jpa.show-sql}")
+    private String hibernateShowSql;
+
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String hibernateCreationSchema;
+
+    @Value("${spring.jpa.properties.hibernate.format_sql}")
+    private String hibernateFormatSql;
+
+
     @Bean
     public DataSource dataSource() {
         try {
             SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-            Class<? extends Driver> driver = (Class<? extends Driver>) Class.forName("com.mysql.cj.jdbc.Driver");
+            Class<? extends Driver> driver = (Class<? extends Driver>) Class.forName(sqlDriver);
             dataSource.setDriverClass(driver);
             dataSource.setUrl(url);
             dataSource.setUsername(username);
@@ -51,10 +67,10 @@ public class SpringConfig {
     @Bean
     public Properties hibernateProperties() {
         Properties hibernateProp = new Properties();
-        hibernateProp.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
-        hibernateProp.put("hibernate.show_sql", "true");
-        hibernateProp.put("hibernate.hbm2ddl.auto", "create-drop");
-        hibernateProp.put("hibernate.format_sql", "true");
+        hibernateProp.put("hibernate.dialect", hibernateDialect);
+        hibernateProp.put("hibernate.show_sql", hibernateShowSql);
+        hibernateProp.put("hibernate.hbm2ddl.auto", hibernateCreationSchema);
+        hibernateProp.put("hibernate.format_sql", hibernateFormatSql);
         return hibernateProp;
     }
 

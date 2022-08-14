@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -86,7 +85,7 @@ public class ProductService implements IProductService<Product> {
     public List<Product> findByCategoryId(Long id) {
         Category category = categoryRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
-        return productRepo.findByCategoryId(category.getId(), category.getLineage(), category.getDepth())
+        return productRepo.findByLineageDepthAndCategoryId(category.getLineage(), category.getDepth(), category.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 }
