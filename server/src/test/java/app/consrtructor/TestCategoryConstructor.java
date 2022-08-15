@@ -4,6 +4,7 @@ import app.model.category.Category;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TestCategoryConstructor {
@@ -61,11 +62,17 @@ public class TestCategoryConstructor {
     }
 
     public List<Category> getFirstLevelCategories() {
-        return categoryList.stream().filter(category -> category.parent == null).collect(Collectors.toList());
+        return categoryList.stream().filter(category -> category.getParent() == null).collect(Collectors.toList());
     }
 
     public List<Category> getCategoriesByDepth(long depth) {
         return categoryList.stream().filter(category -> category.getDepth() == depth).collect(Collectors.toList());
+    }
+
+    public Category getById(Long id){
+        return categoryList.stream()
+                .filter(category -> Objects.equals(category.getId(), id))
+                .findFirst().orElseGet(Category::new);
     }
 
 }

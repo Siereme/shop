@@ -100,4 +100,10 @@ public class TestOrderConstructor {
                         .anyMatch(id -> Objects.equals(order.getId(), id)))
                 .collect(Collectors.toSet());
     }
+
+    public Order getById(Long id){
+        return orderList.stream()
+                .filter(order -> Objects.equals(order.getId(), id))
+                .findFirst().orElseGet(Order::new);
+    }
 }

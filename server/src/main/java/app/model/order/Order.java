@@ -2,7 +2,6 @@ package app.model.order;
 
 import app.model.order.payment.Payment;
 import app.model.order.userDetails.OrderUserDetails;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

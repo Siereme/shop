@@ -14,7 +14,7 @@ public class CategoryService implements ICategoryService<Category> {
     private static final Logger logger = Logger.getLogger(CategoryService.class);
 
     @Autowired
-    CategoryRepository categoryRepo;
+    private CategoryRepository categoryRepo;
 
     public Category addCategory(CategoryDTO categoryDTO) {
         Category category = new Category();

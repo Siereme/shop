@@ -25,11 +25,11 @@ public class ProductService implements IProductService<Product> {
     private static final Logger logger = Logger.getLogger(ProductService.class);
 
     @Autowired
-    ProductRepository productRepo;
+    private ProductRepository productRepo;
     @Autowired
-    ProductOptionRepository optionRepo;
+    private ProductOptionRepository optionRepo;
     @Autowired
-    CategoryRepository categoryRepo;
+    private CategoryRepository categoryRepo;
 
     public Product addProduct(ProductDTO productDTO) {
         Product product = new Product();

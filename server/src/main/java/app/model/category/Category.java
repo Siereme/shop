@@ -31,7 +31,7 @@ public class Category implements ICategory {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    public Category parent;
+    private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Category> categories = new HashSet<>();

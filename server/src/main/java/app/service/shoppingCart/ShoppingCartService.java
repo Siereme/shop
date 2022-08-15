@@ -52,7 +52,7 @@ public class ShoppingCartService implements IShoppingCartService {
         return cartItem;
     }
 
-    public <T extends IProductItem> double calculateTotal(Collection<T> cartItems) {
+    public <T extends IProductItem<Product>> double calculateTotal(Collection<T> cartItems) {
         return cartItems.stream()
                 .map(item -> item.getProduct().getPrice() * item.getCount())
                 .reduce(0d, Double::sum);

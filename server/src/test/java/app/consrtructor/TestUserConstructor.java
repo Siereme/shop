@@ -6,6 +6,7 @@ import app.utils.constants.user.UserStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TestUserConstructor {
 
@@ -64,5 +65,11 @@ public class TestUserConstructor {
 
     public List<User> getAll() {
         return userList;
+    }
+
+    public User getById(Long id) {
+        return userList.stream()
+                .filter(user -> Objects.equals(user.getId(), id))
+                .findFirst().orElseGet(User::new);
     }
 }
