@@ -1,5 +1,6 @@
 package app.model.category;
 
+import app.model.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,32 @@ public class Category implements ICategory {
 
     @Column(name = "depth")
     private int depth;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade =
+            {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            })
+    @JoinTable(name = "product_category",
+            joinColumns = {@JoinColumn(name = "category_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "product_id", nullable = false)}
+    )
+    private Set<Product> products = new HashSet<>();
+
+
+    @PreRemove
+    public void removeDependencies(){
+        Set.copyOf(products).forEach(this::removeProduct);
+    }
+
+
+    public void removeProduct(Product product){
+        products.remove(product);
+        product.getCategories().remove(this);
+    }
 
 }

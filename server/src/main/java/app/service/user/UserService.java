@@ -37,10 +37,10 @@ public class UserService implements IUserService<User> {
         return userRepo.save(newUser);
     }
 
-    public User updateUser(User newUser) {
-        UserRole role = getUserRole(newUser);
+    public User updateUser(User user) {
+        UserRole role = getUserRole(user);
         IUserConstructor<User> constructor = userFactory.getFactory(role);
-        return constructor.updateUser(newUser);
+        return constructor.updateUser(user);
     }
 
     public User findById(Long id) {

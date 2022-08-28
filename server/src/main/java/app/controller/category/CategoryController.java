@@ -87,11 +87,11 @@ public class CategoryController {
     }
 
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<?> addProduct(@RequestBody CategoryDTO category) {
+    @PostMapping(value = "/add", consumes = {"application/json"})
+    public ResponseEntity<?> addProduct(@RequestBody CategoryDTO categoryDTO) {
         try {
-            service.addCategory(category);
-            return ResponseEntity.ok().build();
+            Category category = service.addCategory(categoryDTO);
+            return ResponseEntity.ok().body(category);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -100,7 +100,7 @@ public class CategoryController {
     @PostMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         try {
-            categoryRepo.deleteById(id);
+            service.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());

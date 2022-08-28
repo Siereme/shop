@@ -9,7 +9,7 @@ public interface IProductService<T extends Product> {
 
     T addProduct(ProductDTO productDTO);
 
-    void deleteProduct(Long id);
+    void deleteById(Long id);
 
     List<T> getPopular();
 

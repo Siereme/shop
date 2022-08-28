@@ -46,7 +46,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping(value = "/category_id/{id}")
+    @GetMapping(value = "/category-id/{id}")
     public ResponseEntity<?> findByCategoryId(@PathVariable Long id) {
         try {
             List<Product> products = productService.findByCategoryId(id);
@@ -79,7 +79,7 @@ public class ProductController {
     @PostMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         try {
-            productService.deleteProduct(id);
+            productService.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());

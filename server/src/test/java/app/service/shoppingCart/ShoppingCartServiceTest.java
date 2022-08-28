@@ -1,16 +1,23 @@
 package app.service.shoppingCart;
 
+import app.consrtructor.TestProductConstructor;
 import app.consrtructor.TestShoppingCartConstructor;
+import app.model.product.Product;
+import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
+import app.repository.product.ProductRepository;
+import app.repository.shoppingCart.ShoppingCartRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
@@ -18,38 +25,69 @@ import java.util.Set;
 @ActiveProfiles("test")
 class ShoppingCartServiceTest {
 
-    @Mock
+    @InjectMocks
     private ShoppingCartService cartService;
-    private final TestShoppingCartConstructor constructor = new TestShoppingCartConstructor();
+    @Mock
+    private ShoppingCartRepository cartRepo;
+    @Mock
+    private ProductRepository productRepo;
+
+    private final TestShoppingCartConstructor cartConstructor = new TestShoppingCartConstructor();
+    private final TestProductConstructor productConstructor = new TestProductConstructor();
 
     @Test
     void setCartItem() {
-        ShoppingCartProductItem productItemMock = constructor.getById(1L).getCartItems().iterator().next();
+        //Prepare objects
+        ShoppingCartProductItem productItemMock = new ShoppingCartProductItem();
+        productItemMock.setId(5L);
+        productItemMock.setProduct(productConstructor.getById(5L));
+        productItemMock.setCount(7);
 
-        Mockito.when(cartService.setCartItem(1L, 1L, 7)).thenReturn(productItemMock);
+        Optional<ShoppingCart> cartOptional = Optional.of(cartConstructor.getById(1L));
+        Optional<Product> productOptional = Optional.of(productConstructor.getById(5L));
 
-        ShoppingCartProductItem productItem = cartService.setCartItem(1L, 1L, 7);
+        //When stubs are called
+        Mockito.when(cartRepo.findByUserId(1L)).thenReturn(cartOptional);
+        Mockito.when(productRepo.findById(5L)).thenReturn(productOptional);
 
+        //Call a real service method
+        ShoppingCartProductItem productItem = cartService.setCartItem(1L, 5L, 7);
+
+        //Verify stub calls
+        Mockito.verify(cartRepo, Mockito.times(1)).findByUserId(1L);
+        Mockito.verify(productRepo, Mockito.times(1)).findById(5L);
+
+        //Check the resulting object
         Assertions.assertEquals(productItemMock.getProduct().getArticle(), productItem.getProduct().getArticle());
         Assertions.assertEquals(productItemMock.getCount(), productItem.getCount());
     }
 
     @Test
     void calculateTotal() {
-        Set<ShoppingCartProductItem> productItems = constructor.getById(1L).getCartItems();
-        double totalMock = 194500d;
+        //Prepare objects
+        Set<ShoppingCartProductItem> productItems = cartConstructor.getById(1L).getCartItems();
+        double totalCheck = 995083d;
 
-        Mockito.when(cartService.calculateTotal(productItems)).thenReturn(totalMock);
-
+        //Call a real service method
         double total = cartService.calculateTotal(productItems);
 
-        Assertions.assertEquals(totalMock, total);
+        //Check the resulting total
+        Assertions.assertEquals(totalCheck, total);
     }
 
     @Test
     void removeCartItem() {
+        //Prepare objects
+        ShoppingCart cartMock = cartConstructor.getById(1L);
+        Optional<ShoppingCart> cartOptional = Optional.of(cartMock);
+
+        //When stubs are called
+        Mockito.when(cartRepo.findByUserId(1L)).thenReturn(cartOptional);
+
+        //Call a real service method
         cartService.removeCartItem(1L, 1L);
 
-        Mockito.verify(cartService, Mockito.times(1)).removeCartItem(1L, 1L);
+        //Verify stub calls
+        Mockito.verify(cartRepo, Mockito.times(1)).findByUserId(1L);
     }
 }

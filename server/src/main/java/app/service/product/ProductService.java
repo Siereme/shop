@@ -5,13 +5,15 @@ import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.model.product.description.ProductDescription;
 import app.model.product.option.ProductOption;
+import app.model.shoppingCart.ShoppingCartProductItem;
 import app.repository.category.CategoryRepository;
 import app.repository.product.ProductOptionRepository;
 import app.repository.product.ProductRepository;
+import app.repository.shoppingCart.ShoppingCartProductItemRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -19,7 +21,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class ProductService implements IProductService<Product> {
 
     private static final Logger logger = Logger.getLogger(ProductService.class);
@@ -30,6 +31,8 @@ public class ProductService implements IProductService<Product> {
     private ProductOptionRepository optionRepo;
     @Autowired
     private CategoryRepository categoryRepo;
+    @Autowired
+    private ShoppingCartProductItemRepository cartItemRepo;
 
     public Product addProduct(ProductDTO productDTO) {
         Product product = new Product();
@@ -41,19 +44,23 @@ public class ProductService implements IProductService<Product> {
 
         //add description
         ProductDescription description = new ProductDescription();
-        description.setShortDescription(productDTO.getDescription().getShortDescription());
-        description.setLongDescription(productDTO.getDescription().getLongDescription());
+        if (productDTO.getDescription() != null) {
+            description.setShortDescription(productDTO.getDescription().getShortDescription());
+            description.setLongDescription(productDTO.getDescription().getLongDescription());
+        }
         product.setDescription(description);
 
         //add options
-        Set<ProductOption> options = productDTO.getOptions().stream().map(option -> {
-            try {
-                return optionRepo.findByNameAndValue(option.getName(), option.getValue())
-                        .orElseThrow(() -> new EntityNotFoundException("Option is not found"));
-            } catch (EntityNotFoundException ex) {
-                return new ProductOption(option.getName(), option.getValue());
-            }
-        }).collect(Collectors.toSet());
+        Set<ProductOption> options = productDTO.getOptions()
+                .stream()
+                .map(option -> {
+                    try {
+                        return optionRepo.findByNameAndValue(option.getName(), option.getValue())
+                                .orElseThrow(() -> new EntityNotFoundException("Option is not found"));
+                    } catch (EntityNotFoundException ex) {
+                        return new ProductOption(option.getName(), option.getValue());
+                    }
+                }).collect(Collectors.toSet());
         product.setOptions(options);
 
         //add categories
@@ -66,18 +73,25 @@ public class ProductService implements IProductService<Product> {
     }
 
 
-    public void deleteProduct(Long id) {
-        Product product = productRepo.findById(id)
+    public void deleteById(Long id) {
+        Product product = productRepo.findByIdWithCategoryProducts(id)
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
-        product.getOptions().clear();
-        product.getCategories().clear();
-        productRepo.deleteById(id);
+
+        int orderProductsCount = productRepo.findCountOrderItemsByProductId(id).orElse(0);
+        if (orderProductsCount > 0) {
+            throw new IllegalArgumentException("The product is contained in the completed orders");
+        }
+
+        List<ShoppingCartProductItem> productItems = productRepo.findCartItemsByProductId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cart items is not found"));
+        productItems.forEach(cartItemRepo::delete);
+
+        productRepo.delete(product);
     }
 
     public List<Product> getPopular() {
-        List<Long> productIds = productRepo.findPopularIds()
-                .orElseThrow(() -> new EntityNotFoundException("Products is not found"))
-                .subList(0, 10);
+        List<Long> productIds = productRepo.findPopularIds(PageRequest.of(0, 10))
+                .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
         return productRepo.findAllById(productIds);
     }
 

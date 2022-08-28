@@ -2,7 +2,7 @@ FROM maven:3.8.5-jdk-11-slim as build
 RUN mkdir /project
 COPY . /project
 WORKDIR /project
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 FROM adoptopenjdk:11-jre-hotspot
 RUN mkdir /app

@@ -53,23 +53,14 @@ public class OrderController {
         }
     }
 
-    @PostMapping(value = "/delete")
-    public ResponseEntity<?> deleteOrder(Long orderId) {
+    @PostMapping(value = "/delete/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
         try {
-            orderRepo.deleteById(orderId);
+            orderRepo.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    @PostMapping(value = "/delete-all")
-    public ResponseEntity<?> deleteAllOrder() {
-        try {
-            orderRepo.deleteAll();
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }
 }

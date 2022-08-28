@@ -5,7 +5,6 @@ import app.constructor.order.OrderFactory;
 import app.model.dto.order.OrderDTO;
 import app.model.order.Order;
 import app.repository.order.OrderRepository;
-import app.service.shoppingCart.ShoppingCartService;
 import app.utils.constants.user.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,6 @@ public class OrderService implements IOrderService<Order> {
 
     @Autowired
     private OrderRepository orderRepo;
-    @Autowired
-    private ShoppingCartService cartService;
     @Autowired
     private OrderFactory orderFactory;
 

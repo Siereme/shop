@@ -1,6 +1,7 @@
 package app.repository.order;
 
 import app.model.order.Order;
+import app.model.order.OrderProductItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,4 +21,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "left join fetch o.payment " +
             "where u.id = :id")
     Optional<List<Order>> findAllByUserId(Long id);
+
 }

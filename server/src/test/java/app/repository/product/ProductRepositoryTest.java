@@ -2,6 +2,7 @@ package app.repository.product;
 
 import app.consrtructor.TestProductConstructor;
 import app.model.product.Product;
+import app.model.shoppingCart.ShoppingCartProductItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -135,4 +136,27 @@ class ProductRepositoryTest {
         Assertions.assertEquals(checkProductList.get(1).getCategories().size(), products.get(1).getCategories().size());
         Assertions.assertEquals(checkProductList.get(1).getCategories().iterator().next().getId(), products.get(1).getCategories().iterator().next().getId());
     }
+
+    @Test
+    void testFindCountOrderItemsByProductId() {
+        //Find count order product items from repository where productId = 1
+        int count = productRepo.findCountOrderItemsByProductId(1L).orElse(0);
+
+        //Check count
+        Assertions.assertEquals(1, count);
+    }
+
+    @Test
+    void testFindCartItemsByProductId() {
+        //Find cart items from repository where productId = 1
+        List<ShoppingCartProductItem> cartItems = productRepo.findCartItemsByProductId(1L).orElseGet(Collections::emptyList);
+
+        //Check count
+        Assertions.assertEquals(1, cartItems.size());
+
+        //Check first element of the collection
+        Assertions.assertEquals(1, cartItems.get(0).getProduct().getId());
+        Assertions.assertEquals(7, cartItems.get(0).getCount());
+    }
+
 }

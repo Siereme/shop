@@ -1,6 +1,7 @@
 package app.controller.shoppingCart;
 
 import app.model.shoppingCart.ShoppingCart;
+import app.model.shoppingCart.ShoppingCartProductItem;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.service.shoppingCart.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +44,14 @@ public class ShoppingCartController {
     @PostMapping(value = "/add")
     public ResponseEntity<?> addToCart(Long userId, Long productId, int count) {
         try {
-            cartService.setCartItem(userId, productId, count);
-            return ResponseEntity.ok().build();
+            ShoppingCartProductItem cartItem = cartService.setCartItem(userId, productId, count);
+            return ResponseEntity.ok().body(cartItem);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    @PostMapping(value = "/remove")
+    @PostMapping(value = "/delete")
     public ResponseEntity<?> removeCartItem(Long userId, Long productId) {
         try {
             cartService.removeCartItem(userId, productId);

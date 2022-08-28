@@ -6,6 +6,7 @@ import app.model.product.option.ProductOption;
 import java.util.Set;
 
 public interface IProduct {
+
     Long getId();
 
     Long getArticle();

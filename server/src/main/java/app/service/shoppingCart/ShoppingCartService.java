@@ -29,7 +29,8 @@ public class ShoppingCartService implements IShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
 
-        ShoppingCartProductItem cartProductItem = cart.getCartItems().stream()
+        ShoppingCartProductItem cartProductItem = cart.getCartItems()
+                .stream()
                 .filter(item -> Objects.equals(item.getProduct().getId(), productId))
                 .findFirst().orElse(null);
 
@@ -53,7 +54,8 @@ public class ShoppingCartService implements IShoppingCartService {
     }
 
     public <T extends IProductItem<Product>> double calculateTotal(Collection<T> cartItems) {
-        return cartItems.stream()
+        return cartItems
+                .stream()
                 .map(item -> item.getProduct().getPrice() * item.getCount())
                 .reduce(0d, Double::sum);
     }

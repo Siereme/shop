@@ -3,7 +3,7 @@ import cookies from "./cookies.js"
 
 
 const handleAuth = async () => {
-    let token = cookies.getCookie('Access_Authorization')
+    let token = cookies.getCookie('X-access-token')
     if(!token){
         return await Promise.resolve(api.loginAnonymous())
     } else {

@@ -1,11 +1,7 @@
 package app.repository.user;
 
 import app.consrtructor.TestUserConstructor;
-import app.model.order.Order;
 import app.model.user.User;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -25,8 +20,6 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepo;
-    @Autowired
-    private SessionFactory sessionFactory;
     private final List<User> userList = new ArrayList<>();
 
     @BeforeEach

@@ -51,11 +51,24 @@ public class Product implements IProduct {
     private Set<ProductOption> options = new HashSet<>();
 
     @JsonIgnoreProperties(value = "categories", allowSetters = true)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "product_category",
-            joinColumns = {@JoinColumn(name = "product_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false)}
-    )
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
+
+
+    @PreRemove
+    public void removeDependencies() {
+        Set.copyOf(categories).forEach(this::removeCategory);
+        Set.copyOf(options).forEach(this::removeOption);
+    }
+
+    public void removeCategory(Category category) {
+        categories.remove(category);
+        category.getProducts().remove(this);
+    }
+
+    public void removeOption(ProductOption option) {
+        options.remove(option);
+        option.getProducts().remove(this);
+    }
 
 }

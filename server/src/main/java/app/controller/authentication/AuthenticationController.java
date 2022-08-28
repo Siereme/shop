@@ -28,7 +28,7 @@ public class AuthenticationController {
     private JwtTokenProvider jwtTokenProvider;
 
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/login", consumes = {"application/json"})
     public ResponseEntity<AuthenticationUserResponse> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             AuthenticationUserResponse authenticationUserResponse = authenticationService.authenticate(

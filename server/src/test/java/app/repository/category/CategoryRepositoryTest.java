@@ -159,4 +159,21 @@ class CategoryRepositoryTest {
         Assertions.assertEquals(checkCategoryList.get(0).getDepth(), categories.get(0).getDepth());
         Assertions.assertEquals(checkCategoryList.get(0).getCategories().size(), categories.get(0).getCategories().size());
     }
+
+    @Test
+    void testFindByIdWithProducts() {
+        //Find category with products from repository where id = 2
+        Category category = categoryRepo.findByIdWithProducts(2L).orElseGet(Category::new);
+
+        //Check category
+        Assertions.assertEquals(2, category.getId());
+        Assertions.assertEquals("Смартфоны", category.getName());
+        Assertions.assertEquals(1, category.getLineage());
+        Assertions.assertEquals(2, category.getDepth());
+
+        //Check product collections
+        Assertions.assertEquals(2, category.getProducts().size());
+        Assertions.assertEquals(1, category.getProducts().iterator().next().getId());
+        Assertions.assertEquals(412235, category.getProducts().iterator().next().getArticle());
+    }
 }

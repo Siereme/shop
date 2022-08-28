@@ -12,6 +12,9 @@ public class AuthenticationUserResponse {
     private String refreshToken;
     private User user;
 
+    public AuthenticationUserResponse() {
+    }
+
     public AuthenticationUserResponse(String accessToken, String refreshToken, User user) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

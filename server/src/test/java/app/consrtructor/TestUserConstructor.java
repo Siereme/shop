@@ -68,7 +68,8 @@ public class TestUserConstructor {
     }
 
     public User getById(Long id) {
-        return userList.stream()
+        return userList
+                .stream()
                 .filter(user -> Objects.equals(user.getId(), id))
                 .findFirst().orElseGet(User::new);
     }

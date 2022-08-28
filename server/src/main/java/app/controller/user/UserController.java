@@ -42,7 +42,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add", consumes = {"application/json"})
     public ResponseEntity<?> addUser(@RequestBody User userDTO) {
         try {
             IUser user = userService.createUser(userDTO);

@@ -2,11 +2,9 @@ package app.consrtructor;
 
 import app.model.category.Category;
 import app.model.product.Product;
+import app.model.product.option.ProductOption;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestProductConstructor {
@@ -60,6 +58,7 @@ public class TestProductConstructor {
         product5.setPrice(3099d);
         product5.setImageLink("/assets/img/products/smart_watches_and_bracelets/product_9_379476.jpg");
         product5.setCategories(Set.of(categoryList.get(3)));
+        product5.setOptions(Set.copyOf(Collections.singletonList(new ProductOption("Вес", "200г"))));
 
         Product product6 = new Product();
         product6.setId(6L);
@@ -102,19 +101,26 @@ public class TestProductConstructor {
     }
 
     public Product getById(Long id) {
-        return productList.stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseGet(Product::new);
+        return productList
+                .stream()
+                .filter(product -> Objects.equals(product.getId(), id))
+                .findFirst().orElseGet(Product::new);
     }
 
     public List<Product> getAllById(List<Long> ids) {
-        return productList.stream()
-                .filter(product -> ids.stream()
+        return productList
+                .stream()
+                .filter(product -> ids
+                        .stream()
                         .anyMatch(id -> Objects.equals(product.getId(), id)))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getByCategoryId(Long id) {
-        return productList.stream()
-                .filter(product -> product.getCategories().stream()
+        return productList
+                .stream()
+                .filter(product -> product.getCategories()
+                        .stream()
                         .anyMatch(category -> Objects.equals(category.getId(), id)))
                 .collect(Collectors.toList());
     }

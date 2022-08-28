@@ -14,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -55,11 +54,13 @@ class OrderRepositoryTest {
         //// Check order items
         Assertions.assertEquals(checkOrderList.get(0).getOrderItems().size(), orders.get(0).getOrderItems().size());
         Assertions.assertTrue(
-                orders.get(0).getOrderItems().stream()
+                orders.get(0).getOrderItems()
+                        .stream()
                         .map(OrderProductItem::getId)
-                        .allMatch(orderId -> checkOrderList.get(0).getOrderItems().stream()
+                        .allMatch(orderId -> checkOrderList.get(0).getOrderItems()
+                                .stream()
                                 .map(OrderProductItem::getId)
-                                .anyMatch(checkOrderId -> Objects.equals(orderId, checkOrderId)))
+                                .anyMatch(orderId::equals))
         );
 
         //Comparison of the second elements of collections
@@ -76,11 +77,13 @@ class OrderRepositoryTest {
         //// Check order items
         Assertions.assertEquals(checkOrderList.get(1).getOrderItems().size(), orders.get(1).getOrderItems().size());
         Assertions.assertTrue(
-                orders.get(1).getOrderItems().stream()
+                orders.get(1).getOrderItems()
+                        .stream()
                         .map(OrderProductItem::getId)
-                        .allMatch(orderId -> checkOrderList.get(1).getOrderItems().stream()
+                        .allMatch(orderId -> checkOrderList.get(1).getOrderItems()
+                                .stream()
                                 .map(OrderProductItem::getId)
-                                .anyMatch(checkOrderId -> Objects.equals(orderId, checkOrderId)))
+                                .anyMatch(orderId::equals))
         );
     }
 
@@ -109,11 +112,14 @@ class OrderRepositoryTest {
         //// Check order items
         Assertions.assertEquals(checkOrderList.get(0).getOrderItems().size(), orders.get(0).getOrderItems().size());
         Assertions.assertTrue(
-                orders.get(0).getOrderItems().stream()
+                orders.get(0).getOrderItems()
+                        .stream()
                         .map(OrderProductItem::getId)
-                        .allMatch(itemId -> checkOrderList.get(0).getOrderItems().stream()
+                        .allMatch(itemId -> checkOrderList.get(0).getOrderItems()
+                                .stream()
                                 .map(OrderProductItem::getId)
-                                .anyMatch(checkItemId -> Objects.equals(itemId, checkItemId)))
+                                .anyMatch(itemId::equals))
         );
     }
+
 }

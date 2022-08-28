@@ -2,11 +2,9 @@ package app.consrtructor;
 
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
+import org.assertj.core.util.Sets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class TestShoppingCartConstructor {
 
@@ -33,7 +31,7 @@ public class TestShoppingCartConstructor {
         productItem12.setProduct(productConstructor.getById(2L));
         productItem12.setCount(11);
 
-        shoppingCart1.setCartItems(Set.of(productItem11, productItem12));
+        shoppingCart1.setCartItems(Sets.newHashSet(Arrays.asList(productItem11, productItem12)));
 
         shoppingCart1.setTotal(194500d);
         shoppingCart1.setCount(2);
@@ -54,7 +52,7 @@ public class TestShoppingCartConstructor {
         productItem22.setProduct(productConstructor.getById(4L));
         productItem22.setCount(10);
 
-        shoppingCart2.setCartItems(Set.of(productItem21, productItem22));
+        shoppingCart2.setCartItems(Sets.newHashSet(Arrays.asList(productItem21, productItem22)));
 
         shoppingCart2.setTotal(214500d);
         shoppingCart2.setCount(2);
@@ -67,7 +65,8 @@ public class TestShoppingCartConstructor {
     }
 
     public ShoppingCart getById(Long id) {
-        return shoppingCartList.stream()
+        return shoppingCartList
+                .stream()
                 .filter(shoppingCart -> Objects.equals(shoppingCart.getId(), id))
                 .findFirst().orElseGet(ShoppingCart::new);
     }

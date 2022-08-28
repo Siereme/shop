@@ -18,9 +18,9 @@ export default {
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('Access_Authorization', res.data.accessToken)
+            cookies.setCookie('X-access-token', res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('Refresh_Authorization', res.data.refreshToken)
+            cookies.setCookie('X-refresh-token', res.data.refreshToken)
             return res
         })
     },
@@ -32,9 +32,9 @@ export default {
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('Access_Authorization', res.data.accessToken)
+            cookies.setCookie('X-access-token', res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('Refresh_Authorization', res.data.refreshToken)
+            cookies.setCookie('X-refresh-token', res.data.refreshToken)
             return res
         })
     },
@@ -43,15 +43,15 @@ export default {
             method: 'post',
             url: '/auth/refresh',
             headers: {
-                'Refresh_Authorization': refreshToken.value
+                'X-refresh-token': refreshToken.value
             }
         })
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('Access_Authorization', res.data.accessToken)
+            cookies.setCookie('X-access-token', res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('Refresh_Authorization', res.data.refreshToken)
+            cookies.setCookie('X-refresh-token', res.data.refreshToken)
             return res
         })
     },
@@ -61,8 +61,8 @@ export default {
             url: '/auth/logout'
         })
         .then(res => {
-            cookies.deleteCookie('Access_Authorization')
-            cookies.deleteCookie('Refresh_Authorization')
+            cookies.deleteCookie('X-access-token')
+            cookies.deleteCookie('X-refresh-token')
             store.commit('setUser', {})
             store.commit('setAccessToken', '')
             store.commit('setRefreshToken', '')
@@ -74,7 +74,7 @@ export default {
             method: 'get',
             url: '/auth/info',
             headers: {
-                'Access_Authorization': token
+                'X-access-token': token
             }
         })
         .then(res => {
@@ -164,7 +164,7 @@ export default {
     loadProductsByCategoryId: (categoryId) =>  {
         return axiosApi({
             method: 'get',
-            url: '/product/category_id/' + categoryId
+            url: '/product/category-id/' + categoryId
         })
         .then(res => {
             store.commit('setProducts', res.data)
@@ -205,7 +205,7 @@ export default {
         const userId = store.getters.getUserId()
         return axiosApi({
             method: 'post',
-            url: `/shopping-cart/remove?userId=${userId}&productId=${productId}`
+            url: `/shopping-cart/delete?userId=${userId}&productId=${productId}`
         })
     },
     getOrders: function(){

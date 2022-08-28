@@ -19,4 +19,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(value = "select distinct c from Category c where c.depth = :depth")
     Optional<List<Category>> findByDepth(int depth);
 
+    @Query(value = "select distinct c from Category c left join fetch c.products p left join fetch p.categories where c.id = :id")
+    Optional<Category> findByIdWithProducts(Long id);
+
 }

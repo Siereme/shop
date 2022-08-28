@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -44,11 +43,13 @@ class ShoppingCartRepositoryTest {
         //// Check shopping cart items
         Assertions.assertEquals(checkShoppingCart.getCartItems().size(), shoppingCart.getCartItems().size());
         Assertions.assertTrue(
-                shoppingCart.getCartItems().stream()
+                shoppingCart.getCartItems()
+                        .stream()
                         .map(ShoppingCartProductItem::getId)
-                        .allMatch(itemId -> checkShoppingCart.getCartItems().stream()
+                        .allMatch(itemId -> checkShoppingCart.getCartItems()
+                                .stream()
                                 .map(ShoppingCartProductItem::getId)
-                                .anyMatch(checkItemId -> Objects.equals(itemId, checkItemId)))
+                                .anyMatch(itemId::equals))
         );
     }
 }

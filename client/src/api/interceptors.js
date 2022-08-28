@@ -8,7 +8,7 @@ const setup = (store) => {
       (config) => {
         var accessToken = store.getters.getAccessToken()
         if (accessToken && !config.url.includes('/refresh')) {
-          config.headers['Access_Authorization'] = accessToken
+          config.headers['X-access-token'] = accessToken
         }
         return config;
       },
