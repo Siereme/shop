@@ -108,48 +108,18 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findByCategoryId() {
-
-        //Find products from repository where categoryId = 3
-        List<Product> products = productRepo.findByLineageDepthAndCategoryId(1L, 2, 3L).orElseGet(Collections::emptyList);
-
-        //Get products from constructor where categoryId = 3
-        List<Product> checkProductList = List.of(productList.get(2), productList.get(3));
-
-        //Check collections
-        Assertions.assertFalse(products.isEmpty());
-        Assertions.assertEquals(checkProductList.size(), products.size());
-
-        //Comparison of the first elements of collections
-        Assertions.assertEquals(checkProductList.get(0).getId(), products.get(0).getId());
-        Assertions.assertEquals(checkProductList.get(0).getArticle(), products.get(0).getArticle());
-        Assertions.assertEquals(checkProductList.get(0).getName(), products.get(0).getName());
-        Assertions.assertEquals(checkProductList.get(0).getImageLink(), products.get(0).getImageLink());
-        Assertions.assertEquals(checkProductList.get(0).getCategories().size(), products.get(0).getCategories().size());
-        Assertions.assertEquals(checkProductList.get(0).getCategories().iterator().next().getId(), products.get(0).getCategories().iterator().next().getId());
-
-        //Comparison of the second elements of collections
-        Assertions.assertEquals(checkProductList.get(1).getId(), products.get(1).getId());
-        Assertions.assertEquals(checkProductList.get(1).getArticle(), products.get(1).getArticle());
-        Assertions.assertEquals(checkProductList.get(1).getName(), products.get(1).getName());
-        Assertions.assertEquals(checkProductList.get(1).getImageLink(), products.get(1).getImageLink());
-        Assertions.assertEquals(checkProductList.get(1).getCategories().size(), products.get(1).getCategories().size());
-        Assertions.assertEquals(checkProductList.get(1).getCategories().iterator().next().getId(), products.get(1).getCategories().iterator().next().getId());
-    }
-
-    @Test
-    void testFindCountOrderItemsByProductId() {
+    void testFindCountOrderItems() {
         //Find count order product items from repository where productId = 1
-        int count = productRepo.findCountOrderItemsByProductId(1L).orElse(0);
+        int count = productRepo.findCountOrderItems(1L).orElse(0);
 
         //Check count
         Assertions.assertEquals(1, count);
     }
 
     @Test
-    void testFindCartItemsByProductId() {
+    void testFindCartItems() {
         //Find cart items from repository where productId = 1
-        List<ShoppingCartProductItem> cartItems = productRepo.findCartItemsByProductId(1L).orElseGet(Collections::emptyList);
+        List<ShoppingCartProductItem> cartItems = productRepo.findCartItems(1L).orElseGet(Collections::emptyList);
 
         //Check count
         Assertions.assertEquals(1, cartItems.size());

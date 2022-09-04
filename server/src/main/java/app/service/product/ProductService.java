@@ -10,12 +10,14 @@ import app.repository.category.CategoryRepository;
 import app.repository.product.ProductOptionRepository;
 import app.repository.product.ProductRepository;
 import app.repository.shoppingCart.ShoppingCartProductItemRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,14 +79,15 @@ public class ProductService implements IProductService<Product> {
         Product product = productRepo.findByIdWithCategoryProducts(id)
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
 
-        int orderProductsCount = productRepo.findCountOrderItemsByProductId(id).orElse(0);
+        int orderProductsCount = productRepo.findCountOrderItems(id).orElse(0);
         if (orderProductsCount > 0) {
             throw new IllegalArgumentException("The product is contained in the completed orders");
         }
 
-        List<ShoppingCartProductItem> productItems = productRepo.findCartItemsByProductId(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cart items is not found"));
-        productItems.forEach(cartItemRepo::delete);
+        List<ShoppingCartProductItem> productItems = productRepo.findCartItems(id).orElseGet(Collections::emptyList);
+        if(!productItems.isEmpty()){
+            productItems.forEach(cartItemRepo::delete);
+        }
 
         productRepo.delete(product);
     }
@@ -99,7 +102,13 @@ public class ProductService implements IProductService<Product> {
     public List<Product> findByCategoryId(Long id) {
         Category category = categoryRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
-        return productRepo.findByLineageDepthAndCategoryId(category.getLineage(), category.getDepth(), category.getId())
+        return productRepo.findByPathInDepth(category.getPath())
+                .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
+    }
+
+    public List<Product> findByCategoryPath(String path, int depth) {
+        String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
+        return productRepo.findByPathInDepth(targetPath)
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 }

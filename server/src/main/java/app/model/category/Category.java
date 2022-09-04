@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,6 +18,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "category")
 public class Category implements ICategory {
 
@@ -25,7 +31,6 @@ public class Category implements ICategory {
     @Column(name = "name")
     private String name;
 
-
     @Column(name = "image_link")
     private String imageLink;
 
@@ -35,10 +40,11 @@ public class Category implements ICategory {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private Set<Category> categories = new HashSet<>();
 
-    @Column(name = "lineage")
-    private Long lineage;
+    @Column(name = "path")
+    private String path;
 
     @Column(name = "depth")
     private int depth;

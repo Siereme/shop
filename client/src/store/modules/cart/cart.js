@@ -41,6 +41,11 @@ export default {
         setCartTotal: (state, total) => {
             state.cartTotal = total
         },
+        setCart: (state, cart) => {
+            state.cartProducts = cart.cartItems
+            state.cartCount = cart.count
+            state.cartTotal = cart.total
+        },
         clearCart: (state) => {
             state.cartProducts = []
             state.cartCount = 0

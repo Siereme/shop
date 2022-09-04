@@ -11,15 +11,7 @@ const handleAuth = async () => {
     }
 }
 
-const handleAuthInit = () => {
-    handleAuth()
-    .then(() => {
-      api.loadCategoriesByDepth(1)
-      api.loadPopularProducts()
-      api.loadCartProducts()
-      api.getOrders()
-    })
-}
+const handleAuthInit = () => handleAuth().then(() => api.loadMain())
 
 export default {
     handleAuthInit

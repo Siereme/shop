@@ -1,5 +1,6 @@
 package app.controller.product;
 
+import app.model.dto.category.CategoryPathDTO;
 import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.repository.product.ProductRepository;
@@ -50,6 +51,16 @@ public class ProductController {
     public ResponseEntity<?> findByCategoryId(@PathVariable Long id) {
         try {
             List<Product> products = productService.findByCategoryId(id);
+            return ResponseEntity.ok().body(products);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/by-category/path-depth")
+    public ResponseEntity<?> findByPathAndDepth(@RequestBody CategoryPathDTO categoryDTO) {
+        try {
+            List<Product> products = productService.findByCategoryPath(categoryDTO.getPath(), categoryDTO.getDepth());
             return ResponseEntity.ok().body(products);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());

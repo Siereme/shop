@@ -14,4 +14,6 @@ public interface IProductService<T extends Product> {
     List<T> getPopular();
 
     List<T> findByCategoryId(Long id);
+
+    List<T> findByCategoryPath(String path, int depth);
 }

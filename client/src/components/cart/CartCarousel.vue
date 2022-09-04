@@ -35,7 +35,7 @@ export default defineComponent({
       let handleCart = (count) => {
           if(+cartCount.value + +count >= 1){
               cartCount.value = +cartCount.value + +count
-              api.addCartProduct(props.cart.product.id, cartCount.value).then(() => api.loadCartProducts())
+              api.addCartProduct(props.cart.product.id, cartCount.value)
           }
       }
 
@@ -43,16 +43,16 @@ export default defineComponent({
         var count = event.target.value
         if(!isNaN(count) && +count >= 1){
             cartCount.value = count
-            api.addCartProduct(props.cart.product.id, +count).then(() => api.loadCartProducts())
+            api.addCartProduct(props.cart.product.id, +count)
         } else {
             cartCount.value = 1
-            api.addCartProduct(props.cart.product.id, 1).then(() => api.loadCartProducts())
+            api.addCartProduct(props.cart.product.id, 1)
         }
       }
 
       let deleteProduct = () => {
         store.commit('removeCartProduct', props.cart.product.id)
-        api.removeCartProduct(props.cart.product.id).then(() => api.loadCartProducts())
+        api.removeCartProduct(props.cart.product.id)
       }
 
       return {

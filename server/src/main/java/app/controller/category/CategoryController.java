@@ -1,7 +1,10 @@
 package app.controller.category;
 
 import app.model.category.Category;
-import app.model.dto.category.CategoryDTO;
+import app.model.dto.category.CategoryConfigDTO;
+import app.model.dto.category.CategoryPathDTO;
+import app.model.dto.category.CategoryRequest;
+import app.model.dto.category.CategoryResponse;
 import app.repository.category.CategoryRepository;
 import app.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +20,9 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    private CategoryService service;
+    private CategoryService categoryService;
     @Autowired
     private CategoryRepository categoryRepo;
-
 
     @GetMapping(value = "/all")
     public ResponseEntity<?> findAll() {
@@ -56,7 +58,7 @@ public class CategoryController {
     @GetMapping(value = "/first-level")
     public ResponseEntity<?> findAllFirstLevel() {
         try {
-            List<Category> categories = categoryRepo.findAllFirstLevel()
+            List<Category> categories = categoryRepo.findByDepth(1)
                     .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
             return ResponseEntity.ok().body(categories);
         } catch (EntityNotFoundException e) {
@@ -64,8 +66,8 @@ public class CategoryController {
         }
     }
 
-    @GetMapping(value = "/depth")
-    public ResponseEntity<?> findByDepth(@RequestParam int depth) {
+    @GetMapping(value = "/depth/{depth}")
+    public ResponseEntity<?> findByDepth(@PathVariable int depth) {
         try {
             List<Category> categories = categoryRepo.findByDepth(depth)
                     .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
@@ -75,12 +77,12 @@ public class CategoryController {
         }
     }
 
-    @GetMapping(value = "/lineage-depth")
-    public ResponseEntity<?> findByLineageAndDepth(@RequestParam Long lineage, @RequestParam int depth) {
+    @GetMapping(value = "/path")
+    public ResponseEntity<?> findByPathAndDepth(@RequestBody CategoryPathDTO categoryDTO) {
         try {
-            List<Category> categories = categoryRepo.findByLineageAndDepth(lineage, depth)
-                    .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
-            return ResponseEntity.ok().body(categories);
+            Category category =
+                    categoryService.getByPathAndDepth(categoryDTO.getPath(), categoryDTO.getDepth());
+            return ResponseEntity.ok().body(category);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -88,9 +90,9 @@ public class CategoryController {
 
 
     @PostMapping(value = "/add", consumes = {"application/json"})
-    public ResponseEntity<?> addProduct(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<?> addProduct(@RequestBody CategoryRequest categoryRequest) {
         try {
-            Category category = service.addCategory(categoryDTO);
+            Category category = categoryService.addCategory(categoryRequest);
             return ResponseEntity.ok().body(category);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -100,7 +102,7 @@ public class CategoryController {
     @PostMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         try {
-            service.deleteById(id);
+            categoryService.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());

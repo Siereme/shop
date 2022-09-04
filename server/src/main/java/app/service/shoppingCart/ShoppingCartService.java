@@ -24,7 +24,7 @@ public class ShoppingCartService implements IShoppingCartService {
 
 
     @Transactional
-    public ShoppingCartProductItem setCartItem(Long userId, Long productId, int count) {
+    public ShoppingCart setCartItem(Long userId, Long productId, int count) {
         ShoppingCart cart = cartRepo.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
@@ -37,7 +37,7 @@ public class ShoppingCartService implements IShoppingCartService {
         if (cartProductItem != null) {
             cartProductItem.setCount(count);
             cart.setTotal(calculateTotal(cart.getCartItems()));
-            return cartProductItem;
+            return cart;
         }
 
         Product product = productRepo.findById(productId)
@@ -50,7 +50,7 @@ public class ShoppingCartService implements IShoppingCartService {
         cart.setCartItem(cartItem);
         cart.setCount(cart.getCartItems().size());
         cart.setTotal(calculateTotal(cart.getCartItems()));
-        return cartItem;
+        return cart;
     }
 
     public <T extends IProductItem<Product>> double calculateTotal(Collection<T> cartItems) {
@@ -61,10 +61,13 @@ public class ShoppingCartService implements IShoppingCartService {
     }
 
     @Transactional
-    public void removeCartItem(Long userId, Long productId) {
+    public ShoppingCart removeCartItem(Long userId, Long productId) {
         ShoppingCart cart = cartRepo.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
         cart.getCartItems().removeIf(cartItem -> Objects.equals(cartItem.getProduct().getId(), productId));
+        cart.setTotal(calculateTotal(cart.getCartItems()));
+        cart.setCount(cart.getCartItems().size());
+        return cart;
     }
 
 }

@@ -1,8 +1,10 @@
 package app.controller.user;
 
+import app.model.dto.user.AuthenticationUserResponse;
 import app.model.user.IUser;
 import app.model.user.User;
 import app.repository.user.UserRepository;
+import app.service.authentication.AuthenticationService;
 import app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ public class UserController {
     private UserRepository userRepo;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthenticationService authService;
 
 
     @GetMapping(value = "/all")
@@ -57,6 +61,17 @@ public class UserController {
         try {
             User user = userService.createAnonymousUser();
             return ResponseEntity.ok().body(user);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/update")
+    public ResponseEntity<?> updateUser(@RequestBody User userDTO) {
+        try {
+            User user = userService.updateUser(userDTO);
+            AuthenticationUserResponse response = authService.createToken(user);
+            return ResponseEntity.ok().body(response);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }

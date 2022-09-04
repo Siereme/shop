@@ -44,7 +44,7 @@ public class ShoppingCartController {
     @PostMapping(value = "/add")
     public ResponseEntity<?> addToCart(Long userId, Long productId, int count) {
         try {
-            ShoppingCartProductItem cartItem = cartService.setCartItem(userId, productId, count);
+            ShoppingCart cartItem = cartService.setCartItem(userId, productId, count);
             return ResponseEntity.ok().body(cartItem);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -54,8 +54,8 @@ public class ShoppingCartController {
     @PostMapping(value = "/delete")
     public ResponseEntity<?> removeCartItem(Long userId, Long productId) {
         try {
-            cartService.removeCartItem(userId, productId);
-            return ResponseEntity.ok().build();
+            ShoppingCart shoppingCart = cartService.removeCartItem(userId, productId);
+            return ResponseEntity.ok().body(shoppingCart);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }

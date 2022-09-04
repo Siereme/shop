@@ -61,8 +61,8 @@ export default {
             url: '/auth/logout'
         })
         .then(res => {
-            cookies.deleteCookie('X-access-token')
-            cookies.deleteCookie('X-refresh-token')
+            cookies.setCookie('X-access-token', '')
+            cookies.setCookie('X-refresh-token', '')
             store.commit('setUser', {})
             store.commit('setAccessToken', '')
             store.commit('setRefreshToken', '')
@@ -83,6 +83,26 @@ export default {
             return res
         })
     },
+    loadMain: () => {
+        return axiosApi({
+            method: 'post',
+            url: '/main/main-page',
+            data: {
+                'userId': store.getters.getUserId(),
+                'withCategories': true,
+                'categoryLevel': 1,
+                'withShoppingCart': true,
+                'withOrders': true,
+                'withProductsPopular': true,
+            }
+        })
+        .then(res => {
+            store.commit('setCategories', res.data.categories)
+            store.commit('setPopularProducts', res.data.productsPopular)
+            store.commit('setCart', res.data.shoppingCart)
+            store.commit('setOrders', [...res.data.orders])
+        })
+    },
     createUser: (user) => {
         return axiosApi({
             method: 'post',
@@ -90,64 +110,35 @@ export default {
             data: user
         })
     },
-    createAnonymousUser: () => {
+    updateUser: (user) => {
         return axiosApi({
             method: 'post',
-            url: '/user/add/anonymous'
-        })
-        .then(res => {
-            store.commit('setUser', res.data)
-            return res
-        })
-    },
-    editUser: (user) => {
-        return axiosApi({
-            method: 'post',
-            url: '/user/edit',
+            url: '/user/update',
             data: user
         })
         .then(res => {
-            store.commit('setUser', res.data)
+            store.commit('setUser', res.data.user)
+            store.commit('setAccessToken', res.data.accessToken)
+            cookies.setCookie('X-access-token', res.data.accessToken)
+            store.commit('setRefreshToken', res.data.refreshToken)
+            cookies.setCookie('X-refresh-token', res.data.refreshToken)
             return res
         })
     },
-    loadAllCategories: () =>  {
+    loadCategory: (id, withParent, withProducts) => {
         return axiosApi({
-            method: 'get',
-            url: '/category/all'
+            method: 'post',
+            url: '/main/category-page',
+            data: {
+                "id": id, 
+                "withParent": withParent,
+                "withProducts": withProducts
+            }
         })
         .then(res => {
-            store.commit('setCategories', res.data)
-            return res
-        })
-    },
-    loadCategoryById: (id) =>  {
-        return axiosApi({
-            method: 'get',
-            url: '/category/id/' + id
-        })
-        .then(res => {
-            store.commit('setCurrentCategory', res.data)
-            return res
-        })
-    },
-    loadCategoriesByDepth: (depth) =>  {
-        return axiosApi({
-            method: 'get',
-            url: '/category/depth?depth=' + depth
-        })
-        .then(res => {
-            store.commit('setCategories', res.data)
-            return res
-        })
-    },
-    loadCategoriesByLineageAndDepth: (lineage, depth) =>  {
-        return axiosApi({
-            method: 'get',
-            url: '/category/lineage-depth?lineage=' + lineage + '&depth=' + depth
-        })
-        .then(res => {
-            store.commit('setMainCategory', res.data[0])
+            store.commit('setCurrentCategory', res.data.category)
+            store.commit('setMainCategory', res.data.parentCategory ?? {})
+            store.commit('setProducts', res.data.products ?? [])
             return res
         })
     },
@@ -155,16 +146,6 @@ export default {
         return axiosApi({
             method: 'get',
             url: '/product/all'
-        })
-        .then(res => {
-            store.commit('setProducts', res.data)
-            return res
-        })
-    },
-    loadProductsByCategoryId: (categoryId) =>  {
-        return axiosApi({
-            method: 'get',
-            url: '/product/category-id/' + categoryId
         })
         .then(res => {
             store.commit('setProducts', res.data)
@@ -200,12 +181,24 @@ export default {
             method: 'post',
             url: `/shopping-cart/add?userId=${userId}&productId=${productId}&count=${count}`
         })
+        .then(res => {
+            store.commit('setCartProducts', res.data.cartItems ?? [])
+            store.commit('setCartCount', res.data.count ?? 0)
+            store.commit('setCartTotal', res.data.total ?? 0)
+            return res
+        })
     },
     removeCartProduct: (productId) =>  {
         const userId = store.getters.getUserId()
         return axiosApi({
             method: 'post',
             url: `/shopping-cart/delete?userId=${userId}&productId=${productId}`
+        })
+        .then(res => {
+            store.commit('setCartProducts', res.data.cartItems ?? [])
+            store.commit('setCartCount', res.data.count ?? 0)
+            store.commit('setCartTotal', res.data.total ?? 0)
+            return res
         })
     },
     getOrders: function(){

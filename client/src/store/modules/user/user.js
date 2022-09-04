@@ -30,6 +30,9 @@ export default {
         getUserStatus: (state) => () => {
             return state.user?.status
         },
+        getUserRole: (state) => () => {
+            return state.user?.role?.name
+        },
         getAccessToken: (state) => () => {
             return state.accessToken
         },

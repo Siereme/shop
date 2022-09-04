@@ -12,14 +12,14 @@ import { defineComponent } from 'vue'
 import {useStore} from "vuex"
 import {computed} from 'vue'
 import BannersWrapperVue from './banners/BannersWrapper.vue'
-import PopularProducts from './product/PopularProducts.vue'
+import PopularProductsVue from './product/PopularProducts.vue'
 
 export default defineComponent({
     name: 'App',
     components: {
-        BannersWrapper: BannersWrapperVue,
-        PopularProducts
-    },
+    BannersWrapper: BannersWrapperVue,
+    PopularProducts: PopularProductsVue,
+},
     setup() {
         const store = useStore();
 

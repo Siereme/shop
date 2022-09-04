@@ -92,25 +92,25 @@ export default defineComponent({
         api.getPayments()
 
         let storeUser = computed(() => store.state.user.user)
-        let user = ref(storeUser.value && storeUser.value.status !== 'ANONYMOUS' ? storeUser : {})
+        let sendUserForm = ref(Object.assign({}, storeUser.value))
+        let user = ref(storeUser.value && storeUser.value.status !== 'ANONYMOUS' ? Object.assign({}, storeUser.value) : {})
         let payments = computed(() => store.state.order.payments)
         let payment = ref({})
 
         let setUserData = () => {
-            store.commit('setUserPhone', user.value.phone)
-            store.commit('setUserEmail', user.value.email)
-            store.commit('setUserSurname', user.value.surname)
-            store.commit('setUserName', user.value.name)
-            store.commit('setUserPatronymic', user.value.patronymic)
+            sendUserForm.value.phone = user.value.phone
+            sendUserForm.value.email = user.value.email
+            sendUserForm.value.surname = user.value.surname
+            sendUserForm.value.name = user.value.name
+            sendUserForm.value.patronymic = user.value.patronymic
         }
 
         let createOrder = () => {
             setUserData()
-            api.createOrder(storeUser.value, payment.value)
+            store.commit('setIsLoading', true)
+            api.createOrder(sendUserForm.value, payment.value)
             .then(res => {
                 if(res.status === 200){
-                    store.commit('setIsLoading', true)
-                    store.commit('setCartProducts', [])
                     router.replace({name: 'OrderPage'})
                 }
             })

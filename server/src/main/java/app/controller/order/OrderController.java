@@ -1,7 +1,7 @@
 package app.controller.order;
 
 import app.model.dto.order.OrderDTO;
-import app.model.dto.order.OrderResponseDTO;
+import app.model.dto.order.OrderResponse;
 import app.model.order.Order;
 import app.repository.order.OrderRepository;
 import app.service.order.OrderService;
@@ -47,7 +47,7 @@ public class OrderController {
     public ResponseEntity<?> addOrder(@RequestBody OrderDTO orderDTO) {
         try {
             Order order = orderService.createOrder(orderDTO);
-            return ResponseEntity.ok().body(new OrderResponseDTO(order));
+            return ResponseEntity.ok().body(new OrderResponse(order));
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }

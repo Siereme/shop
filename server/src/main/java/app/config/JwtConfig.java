@@ -1,6 +1,8 @@
 package app.config;
 
 import app.security.JwtTokenFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,5 +21,13 @@ public class JwtConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterCh
     @Override
     public void configure(HttpSecurity httpSecurity) {
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public FilterRegistrationBean<JwtTokenFilter> filterRegistrationBean() {
+        FilterRegistrationBean<JwtTokenFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(jwtTokenFilter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
     }
 }

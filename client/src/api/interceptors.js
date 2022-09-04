@@ -2,7 +2,6 @@
 import api from './backend-api'
 import axiosApi from "./api"
 
-
 const setup = (store) => {
     axiosApi.interceptors.request.use(
       (config) => {

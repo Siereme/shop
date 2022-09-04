@@ -1,9 +1,9 @@
-INSERT INTO category (category_id, name, lineage, depth) VALUES (1, 'Смартфоны и гаджеты', 1, 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (1, 'Смартфоны и гаджеты', '1/', 1);
 
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (2, 1, 'Смартфоны', 1, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (3, 1, 'Планшеты', 1, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (4, 1, 'Умные часы и браслеты', 1, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (5, 1, 'Электронные книги', 1, 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (2, 1, 'Смартфоны', '1/2/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (3, 1, 'Планшеты', '1/3/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (4, 1, 'Умные часы и браслеты', '1/4/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (5, 1, 'Электронные книги', '1/5/', 2);
 
 
 
@@ -61,7 +61,7 @@ INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) V
 INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (4, 2, 4, 10);
 
 INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','+7-999-999-99-99', 1, 'ACTIVE', 1);
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-99', 2, 'ACTIVE', 2);
+INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-98', 2, 'ACTIVE', 2);
 
 
 INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');

@@ -1,11 +1,11 @@
 package app.service.shoppingCart;
 
-import app.model.shoppingCart.ShoppingCartProductItem;
+import app.model.shoppingCart.ShoppingCart;
 
 public interface IShoppingCartService {
 
-    ShoppingCartProductItem setCartItem(Long userId, Long productId, int count);
+    ShoppingCart setCartItem(Long userId, Long productId, int count);
 
-    void removeCartItem(Long userId, Long productId);
+    ShoppingCart removeCartItem(Long userId, Long productId);
 
 }

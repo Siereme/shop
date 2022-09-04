@@ -39,9 +39,6 @@ public class SpringConfig {
     @Value("${spring.jpa.properties.hibernate.dialect}")
     private String hibernateDialect;
 
-    @Value("${spring.jpa.show-sql}")
-    private String hibernateShowSql;
-
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String hibernateCreationSchema;
 
@@ -68,7 +65,6 @@ public class SpringConfig {
     public Properties hibernateProperties() {
         Properties hibernateProp = new Properties();
         hibernateProp.put("hibernate.dialect", hibernateDialect);
-        hibernateProp.put("hibernate.show_sql", hibernateShowSql);
         hibernateProp.put("hibernate.hbm2ddl.auto", hibernateCreationSchema);
         hibernateProp.put("hibernate.format_sql", hibernateFormatSql);
         return hibernateProp;

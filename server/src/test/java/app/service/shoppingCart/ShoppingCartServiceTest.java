@@ -51,15 +51,19 @@ class ShoppingCartServiceTest {
         Mockito.when(productRepo.findById(5L)).thenReturn(productOptional);
 
         //Call a real service method
-        ShoppingCartProductItem productItem = cartService.setCartItem(1L, 5L, 7);
+        ShoppingCart shoppingCart = cartService.setCartItem(1L, 5L, 7);
 
         //Verify stub calls
         Mockito.verify(cartRepo, Mockito.times(1)).findByUserId(1L);
         Mockito.verify(productRepo, Mockito.times(1)).findById(5L);
 
         //Check the resulting object
-        Assertions.assertEquals(productItemMock.getProduct().getArticle(), productItem.getProduct().getArticle());
-        Assertions.assertEquals(productItemMock.getCount(), productItem.getCount());
+        Assertions.assertTrue(
+                shoppingCart.getCartItems()
+                        .stream()
+                        .map(item -> item.getProduct().getId())
+                        .anyMatch(Long.valueOf(5)::equals)
+        );
     }
 
     @Test
@@ -85,9 +89,17 @@ class ShoppingCartServiceTest {
         Mockito.when(cartRepo.findByUserId(1L)).thenReturn(cartOptional);
 
         //Call a real service method
-        cartService.removeCartItem(1L, 1L);
+        ShoppingCart shoppingCart = cartService.removeCartItem(1L, 1L);
 
         //Verify stub calls
         Mockito.verify(cartRepo, Mockito.times(1)).findByUserId(1L);
+
+        //Check the resulting object
+        Assertions.assertFalse(
+                shoppingCart.getCartItems()
+                        .stream()
+                        .map(item -> item.getProduct().getId())
+                        .anyMatch(Long.valueOf(1)::equals)
+        );
     }
 }

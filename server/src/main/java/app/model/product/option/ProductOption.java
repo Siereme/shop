@@ -5,16 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "product_option")
+@RequiredArgsConstructor
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Entity
+@Table(name = "product_option")
 public class ProductOption implements IOption {
 
     @Id

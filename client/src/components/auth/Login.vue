@@ -41,7 +41,10 @@ export default defineComponent({
             .then(res => {
                 if(res.status === 200){
                     store.commit('setShownAuthModal', 'hide')
-                    router.go()
+                    
+                    router.currentRoute.value.fullPath.includes('/order')
+                    ? router.push("/")
+                    : router.go()
                 }
             })
         }

@@ -128,11 +128,15 @@ class ShoppingCartControllerTest {
 
         //Convert the response to an object
         String strContents = mvcResult.getResponse().getContentAsString();
-        ShoppingCartProductItem cartProductItem = objectMapper.readValue(strContents, ShoppingCartProductItem.class);
+        ShoppingCart shoppingCart = objectMapper.readValue(strContents, ShoppingCart.class);
 
         //Check the resulting object
-        Assertions.assertEquals(8, cartProductItem.getProduct().getId());
-        Assertions.assertEquals(10, cartProductItem.getCount());
+        Assertions.assertTrue(
+                shoppingCart.getCartItems()
+                        .stream()
+                        .map(item -> item.getProduct().getId())
+                        .anyMatch(Long.valueOf(8)::equals)
+        );
     }
 
     @Test
@@ -148,5 +152,17 @@ class ShoppingCartControllerTest {
         //Check the response status
         int status = mvcResult.getResponse().getStatus();
         Assertions.assertEquals(200, status);
+
+        //Convert the response to an object
+        String strContents = mvcResult.getResponse().getContentAsString();
+        ShoppingCart shoppingCart = objectMapper.readValue(strContents, ShoppingCart.class);
+
+        //Check the resulting object
+        Assertions.assertFalse(
+                shoppingCart.getCartItems()
+                        .stream()
+                        .map(item -> item.getProduct().getId())
+                        .anyMatch(Long.valueOf(4)::equals)
+        );
     }
 }

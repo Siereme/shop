@@ -36,11 +36,9 @@ export default defineComponent({
         const store = useStore();    
             
         let loadData = categoryId => {
-            if(token.value){
-                api.loadCategoryById(categoryId)
-                .then(() => api.loadCategoriesByLineageAndDepth(currentCategory.value.lineage, 1))
-                store.commit('setProducts', [])
-                api.loadProductsByCategoryId(categoryId)
+            if(token.value && currentCategory.value.id != categoryId){
+                api.loadCategory(categoryId, true, true)
+                .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
             }
         }
 
@@ -69,7 +67,7 @@ export default defineComponent({
 
         let products = computed(() => store.state.product.products)
         
-        const shown = computed(() => mainCategory.value !== null && currentCategory.value !== null && products.value !== null && products.value.length)
+        const shown = computed(() => mainCategory.value !== null && currentCategory.value !== null)
 
         return {
             shown,

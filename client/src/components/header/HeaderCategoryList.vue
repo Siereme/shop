@@ -1,21 +1,43 @@
 <template>
   <div class="header-navbar">
         <ul class="header-category-list">
-            <router-link v-for="category in categories" :key="category.id" :to="'/category/' + category.id">
+            <a v-for="category in categories" :key="category.id" @click="handleClick(category.id)">
               {{category.name}}
-            </router-link>
+            </a>
         </ul>
   </div>
 </template>
 
 <script>
+import api from "@/api/backend-api"
 import { defineComponent } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default defineComponent({
     name: 'HeaderCategoryList',
     props: {
         categories: {
             default: () => {}
         }
+    },
+    setup(){
+      const store = useStore()
+      const router = useRouter()
+
+      let handleClick = (categoryId) => {
+        store.commit('setIsLoading', true)
+        api.loadCategory(categoryId, true, true)
+        .then((res) => {
+          if(res.status === 200){
+            router.push({name: 'CategoryPage', params: {id: categoryId}})
+            store.commit('setIsLoading', false)
+          }
+        })
+      }
+      
+      return{
+        handleClick
+      }
     }
 })
 </script>

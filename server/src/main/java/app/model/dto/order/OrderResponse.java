@@ -9,17 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class OrderResponseDTO {
+public class OrderResponse {
 
     String token;
     User user;
     Order order;
 
-    public OrderResponseDTO(Order order) {
+    public OrderResponse(Order order) {
         this.order = order;
     }
 
-    public OrderResponseDTO(String token, User user, Order order) {
+    public OrderResponse(String token, User user, Order order) {
         this.token = token;
         this.user = user;
         this.order = order;

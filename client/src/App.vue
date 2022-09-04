@@ -4,6 +4,7 @@
       <router-view></router-view>
       <Footer/>
       <AuthorizationModal/>
+      <Preloader v-if="isLoading" />
   </div>
 </template>
 
@@ -15,13 +16,15 @@ import {computed} from 'vue'
 import Header from "./components/header/Header.vue"
 import Footer from './components/footer/Footer.vue'
 import AuthorizationModal from './components/auth/AuthorizationModal.vue'
+import Preloader from './components/form/Preloader.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     Header,
     Footer,
-    AuthorizationModal
+    AuthorizationModal,
+    Preloader
 },
   setup() {
     onMounted(() => {
@@ -30,9 +33,11 @@ export default defineComponent({
 
     const store = useStore();
     let categories = computed(() => store.state.category.categories)
+    let isLoading = computed(() => store.state.main.isLoading)
 
     return {
-      categories
+      categories,
+      isLoading
     }
   }
 })

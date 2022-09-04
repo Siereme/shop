@@ -17,7 +17,7 @@ public class AnonymousOrderManager implements IOrderManager<Order> {
 
     @Override
     public Order construct(OrderDTO orderDTO) {
-        User user = constructor.updateUser(orderDTO.getUser());
+        User user = orderDTO.getUser();
         constructor.create();
         constructor.setUser(user);
         constructor.setUserDetails(user);

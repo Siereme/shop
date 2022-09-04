@@ -1,39 +1,39 @@
-INSERT INTO category (category_id, name, lineage, depth) VALUES (1, 'Смартфоны и гаджеты', 1, 1);
-INSERT INTO category (category_id, name, lineage, depth) VALUES (2, 'Телевизоры', 2, 1);
-INSERT INTO category (category_id, name, lineage, depth) VALUES (3, 'Компьютерная техника', 3, 1);
-INSERT INTO category (category_id, name, lineage, depth) VALUES (4, 'Умный дом', 4, 1);
-INSERT INTO category (category_id, name, lineage, depth) VALUES (5, 'Аудио-видео', 5, 1);
-INSERT INTO category (category_id, name, lineage, depth) VALUES (6, 'Техника для дома', 6, 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (1, 'Смартфоны и гаджеты', '1/', 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (2, 'Телевизоры', '2/', 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (3, 'Компьютерная техника', '3/', 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (4, 'Умный дом', '4/', 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (5, 'Аудио-видео', '5/', 1);
+INSERT INTO category (category_id, name, path, depth) VALUES (6, 'Техника для дома', '6/', 1);
 
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (7, 1, 'Смартфоны', 1, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (8, 1, 'Планшеты', 1, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (9, 1, 'Умные часы и браслеты', 1, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (10, 1, 'Электронные книги', 1, 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (7, 1, 'Смартфоны', '1/7/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (8, 1, 'Планшеты', '1/8/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (9, 1, 'Умные часы и браслеты', '1/9/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (10, 1, 'Электронные книги', '1/10/', 2);
 
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (11, 3, 'Блоки питания', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (12, 3, 'Видеокарты', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (13, 3, 'Жесткие диски и SSD накопители', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (14, 3, 'Материнские платы', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (15, 3, 'Оперативная память', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (16, 3, 'Процессоры', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (17, 3, 'Ноутбуки', 3, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (18, 3, 'Моноблоки', 3, 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (11, 3, 'Блоки питания', '3/11/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (12, 3, 'Видеокарты', '3/12/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (13, 3, 'Жесткие диски и SSD накопители', '3/13/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (14, 3, 'Материнские платы', '3/14/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (15, 3, 'Оперативная память', '3/15/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (16, 3, 'Процессоры', '3/16/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (17, 3, 'Ноутбуки', '3/17/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (18, 3, 'Моноблоки', '3/18/', 2);
 
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (19, 5, 'Аудиотехника', 5, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (20, 19, 'Домашние кинотеатры', 5, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (21, 19, 'Музыкальные центры', 5, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (22, 19, 'Магнитолы', 5, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (23, 5, 'Проекторы', 5, 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (19, 5, 'Аудиотехника', '5/19/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (20, 19, 'Домашние кинотеатры', '5/19/20/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (21, 19, 'Музыкальные центры', '5/19/21/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (22, 19, 'Магнитолы', '5/19/22/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (23, 5, 'Проекторы', '5/23/', 2);
 
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (24, 6, 'Системы безопасноcти и видеонаблюдения', 6, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (25, 24, 'Видеонаблюдение', 6, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (26, 24, 'Видеодомофоны', 6, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (27, 6, 'Умный дом', 6, 2);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (28, 27, 'Блоки управления', 6, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (29, 27, 'Датчики', 6, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (30, 27, 'Камеры', 6, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (31, 27, 'Комплекты умный дом', 6, 3);
-INSERT INTO category (category_id, parent_id, name, lineage, depth) VALUES (32, 27, 'Лампы, светодиодные ленты', 6, 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (24, 6, 'Системы безопасноcти и видеонаблюдения', '6/24/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (25, 24, 'Видеонаблюдение', '6/24/25/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (26, 24, 'Видеодомофоны', '6/24/26/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (27, 6, 'Умный дом', '6/27/', 2);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (28, 27, 'Блоки управления', '6/27/28/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (29, 27, 'Датчики', '6/27/29/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (30, 27, 'Камеры', '6/27/30/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (31, 27, 'Комплекты умный дом', '6/27/31/', 3);
+INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (32, 27, 'Лампы, светодиодные ленты', '6/27,', 3);
 
 
 
@@ -264,7 +264,7 @@ INSERT INTO shopping_cart (id, total, count_items) VALUES (2, 194500, 3);
 --INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (3, 2, 3, 1);
 
 INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','+7-999-999-99-99', 1, 'ACTIVE', 1);
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-99', 2, 'ACTIVE', 2);
+INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+7-999-999-99-98', 2, 'ACTIVE', 2);
 
 
 

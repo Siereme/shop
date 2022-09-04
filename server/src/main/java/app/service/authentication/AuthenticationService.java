@@ -50,7 +50,7 @@ public class AuthenticationService implements IAuthenticationService {
         return createToken(user);
     }
 
-    protected AuthenticationUserResponse createToken(User user) {
+    public AuthenticationUserResponse createToken(User user) {
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole().getName());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getRole().getName());
         return new AuthenticationUserResponse(accessToken, refreshToken, user);

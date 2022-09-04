@@ -35,13 +35,13 @@ public class User implements IUser {
     @Column(name = "patronymic")
     private String patronymic;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     private String phone;
 
     @JsonIgnoreProperties(value = {"users", "permissions", "authorities"}, allowSetters = true)

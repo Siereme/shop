@@ -20,6 +20,7 @@
 import { defineComponent } from 'vue'
 import {computed} from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
     name: 'FacetCategory',
@@ -32,10 +33,13 @@ export default defineComponent({
         }
     },
     setup(props) {
-        // const store = useStore()
+        const store = useStore()
         const router = useRouter()
 
-        let handleSelectCategory = category => router.push({name: 'CategoryPage', params: {id: category.id}})
+        let handleSelectCategory = category => {
+            store.commit('setIsLoading', true)
+            router.push({name: 'CategoryPage', params: {id: category.id}})
+        }
 
 
         let getParentCategories = (category, currentCategory) => {

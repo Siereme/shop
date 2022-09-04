@@ -2,7 +2,7 @@ package app.controller.order;
 
 import app.consrtructor.TestOrderConstructor;
 import app.model.dto.order.OrderDTO;
-import app.model.dto.order.OrderResponseDTO;
+import app.model.dto.order.OrderResponse;
 import app.model.order.Order;
 import app.model.order.payment.Payment;
 import app.model.user.User;
@@ -148,7 +148,7 @@ class OrderControllerTest {
 
         //Convert the response to an object
         String strContents = mvcResult.getResponse().getContentAsString();
-        OrderResponseDTO response = objectMapper.readValue(strContents, OrderResponseDTO.class);
+        OrderResponse response = objectMapper.readValue(strContents, OrderResponse.class);
 
         //Check the resulting object
         Assertions.assertEquals(user.getEmail(), response.getOrder().getUserDetails().getEmail());

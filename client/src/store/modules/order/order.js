@@ -16,7 +16,7 @@ export default {
     },
     mutations: {
         setOrder: (state, order) => {
-            state.orders.shift(order)
+            state.orders.push(order)
         },
         setOrders: (state, orders) => {
             state.orders = orders

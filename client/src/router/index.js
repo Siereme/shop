@@ -6,9 +6,10 @@ import OrderPage from '@/components/OrderPage.vue'
 import PersonalCabinet from '@/components/PersonalCabinet.vue'
 import UserInfo from '@/components/cabinet/UserInfo.vue'
 import OrdersHistory from '@/components/cabinet/OrdersHistory.vue'
+import store from "@/store"
+import { computed } from "vue"
 
-// import store from "@/store";
-// import category from "@/store/modules/category/category";
+const userRole = computed(() => store.getters.getUserRole())
 
 const routes = [
   {
@@ -58,6 +59,30 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+const getUserRole = () => new Promise(resolve => {
+  if (userRole.value === undefined) {
+    const unwatch = store.watch(
+      () => userRole.value,
+      (value) => {
+        unwatch()
+        resolve(value)
+      }
+    )
+  } else {
+    resolve(userRole.value)
+  }
+})
+
+router.beforeEach(async (to) => {
+  const checkPages = ['/cabinet'];
+  const userRole = await getUserRole()
+  const authRequired = checkPages.some(page => to.path.includes(page)) &&  userRole === 'ANONYMOUS';
+
+  if (authRequired) {
+      return '/';
+  }
 });
 
 

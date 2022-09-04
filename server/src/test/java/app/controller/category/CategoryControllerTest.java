@@ -2,7 +2,7 @@ package app.controller.category;
 
 import app.consrtructor.TestCategoryConstructor;
 import app.model.category.Category;
-import app.model.dto.category.CategoryDTO;
+import app.model.dto.category.CategoryRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -77,13 +77,13 @@ class CategoryControllerTest {
         Assertions.assertEquals(categoryList.get(0).getId(), categories.get(0).getId());
         Assertions.assertEquals(categoryList.get(0).getName(), categories.get(0).getName());
         Assertions.assertEquals(categoryList.get(0).getCategories().size(), categories.get(0).getCategories().size());
-        Assertions.assertEquals(categoryList.get(0).getLineage(), categories.get(0).getLineage());
+        Assertions.assertEquals(categoryList.get(0).getPath(), categories.get(0).getPath());
         Assertions.assertEquals(categoryList.get(0).getDepth(), categories.get(0).getDepth());
 
         Assertions.assertEquals(categoryList.get(4).getId(), categories.get(4).getId());
         Assertions.assertEquals(categoryList.get(4).getName(), categories.get(4).getName());
         Assertions.assertEquals(categoryList.get(4).getCategories().size(), categories.get(4).getCategories().size());
-        Assertions.assertEquals(categoryList.get(4).getLineage(), categories.get(4).getLineage());
+        Assertions.assertEquals(categoryList.get(4).getPath(), categories.get(4).getPath());
         Assertions.assertEquals(categoryList.get(4).getDepth(), categories.get(4).getDepth());
     }
 
@@ -110,7 +110,7 @@ class CategoryControllerTest {
         Assertions.assertEquals(categoryList.get(0).getId(), category.getId());
         Assertions.assertEquals(categoryList.get(0).getName(), category.getName());
         Assertions.assertEquals(categoryList.get(0).getCategories().size(), category.getCategories().size());
-        Assertions.assertEquals(categoryList.get(0).getLineage(), category.getLineage());
+        Assertions.assertEquals(categoryList.get(0).getPath(), category.getPath());
         Assertions.assertEquals(categoryList.get(0).getDepth(), category.getDepth());
         Assertions.assertNull(category.getParent());
     }
@@ -141,13 +141,13 @@ class CategoryControllerTest {
         Assertions.assertEquals(categoryList.get(1).getId(), categories.get(0).getId());
         Assertions.assertEquals(categoryList.get(1).getName(), categories.get(0).getName());
         Assertions.assertEquals(categoryList.get(1).getCategories().size(), categories.get(0).getCategories().size());
-        Assertions.assertEquals(categoryList.get(1).getLineage(), categories.get(0).getLineage());
+        Assertions.assertEquals(categoryList.get(1).getPath(), categories.get(0).getPath());
         Assertions.assertEquals(categoryList.get(1).getDepth(), categories.get(0).getDepth());
 
         Assertions.assertEquals(categoryList.get(3).getId(), categories.get(1).getId());
         Assertions.assertEquals(categoryList.get(3).getName(), categories.get(1).getName());
         Assertions.assertEquals(categoryList.get(3).getCategories().size(), categories.get(1).getCategories().size());
-        Assertions.assertEquals(categoryList.get(3).getLineage(), categories.get(1).getLineage());
+        Assertions.assertEquals(categoryList.get(3).getPath(), categories.get(1).getPath());
         Assertions.assertEquals(categoryList.get(3).getDepth(), categories.get(1).getDepth());
     }
 
@@ -177,7 +177,7 @@ class CategoryControllerTest {
         Assertions.assertEquals(categoryList.get(0).getId(), categories.get(0).getId());
         Assertions.assertEquals(categoryList.get(0).getName(), categories.get(0).getName());
         Assertions.assertEquals(categoryList.get(0).getCategories().size(), categories.get(0).getCategories().size());
-        Assertions.assertEquals(categoryList.get(0).getLineage(), categories.get(0).getLineage());
+        Assertions.assertEquals(categoryList.get(0).getPath(), categories.get(0).getPath());
         Assertions.assertEquals(categoryList.get(0).getDepth(), categories.get(0).getDepth());
     }
 
@@ -187,7 +187,7 @@ class CategoryControllerTest {
         //Send a request
         MvcResult mvcResult = mvc
                 .perform(MockMvcRequestBuilders
-                        .get(url + "/depth?depth=2")
+                        .get(url + "/depth/2")
                         .header(accessHeader, token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -207,59 +207,23 @@ class CategoryControllerTest {
         Assertions.assertEquals(categoryList.get(1).getId(), categories.get(0).getId());
         Assertions.assertEquals(categoryList.get(1).getName(), categories.get(0).getName());
         Assertions.assertEquals(categoryList.get(1).getCategories().size(), categories.get(0).getCategories().size());
-        Assertions.assertEquals(categoryList.get(1).getLineage(), categories.get(0).getLineage());
+        Assertions.assertEquals(categoryList.get(1).getPath(), categories.get(0).getPath());
         Assertions.assertEquals(categoryList.get(1).getDepth(), categories.get(0).getDepth());
 
         Assertions.assertEquals(categoryList.get(3).getId(), categories.get(2).getId());
         Assertions.assertEquals(categoryList.get(3).getName(), categories.get(2).getName());
         Assertions.assertEquals(categoryList.get(3).getCategories().size(), categories.get(2).getCategories().size());
-        Assertions.assertEquals(categoryList.get(3).getLineage(), categories.get(2).getLineage());
+        Assertions.assertEquals(categoryList.get(3).getPath(), categories.get(2).getPath());
         Assertions.assertEquals(categoryList.get(3).getDepth(), categories.get(2).getDepth());
     }
 
     @Test
     @Order(6)
-    void findByLineageAndDepth() throws Exception {
-        //Send a request
-        MvcResult mvcResult = mvc
-                .perform(MockMvcRequestBuilders
-                        .get(url + "/lineage-depth?lineage=1&depth=2")
-                        .header(accessHeader, token)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        //Check the response status
-        int status = mvcResult.getResponse().getStatus();
-        Assertions.assertEquals(200, status);
-
-        //Convert the response to an objects
-        String strContents = mvcResult.getResponse().getContentAsString();
-        TypeReference<List<Category>> typeRef = new TypeReference<>() {
-        };
-        List<Category> categories = objectMapper.readValue(strContents, typeRef);
-
-        //Check the resulting objects
-        Assertions.assertEquals(4, categories.size());
-        Assertions.assertEquals(categoryList.get(1).getId(), categories.get(0).getId());
-        Assertions.assertEquals(categoryList.get(1).getName(), categories.get(0).getName());
-        Assertions.assertEquals(categoryList.get(1).getCategories().size(), categories.get(0).getCategories().size());
-        Assertions.assertEquals(categoryList.get(1).getLineage(), categories.get(0).getLineage());
-        Assertions.assertEquals(categoryList.get(1).getDepth(), categories.get(0).getDepth());
-
-        Assertions.assertEquals(categoryList.get(3).getId(), categories.get(2).getId());
-        Assertions.assertEquals(categoryList.get(3).getName(), categories.get(2).getName());
-        Assertions.assertEquals(categoryList.get(3).getCategories().size(), categories.get(2).getCategories().size());
-        Assertions.assertEquals(categoryList.get(3).getLineage(), categories.get(2).getLineage());
-        Assertions.assertEquals(categoryList.get(3).getDepth(), categories.get(2).getDepth());
-    }
-
-    @Test
-    @Order(7)
     void addProduct() throws Exception {
         //Prepare request object
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setName("Чехлы для смартфонов");
-        categoryDTO.setParentId(1L);
+        CategoryRequest categoryRequest = new CategoryRequest();
+        categoryRequest.setName("Чехлы для смартфонов");
+        categoryRequest.setParentId(1L);
 
         //Send a request
         MvcResult mvcResult = mvc
@@ -267,7 +231,7 @@ class CategoryControllerTest {
                         .post(url + "/add")
                         .header(accessHeader, token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoryDTO)))
+                        .content(objectMapper.writeValueAsString(categoryRequest)))
                 .andReturn();
 
         //Check the response status
@@ -279,11 +243,11 @@ class CategoryControllerTest {
         Category category = objectMapper.readValue(strContents, Category.class);
 
         //Check the resulting object
-        Assertions.assertEquals(categoryDTO.getName(), category.getName());
+        Assertions.assertEquals(categoryRequest.getName(), category.getName());
     }
 
     @Test
-    @Order(8)
+    @Order(7)
     void deleteCategory() throws Exception {
         //Send a request
         MvcResult mvcResult = mvc

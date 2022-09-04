@@ -1,5 +1,5 @@
 <template>
-    <div class="order-success">
+    <div class="order-success" v-if="order">
         <div class="order-success-main-container">
             <div class="order-success__confirm">
                 <div class="order-success__tatus-title">Готово!</div>
@@ -14,7 +14,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import api from "@/api/backend-api"
 import {computed} from 'vue'
 import {useStore} from "vuex"
 import OrderSummary from './order/OrderSummary.vue'
@@ -28,7 +27,7 @@ export default defineComponent({
         const store = useStore()     
         
         store.commit('setIsLoading', false)
-        api.getOrders()
+
         let order = computed(() => store.getters.getLastOrder())
 
         return {

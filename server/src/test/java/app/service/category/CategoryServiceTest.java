@@ -2,7 +2,7 @@ package app.service.category;
 
 import app.consrtructor.TestCategoryConstructor;
 import app.model.category.Category;
-import app.model.dto.category.CategoryDTO;
+import app.model.dto.category.CategoryRequest;
 import app.repository.category.CategoryRepository;
 import app.repository.product.ProductRepository;
 import org.junit.jupiter.api.Assertions;
@@ -36,10 +36,10 @@ class CategoryServiceTest {
     @Test
     void addCategory() {
         //Prepare objects
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setId(10L);
-        categoryDTO.setName("Проекторы");
-        categoryDTO.setParentId(3L);
+        CategoryRequest categoryRequest = new CategoryRequest();
+        categoryRequest.setId(10L);
+        categoryRequest.setName("Проекторы");
+        categoryRequest.setParentId(3L);
 
         Category categoryMock = new Category();
         categoryMock.setId(10L);
@@ -48,14 +48,14 @@ class CategoryServiceTest {
 
         //When stubs are called
         Optional<Category> foundCategory = Optional.of(constructor.getById(3L));
-        Mockito.when(categoryRepo.findById(categoryDTO.getParentId())).thenReturn(foundCategory);
+        Mockito.when(categoryRepo.findById(categoryRequest.getParentId())).thenReturn(foundCategory);
         Mockito.when(categoryRepo.save(any(Category.class))).thenReturn(categoryMock);
 
         //Call a real service method
-        Category category = categoryService.addCategory(categoryDTO);
+        Category category = categoryService.addCategory(categoryRequest);
 
         //Verify stub calls
-        Mockito.verify(categoryRepo, Mockito.times(1)).findById(categoryDTO.getParentId());
+        Mockito.verify(categoryRepo, Mockito.times(1)).findById(categoryRequest.getParentId());
         Mockito.verify(categoryRepo, Mockito.times(1)).save(any(Category.class));
 
         //Check the resulting object

@@ -1,6 +1,6 @@
 <template>
     <div class="user-info">
-        <StepUserInfo :user="user" :isDisabled="isDisabled" />
+        <StepUserInfo :user="userForm" :isDisabled="isDisabled" />
         <button class="user-info__edit-button" v-if="isDisabled" @click="handleDisabled(false)">Редактировать</button>
         <button class="user-info__save-button" v-if="!isDisabled" @click="saveUser()">Сохранить</button>
     </div>
@@ -9,7 +9,7 @@
 <script>
 import { defineComponent } from 'vue'
 import api from "@/api/backend-api"
-import {computed, ref} from 'vue'
+import { ref } from 'vue'
 import {useStore} from "vuex"
 import StepUserInfo from '../form/StepUserInfo.vue'
 
@@ -21,14 +21,14 @@ export default defineComponent({
     setup() {
         const store = useStore()     
         
-        let user = computed(() => store.getters.getUser())
+        let userForm = ref(Object.assign({}, store.getters.getUser()))
 
         let isDisabled = ref(true)
 
         let handleDisabled = flag => isDisabled.value = flag
 
         let saveUser = () => {
-            api.editUser(user.value)
+            api.updateUser(userForm.value)
             .then(res => {
                 if(res.status === 200){
                     handleDisabled(true)
@@ -37,7 +37,7 @@ export default defineComponent({
         }
 
         return {
-            user,
+            userForm,
             isDisabled,
             handleDisabled,
             saveUser

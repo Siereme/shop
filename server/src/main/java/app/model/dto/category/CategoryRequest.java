@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class CategoryDTO implements ICategory {
+public class CategoryRequest implements ICategory {
 
     private Long id;
     private String name;

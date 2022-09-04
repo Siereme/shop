@@ -1,6 +1,7 @@
 package app.constructor.user;
 
 import app.model.user.IUser;
+import app.model.user.User;
 import app.model.user.role.Role;
 import app.repository.user.UserRepository;
 import app.repository.user.UserRoleRepository;
@@ -23,8 +24,8 @@ public abstract class AbstractUserConstructor<T extends IUser> implements IUserC
 
     public abstract T createUser(T user, UserStatus status);
 
-    public T updateUser(T user) {
-        T newUser = (T) userRepo.findById(user.getId())
+    public User updateUser(T user) {
+        User newUser = userRepo.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User is not found"));
 
         newUser.setName(user.getName());
@@ -32,7 +33,7 @@ public abstract class AbstractUserConstructor<T extends IUser> implements IUserC
         newUser.setPatronymic(user.getPatronymic());
         newUser.setPhone(user.getPhone());
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+//        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepo.findByName(user.getRole().getName())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
         newUser.setRole(role);
