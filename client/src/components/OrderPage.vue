@@ -83,6 +83,7 @@ h1 {
 }
 .order-success__status-description{
     font-size: 16px;
+    text-align: left;
 }
 .order-success__status-contacts{
     font-weight: 700;
