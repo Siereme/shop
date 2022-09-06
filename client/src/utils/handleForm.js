@@ -6,7 +6,6 @@ let setEmail = (event, user) => validateEmail(event.value) ? user.email = event.
 let validateNumber = (number) => {
     var validNumber = isActualValue(number) ? number.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,4})/) : ''
     return !validNumber[2] ? validNumber[1] : validNumber[1] + ' (' + validNumber[2] + ') ' + validNumber[3] + (validNumber[4] ? '-' + validNumber[4] : '');
-
 }
 let setNumber = (number, user) => {
     var validNumber = validateNumber(number.value)
@@ -14,13 +13,18 @@ let setNumber = (number, user) => {
 }
 
 let getFieldValue = (event, user) => {
-    var name = event.dataset.type
-    return isActualValue(name) ? user[name] : ''
+    var type = event.dataset.type
+    return isActualValue(type) ? user[type] : ''
 }
 let setFieldValue = (event, user) => {
-    var name = event.dataset.type
+    var type = event.dataset.type
     var value = event.value
-    return isActualValue(name) && isActualValue(value) ? user[name] = value : user[name] = ''
+    return isActualValue(type) && isActualValue(value) ? user[type] = value : user[type] = ''
+}
+
+let clearValidationError = event => {
+    event.classList.remove('unvalid')
+    event.placeholder = event.dataset.name
 }
 
 
@@ -30,5 +34,6 @@ export default {
     validateNumber,
     setNumber,
     getFieldValue,
-    setFieldValue
+    setFieldValue,
+    clearValidationError
 }

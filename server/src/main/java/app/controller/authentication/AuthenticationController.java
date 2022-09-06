@@ -11,10 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/auth")
@@ -29,7 +34,7 @@ public class AuthenticationController {
 
 
     @PostMapping(value = "/login", consumes = {"application/json"})
-    public ResponseEntity<AuthenticationUserResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationUserResponse> authenticate(@Valid @RequestBody AuthenticationRequest request) {
         try {
             AuthenticationUserResponse authenticationUserResponse = authenticationService.authenticate(
                     request.getEmail(), request.getPassword()
@@ -79,4 +84,17 @@ public class AuthenticationController {
         AuthenticationUserResponse authenticationUserResponse = new AuthenticationUserResponse(accessToken, refreshToken, user);
         return ResponseEntity.ok().body(authenticationUserResponse);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+
 }

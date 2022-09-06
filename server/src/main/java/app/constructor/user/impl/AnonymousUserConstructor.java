@@ -19,9 +19,13 @@ public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
     }
 
     @Override
-    public User createUser(User user, UserStatus status) {
+    public User createUser(User user, UserStatus status) {;
+        user.setName(UUID.randomUUID().toString());
+        user.setSurname(UUID.randomUUID().toString());
+        user.setPatronymic(UUID.randomUUID().toString());
         user.setEmail(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+        user.setPhone(UUID.randomUUID().toString());
         user.setStatus(status);
         Role role = roleRepo.findByName(UserRole.ANONYMOUS.name())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));

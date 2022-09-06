@@ -1,6 +1,6 @@
 <template>
     <div class="user-info">
-        <StepUserInfo :user="userForm" :isDisabled="isDisabled" />
+        <StepUserInfo :user="userForm" :isDisabled="isDisabled" :errorMessages="messages" />
         <button class="user-info__edit-button" v-if="isDisabled" @click="handleDisabled(false)">Редактировать</button>
         <button class="user-info__save-button" v-if="!isDisabled" @click="saveUser()">Сохранить</button>
     </div>
@@ -22,8 +22,8 @@ export default defineComponent({
         const store = useStore()     
         
         let userForm = ref(Object.assign({}, store.getters.getUser()))
-
         let isDisabled = ref(true)
+        let messages = ref({})
 
         let handleDisabled = flag => isDisabled.value = flag
 
@@ -33,12 +33,13 @@ export default defineComponent({
                 if(res.status === 200){
                     handleDisabled(true)
                 }
-            })
+            }).catch(res => messages.value = res.response.data)
         }
 
         return {
             userForm,
             isDisabled,
+            messages,
             handleDisabled,
             saveUser
         }

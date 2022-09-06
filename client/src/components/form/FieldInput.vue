@@ -1,6 +1,11 @@
 <template>
     <div class="fields-group__item">
-        <input type="tel" class="field-control__label" :disabled="isDisabled" :placeholder="placeholder" :data-type="type" :value="value" @change="this.setFieldValue">
+        <input type="tel" class="field-control__label" 
+            :disabled="isDisabled" 
+            :placeholder="placeholder" :value="value" 
+            :data-type="type" :data-name="placeholder" 
+            @change="this.setFieldValue" @input="this.clearValidation"
+        >
     </div>
 </template>
 
@@ -25,6 +30,7 @@ export default defineComponent({
             default: () => {}
         },
         setFieldValue: { type: Function },
+        clearValidation: { type: Function }
     }
 })
 </script>
@@ -70,5 +76,12 @@ a {
 }
 .fields-group__item input::placeholder{
     color: #adadad;
+}
+
+.fields-group__item input.unvalid{
+    border-color: red !important;
+}
+.fields-group__item input.unvalid::placeholder{
+    color: red !important;
 }
 </style>

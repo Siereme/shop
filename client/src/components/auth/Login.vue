@@ -1,9 +1,17 @@
 <template>
     <div class="login-container" v-if="shown">
         <div class="modal-title">Вход</div>
-        <div class="fields-wrapper">
-            <FieldInput :placeholder="'Email'" :value="user.email ?? ''" :setFieldValue="(event) => handleForm.setEmail(event.target, user)"/>
-            <FieldInput :placeholder="'Пароль'" :type="'password'" :value="user.password ?? ''" :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"/>
+        <div class="fields-wrapper" ref="fields">
+            <FieldInput :placeholder="'Email'" 
+                :type="'email'" :value="user.email ?? ''" 
+                :setFieldValue="(event) => handleForm.setEmail(event.target, user)"
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
+            <FieldInput :placeholder="'Пароль'" 
+                :type="'password'" :value="user.password ?? ''" 
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
         </div>
         <div class="modal-submit" @click="handleLogin()">Войти</div>
         <div class="switch-modal-button" @click="showRegistration()">Регистрация</div>
@@ -34,7 +42,8 @@ export default defineComponent({
         const router = useRouter()
 
         let user = ref({})
-
+        let messages = ref({})
+        let fields = ref({})
 
         let handleLogin = () => {
             api.login(user.value.email, user.value.password)
@@ -46,14 +55,29 @@ export default defineComponent({
                     ? router.push("/")
                     : router.go()
                 }
-            })
+            }).catch(res => handleValidation(res.response.data))
         }
 
+        let handleValidation = massages => {
+            let fieldItems = Array.from(fields.value.children)
+            .flatMap(item => Array.from(item.children).map(childrenItem => childrenItem))
+            
+            Object.keys(massages).forEach(field => {
+                let currentField = fieldItems.find(item => field.includes(item.dataset.type))
+                if(currentField){
+                    currentField.classList.add('unvalid')
+                    currentField.placeholder = massages[field]
+                }
+            })
+        }
+        
         let showRegistration = () => store.commit('setShownAuthModal', 'registration')
 
         return {
             user,
             handleForm,
+            messages,
+            fields,
             handleLogin,
             showRegistration
         }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,21 +27,27 @@ public class User implements IUser {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotBlank(message = "Имя является обязательным")
     @Column(name = "name")
     private String name;
 
+    @NotBlank(message = "Фамилия является обязательной")
     @Column(name = "surname")
     private String surname;
 
+    @NotBlank(message = "Отчество является обязательным")
     @Column(name = "patronymic")
     private String patronymic;
 
+    @NotBlank(message = "Email является обязательным")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Пароль является обязательным")
     @Column(name = "password", nullable = false)
     private String password;
 
+    @NotBlank(message = "Телефон является обязательным")
     @Column(name = "phone", unique = true)
     private String phone;
 

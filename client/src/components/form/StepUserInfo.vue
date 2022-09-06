@@ -1,17 +1,46 @@
 <template>
     <div class="checkout__step-body" :class="{'is-disabled': isDisabled}">
-        <div class="fields-group">
-            <FieldInput :placeholder="'Телефон'" :isDisabled="isDisabled" :value="user.phone ?? ''" :setFieldValue="(event) => handleForm.setNumber(event.target, user)"/>
-            <FieldInput :placeholder="'Email'" :isDisabled="isDisabled" :value="user.email ?? ''" :setFieldValue="(event) => handleForm.setEmail(event.target, user)"/>
+        <div class="fields-group" ref="contacts">
+            <FieldInput :isDisabled="isDisabled"
+                :placeholder="'Телефон'"  :type="'phone'" :value="userData.phone ?? ''"
+                :setFieldValue="(event) => handleForm.setNumber(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
+            <FieldInput :isDisabled="isDisabled"
+                :placeholder="'Email'" :type="'email'" :value="userData.email ?? ''"
+                :setFieldValue="(event) => handleForm.setEmail(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
         </div>
-        <div class="fields-group">
-            <FieldInput :placeholder="'Фамилия'" :isDisabled="isDisabled" :type="'surname'" :value="user.surname ?? ''" :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"/>
-            <FieldInput :placeholder="'Имя'" :isDisabled="isDisabled" :type="'name'" :value="user.name ?? ''" :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"/>
-            <FieldInput :placeholder="'Отчество'" :isDisabled="isDisabled" :type="'patronymic'" :value="user.patronymic ?? ''" :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"/>
+        <div class="fields-group" ref="fullName">
+            <FieldInput :isDisabled="isDisabled"
+                :placeholder="'Фамилия'"  :type="'surname'" :value="userData.surname ?? ''" 
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
+
+            <FieldInput :isDisabled="isDisabled"
+                :placeholder="'Имя'"  :type="'name'" :value="userData.name ?? ''" 
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
+            <FieldInput :isDisabled="isDisabled" 
+                :placeholder="'Отчество'" :type="'patronymic'" :value="userData.patronymic ?? ''" 
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
         </div>
-        <div class="fields-group" v-if="shownPassword">
-            <FieldInput :placeholder="'Пароль'" :isDisabled="isDisabled" :type="'password'" :value="user.password ?? ''" :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"/>
-            <FieldInput :placeholder="'Повторите пароль'" :isDisabled="isDisabled" :type="'repeatPassword'" :value="user.repeatPassword ?? ''" :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"/>
+        <div class="fields-group" ref="passwords" v-if="shownPassword">
+            <FieldInput :isDisabled="isDisabled" 
+                :placeholder="'Пароль'" :type="'password'" :value="userData.password ?? ''" 
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
+            <FieldInput :isDisabled="isDisabled"
+                :placeholder="'Повторите пароль'"  :type="'repeatPassword'" :value="userData.repeatPassword ?? ''" 
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, userData)" 
+                :clearValidation="(event) => handleForm.clearValidationError(event.target)"
+            />
         </div>
     </div>
 </template>
@@ -20,8 +49,7 @@
 import { defineComponent } from 'vue'
 import handleForm from '@/utils/handleForm'
 import FieldInput from './FieldInput.vue'
-// import {useStore} from "vuex"
-// import {computed} from 'vue'
+import { watch, ref } from 'vue'
 
 export default defineComponent({
     name: 'StepUserInfo',
@@ -37,10 +65,48 @@ export default defineComponent({
         },
         user: {
             default: () => {}
+        },
+        errorMessages: {
+            default: () => {}
         }
     },
-    setup() {
+    setup(props) {
+
+        let contacts = ref(null)
+        let fullName = ref(null)
+        let passwords = ref(null)
+        let userData = ref(props.user)
+
+        watch(
+            () => props.user,
+            user => userData.value = user
+        )
+
+        watch(
+            () => props.errorMessages,
+            massages => handleValidation(massages)
+        )
+
+        let handleValidation = massages => {
+            let fields = Array.from([contacts.value, fullName.value, passwords.value])
+            .filter(item => item)
+            .flatMap(item => Array.from(item.children).map(childrenItem => childrenItem.childNodes[0]))
+            
+            Object.keys(massages).forEach(field => {
+                let currentField = fields.find(item => field.includes(item.dataset.type))
+                if(currentField){
+                    userData.value[currentField.dataset.type] = ''
+                    currentField.classList.add('unvalid')
+                    currentField.placeholder = massages[field]
+                }
+            })
+        }
+
         return {
+            contacts,
+            fullName,
+            passwords,
+            userData,
             handleForm
         }
     }

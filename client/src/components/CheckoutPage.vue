@@ -15,18 +15,19 @@
                                 </div>
                             </div>
                         </div>
-                        <StepUserInfo :user="user" />
+                        <StepUserInfo :user="user" :errorMessages="messages" />
                     </div>
                     <div class="checkout__step">
                         <div class="checkout__step-header">
                             <div class="checkout__step-header-num">2</div>
-                            <div class="checkout__step-header-content">
+                            <div class="checkout__step-header-content checkout__step-header-payment">
                                 <div class="checkout__step-header-title">Способ оплаты</div>
+                                <div class="checkout__step-header-error" v-if="shownPaymentError">Выберите способ оплаты</div>
                             </div>
                         </div>
                         <div class="checkout__step-body">
-                            <div class="checkout__payments">
-                                <div class="checkout__payments-item" v-for="item in payments" :key="item.id">
+                            <div class="checkout__payments" ref="paymentWrapper">
+                                <div class="checkout__payments-item" v-for="item in payments" :key="item.id" @click="handlePaymentError(false)">
                                     <input v-model="payment" type="radio" id="OrderOplata_1" class="field-radio__input" :value="item">
                                     <label for="OrderOplata_1" class="field-radio__label">
                                         <div class="field-radio__label-content-heading">
@@ -63,12 +64,8 @@
 import { defineComponent } from 'vue'
 import CartModal from './cart/CartModal.vue'
 import api from "@/api/backend-api"
-
-// import ProductList from './product/ProductList.vue'
-// import FacetsVue from './facets/Facets.vue'
 import {computed, ref} from 'vue'
 import {useStore} from "vuex"
-// import {ref} from 'vue'
 import { useRouter } from 'vue-router'
 import StepUserInfo from './form/StepUserInfo.vue'
 
@@ -96,6 +93,10 @@ export default defineComponent({
         let user = ref(storeUser.value && storeUser.value.status !== 'ANONYMOUS' ? Object.assign({}, storeUser.value) : {})
         let payments = computed(() => store.state.order.payments)
         let payment = ref({})
+        let paymentWrapper = ref({})
+        let shownPaymentError = ref(false)
+
+        let messages = ref({})
 
         let setUserData = () => {
             sendUserForm.value.phone = user.value.phone
@@ -106,6 +107,12 @@ export default defineComponent({
         }
 
         let createOrder = () => {
+            !validationPaymentChecked()
+            ? handlePaymentError(true)
+            : sendOrder()
+        }
+
+        let sendOrder = () => {
             setUserData()
             store.commit('setIsLoading', true)
             api.createOrder(sendUserForm.value, payment.value)
@@ -113,8 +120,31 @@ export default defineComponent({
                 if(res.status === 200){
                     router.replace({name: 'OrderPage'})
                 }
+                handlePaymentError(false)
+            }).catch(res => {
+                messages.value = res.response.data
+                store.commit('setIsLoading', false)
             })
         }
+
+        let validationPaymentChecked = () => {
+            return Array.from(paymentWrapper.value.children)
+            .map(field => Array.from(field.children).find(item => item.tagName === 'INPUT'))
+            .find(field => field.checked)
+        }
+
+        let handlePaymentError = (flag) => {
+            if(flag) {
+                paymentWrapper.value.classList.add('unchecked')
+                shownPaymentError.value = true
+            }
+            if(!flag){
+                paymentWrapper.value.classList.remove('unchecked')
+                shownPaymentError.value = false
+            }
+            
+        }
+
 
         return {
             storeUser,
@@ -122,8 +152,12 @@ export default defineComponent({
             orderTotal,
             payments,
             payment,
+            messages,
+            paymentWrapper,
+            shownPaymentError,
             setUserData,
-            createOrder
+            createOrder,
+            handlePaymentError
         }
     }
 })
@@ -355,5 +389,20 @@ h1 {
 }
 .checkout__proceed-action-button:hover{
     background-color: #06a4fd;
+}
+.checkout__step-header-payment{
+    flex-direction: row;
+    align-items: center;
+}
+.checkout__step-header-error{
+    font-size: 16px;
+    line-height: 1.09091;
+    flex: 0 0 auto;
+    margin-right: 20px;
+    color: red;
+    font-weight: 400;
+}
+.checkout__payments.unchecked .field-radio__label{
+    border-color: red;
 }
 </style>

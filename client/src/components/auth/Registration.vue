@@ -1,7 +1,7 @@
 <template>
     <div class="registration-container" v-if="shown">
         <div class="modal-title">Регистрация</div>
-        <StepUserInfo :user="user" :shownPassword="true" />
+        <StepUserInfo :user="user" :shownPassword="true" :errorMessages="messages" />
         <div class="modal-submit" @click="handleRegistration()">Зарегестрироваться</div>
         <div class="switch-modal-button" @click="showLogin()">Войти</div>
     </div>
@@ -31,17 +31,41 @@ export default defineComponent({
 
         let user = ref({})
 
+        let messages = ref({})
+
+        let errorMessages = {
+            'password': "Пароль является обязательным",
+            'repeatPassword': 'Повторный пароль является обязательным',
+            'unRepeated': 'Пароли не совпадают'
+        }
+
         let handleRegistration = () => {
-            api.createUser(user.value)
-            .then(res => {
-                if(res.status === 200){
-                    store.commit('setShownAuthModal', 'login')
-                }
-            })
+            passwordValidation()
+                ? null
+                : api.createUser(user.value)
+                .then(res => {
+                    if(res.status === 200){
+                        store.commit('setShownAuthModal', 'login')
+                    }
+                }).catch(res => messages.value = res.response.data)
+        }
+
+        let passwordValidation = () => {
+            var messagesObj = {}
+            if(!user.value.password || !user.value.repeatPassword){
+                messagesObj.password = errorMessages.password
+                messagesObj.repeatPassword = errorMessages.repeatPassword
+            }            
+            else if(user.value.password !== user.value.repeatPassword){
+                messagesObj.password = errorMessages.unRepeated
+                messagesObj.repeatPassword = errorMessages.unRepeated
+            }
+            return Object.keys(messagesObj).length ? messages.value = messagesObj : null
         }
 
         return {
             user,
+            messages,
             showLogin,
             handleRegistration
         }
