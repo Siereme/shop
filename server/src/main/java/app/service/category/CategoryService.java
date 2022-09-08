@@ -4,7 +4,8 @@ import app.model.category.Category;
 import app.model.dto.category.CategoryConfigDTO;
 import app.model.dto.category.CategoryRequest;
 import app.model.dto.category.CategoryResponse;
-import app.model.product.Product;
+import app.model.dto.category.ICategoryDTO;
+import app.model.dto.product.IProductDTO;
 import app.repository.category.CategoryRepository;
 import app.service.product.ProductService;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +59,7 @@ public class CategoryService implements ICategoryService<Category> {
     public CategoryResponse getByConfig(CategoryConfigDTO categoryDTO) {
         CategoryResponse responseDTO = new CategoryResponse();
 
-        Category category = categoryRepo.findById(categoryDTO.getId())
+        ICategoryDTO category = categoryRepo.findByIdWithoutSubcategories(categoryDTO.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
         responseDTO.setCategory(category);
 
@@ -68,7 +69,7 @@ public class CategoryService implements ICategoryService<Category> {
         }
 
         if(categoryDTO.isWithProducts()){
-            List<Product> products = productService.findByCategoryPath(category.getPath(), category.getDepth());
+            List<IProductDTO> products = productService.findByCategoryPathWithIds(category.getPath(), category.getDepth());
             responseDTO.setProducts(products);
         }
 

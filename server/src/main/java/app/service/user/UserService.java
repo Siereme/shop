@@ -5,6 +5,7 @@ import app.constructor.user.UserFactory;
 import app.model.user.User;
 import app.repository.user.UserRepository;
 import app.utils.constants.user.UserRole;
+import app.utils.validation.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class UserService implements IUserService<User> {
     private UserRepository userRepo;
     @Autowired
     private UserFactory userFactory;
+    @Autowired
+    private UserValidation userValidation;
 
     public UserRole getUserRole(User user) {
         return user.getRole() != null && user.getRole().getName() != null
@@ -26,6 +29,7 @@ public class UserService implements IUserService<User> {
     }
 
     public User createUser(User user) {
+        userValidation.createUserValidation(user);
         UserRole role = getUserRole(user);
         IUserConstructor<User> constructor = userFactory.getFactory(role);
         User newUser = constructor.createUser(user);

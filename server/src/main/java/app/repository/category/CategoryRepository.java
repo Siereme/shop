@@ -1,6 +1,7 @@
 package app.repository.category;
 
 import app.model.category.Category;
+import app.model.dto.category.ICategoryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,6 +20,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "left join fetch c.categories " +
             "where c.id = :id")
     Optional<Category> findById(Long id);
+
+    @Query(value = "select distinct c from Category c where c.id = :id")
+    Optional<ICategoryDTO> findByIdWithoutSubcategories(Long id);
 
     @Query(value = "select distinct c from Category c " +
             "left join fetch c.categories " +

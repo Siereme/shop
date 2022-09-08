@@ -1,7 +1,7 @@
 package app.model.dto.category;
 
 import app.model.category.Category;
-import app.model.product.Product;
+import app.model.dto.product.IProductDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,8 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryResponse {
 
-    private Category category;
+    private ICategoryDTO category;
     private Category parentCategory;
-    private List<Product> products;
+    private List<IProductDTO> products;
 
 }

@@ -1,0 +1,4 @@
+{
+    "headerAccessToken": "X-access-token",
+    "headerRefreshToken": "X-refresh-token"
+}

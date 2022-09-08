@@ -21,7 +21,6 @@ public interface IProduct {
 
     Set<ProductOption> getOptions();
 
-
     void setId(Long id);
 
     void setArticle(Long article);

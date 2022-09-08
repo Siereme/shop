@@ -1,5 +1,6 @@
 package app.repository.product;
 
+import app.model.dto.product.IProductDTO;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCartProductItem;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +47,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "left join fetch p.categories c " +
             "left join fetch p.options " +
             "where c.path like :path%")
-    Optional<List<Product>> findByPathInDepth(String path);
+    Optional<List<Product>> findByPath(String path);
+
+    @Query(value = "select distinct p from Product p " +
+            "left join fetch p.categories c " +
+            "left join fetch p.options " +
+            "where c.path like :path%")
+    Optional<List<IProductDTO>> findByPathWithIds(String path);
 
     @Query(value = "select distinct count(oi) from Order o " +
             "left join o.orderItems oi " +

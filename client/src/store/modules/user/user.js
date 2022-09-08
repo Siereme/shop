@@ -4,9 +4,7 @@ export default {
             id: 1,
             email: "admin@mail.com",
             password: "admin",
-        },
-        accessToken: "",
-        refreshToken: ""
+        }
     },
     getters: {
         getUser: (state) => () => {
@@ -32,12 +30,6 @@ export default {
         },
         getUserRole: (state) => () => {
             return state.user?.role?.name
-        },
-        getAccessToken: (state) => () => {
-            return state.accessToken
-        },
-        getRefreshToken: (state) => () => {
-            return state.refreshToken
         }
     },
     mutations: {
@@ -61,12 +53,6 @@ export default {
         },
         setUserPatronymic: (state, patronymic) => {
             state.user.patronymic = patronymic
-        },
-        setAccessToken: (state, accessToken) => {
-            state.accessToken = accessToken
-        },
-        setRefreshToken: (state, refreshToken) => {
-            state.refreshToken = refreshToken
         }
     }
 }

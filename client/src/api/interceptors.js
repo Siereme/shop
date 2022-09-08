@@ -1,13 +1,22 @@
 
 import api from './backend-api'
 import axiosApi from "./api"
+import cookies from '@/utils/cookies'
+import store from "@/store"
+
+let headerAccessToken = store.getters.getHeaderAccessToken()
+let headerRefreshToken = store.getters.getHeaderRefreshToken()
 
 const setup = (store) => {
     axiosApi.interceptors.request.use(
       (config) => {
-        var accessToken = store.getters.getAccessToken()
+        var accessToken = store.getters.getAccessToken() ?? cookies.getCookie(headerAccessToken)
+        var refreshToken = store.getters.getRefreshToken() ?? cookies.getCookie(headerRefreshToken)
         if (accessToken && !config.url.includes('/refresh')) {
-          config.headers['X-access-token'] = accessToken
+          config.headers[headerAccessToken] = accessToken
+        }
+        if(refreshToken && config.url.includes('/refresh')){
+          config.headers[headerRefreshToken] = refreshToken
         }
         return config;
       },

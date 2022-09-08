@@ -1,5 +1,6 @@
 package app.controller.user;
 
+import app.exception.UserAlreadyExistsException;
 import app.model.dto.user.AuthenticationUserResponse;
 import app.model.user.IUser;
 import app.model.user.User;
@@ -93,6 +94,12 @@ public class UserController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public Map<String, String> handleUserAlreadyExistsExceptions(UserAlreadyExistsException ex) {
+        return ex.getMessages();
     }
 
 }

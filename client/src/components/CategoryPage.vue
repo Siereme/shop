@@ -37,7 +37,8 @@ export default defineComponent({
             
         let loadData = categoryId => {
             if(token.value && currentCategory.value.id != categoryId){
-                api.loadCategory(categoryId, true, true)
+                let isShowParent = Object.keys(mainCategory.value).length === 0
+                api.loadCategory(categoryId, isShowParent, true)
                 .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
             }
         }

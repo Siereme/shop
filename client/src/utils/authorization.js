@@ -1,9 +1,11 @@
 import api from "@/api/backend-api"
 import cookies from "./cookies.js"
+import store from "@/store"
 
+let headerAccessToken = store.getters.getHeaderAccessToken()
 
 const handleAuth = async () => {
-    let token = cookies.getCookie('X-access-token')
+    let token = cookies.getCookie(headerAccessToken)
     if(!token){
         return await Promise.resolve(api.loginAnonymous())
     } else {

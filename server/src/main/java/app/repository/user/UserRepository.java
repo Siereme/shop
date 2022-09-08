@@ -24,4 +24,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.email = :email")
     Optional<User> findByEmail(String email);
 
+    @Query(value = "select distinct u from User u " +
+            "left join fetch u.role r left join fetch r.permissions " +
+            "where u.phone = :phone")
+    Optional<User> findByPhone(String phone);
+
 }

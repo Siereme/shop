@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
@@ -42,7 +44,9 @@ public class OrderController {
     public ResponseEntity<?> getOrdersByUserId(@PathVariable Long id) {
         try {
             List<Order> orders = orderRepo.findAllByUserId(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Orders is not found"));
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             return ResponseEntity.ok().body(orders);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());

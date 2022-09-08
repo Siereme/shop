@@ -140,14 +140,14 @@ class ProductServiceTest {
 
         //When stubs are called
         Mockito.when(categoryRepo.findById(2L)).thenReturn(categoryOptional);
-        Mockito.when(productRepo.findByPathInDepth("1/2/")).thenReturn(optionalProducts);
+        Mockito.when(productRepo.findByPath("1/2/")).thenReturn(optionalProducts);
 
         //Call a real service method
         List<Product> products = productService.findByCategoryId(2L);
 
         //Verify stub calls
         Mockito.verify(categoryRepo, Mockito.times(1)).findById(2L);
-        Mockito.verify(productRepo, Mockito.times(1)).findByPathInDepth("1/2/");
+        Mockito.verify(productRepo, Mockito.times(1)).findByPath("1/2/");
 
         //Check the resulting object
         Assertions.assertEquals(productsMock.size(), products.size());

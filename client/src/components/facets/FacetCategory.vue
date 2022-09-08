@@ -9,7 +9,7 @@
         <li class="facet-category-item" v-for="category in getParentCategories(mainCategory, currentCategory)" :class="{'selected': category.id === currentCategory.id}" :key="category.id" @click="handleSelectCategory(category)">
             {{category.name}}
         </li>
-        <li class="facet-category-item facet-category-item__children" v-for="children in currentCategory.categories" :key="children.id" @click="handleSelectCategory(children)">
+        <li class="facet-category-item facet-category-item__children" v-for="children in current.categories" :key="children.id" @click="handleSelectCategory(children)">
             {{children.name}}
         </li>
     </ul>
@@ -18,7 +18,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import {computed} from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -41,16 +41,18 @@ export default defineComponent({
             router.push({name: 'CategoryPage', params: {id: category.id}})
         }
 
+        let current = ref(props.currentCategory)
 
         let getParentCategories = (category, currentCategory) => {
             if (category.id === currentCategory.id) {
-                return [];
+                current.value = category
+                return []
             } else if (category.categories) {
                 for (var i = 0; i < category.categories.length; i++) {
-                    var path = getParentCategories(category.categories[i], currentCategory);
+                    var path = getParentCategories(category.categories[i], currentCategory)
                     if (path !== null) {
-                        path.unshift(category.categories[i]);
-                        return path;
+                        path.unshift(category.categories[i])
+                        return path
                     }        
                 }
             }
@@ -61,6 +63,7 @@ export default defineComponent({
 
         return {
             shown,
+            current,
             handleSelectCategory,
             getParentCategories
         }

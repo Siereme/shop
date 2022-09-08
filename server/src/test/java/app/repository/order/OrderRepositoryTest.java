@@ -90,7 +90,7 @@ class OrderRepositoryTest {
     @Test
     void findAllByUserId() {
         //Find orders from repository where userId = 1
-        List<Order> orders = orderRepo.findAllByUserId(1L).orElseGet(Collections::emptyList);
+        List<Order> orders = orderRepo.findAllByUserId(1L);
 
         //Get orders from constructor where userId = 1
         List<Order> checkOrderList = Collections.singletonList(orderList.get(0));

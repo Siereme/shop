@@ -15,7 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class MainService implements IMainService {
@@ -50,7 +54,9 @@ public class MainService implements IMainService {
 
         if(config.isWithOrders()){
             List<Order> orders = orderRepo.findAllByUserId(config.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException("Orders is not found"));
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             response.setOrders(orders);
         }
 

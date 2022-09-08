@@ -20,6 +20,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "left join fetch op.description left join fetch op.options " +
             "left join fetch o.payment " +
             "where u.id = :id")
-    Optional<List<Order>> findAllByUserId(Long id);
+    List<Order> findAllByUserId(Long id);
 
 }

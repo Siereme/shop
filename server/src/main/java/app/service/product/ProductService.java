@@ -1,6 +1,7 @@
 package app.service.product;
 
 import app.model.category.Category;
+import app.model.dto.product.IProductDTO;
 import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.model.product.description.ProductDescription;
@@ -102,13 +103,19 @@ public class ProductService implements IProductService<Product> {
     public List<Product> findByCategoryId(Long id) {
         Category category = categoryRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
-        return productRepo.findByPathInDepth(category.getPath())
+        return productRepo.findByPath(category.getPath())
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 
     public List<Product> findByCategoryPath(String path, int depth) {
         String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
-        return productRepo.findByPathInDepth(targetPath)
+        return productRepo.findByPath(targetPath)
+                .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
+    }
+
+    public List<IProductDTO> findByCategoryPathWithIds(String path, int depth) {
+        String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
+        return productRepo.findByPathWithIds(targetPath)
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 }

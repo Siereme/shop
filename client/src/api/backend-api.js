@@ -1,9 +1,9 @@
 import axiosApi from "./api"
 import store from "@/store"
 import cookies from "@/utils/cookies/"
-import { computed } from "vue"
 
-let refreshToken = computed(() => store.getters.getRefreshToken())
+let headerAccessToken = store.getters.getHeaderAccessToken()
+let headerRefreshToken = store.getters.getHeaderRefreshToken()
 
 export default {
     login: (email, password) => {
@@ -18,9 +18,9 @@ export default {
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('X-access-token', res.data.accessToken)
+            cookies.setCookie(headerAccessToken, res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('X-refresh-token', res.data.refreshToken)
+            cookies.setCookie(headerRefreshToken, res.data.refreshToken)
             return res
         })
     },
@@ -32,26 +32,23 @@ export default {
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('X-access-token', res.data.accessToken)
+            cookies.setCookie(headerAccessToken, res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('X-refresh-token', res.data.refreshToken)
+            cookies.setCookie(headerRefreshToken, res.data.refreshToken)
             return res
         })
     },
     refreshAccessToken: () => {
         return axiosApi({
             method: 'post',
-            url: '/auth/refresh',
-            headers: {
-                'X-refresh-token': refreshToken.value
-            }
+            url: '/auth/refresh'
         })
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('X-access-token', res.data.accessToken)
+            cookies.setCookie(headerAccessToken, res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('X-refresh-token', res.data.refreshToken)
+            cookies.setCookie(headerRefreshToken, res.data.refreshToken)
             return res
         })
     },
@@ -61,8 +58,8 @@ export default {
             url: '/auth/logout'
         })
         .then(res => {
-            cookies.setCookie('X-access-token', '')
-            cookies.setCookie('X-refresh-token', '')
+            cookies.setCookie(headerAccessToken, '')
+            cookies.setCookie(headerRefreshToken, '')
             store.commit('setUser', {})
             store.commit('setAccessToken', '')
             store.commit('setRefreshToken', '')
@@ -74,7 +71,7 @@ export default {
             method: 'get',
             url: '/auth/info',
             headers: {
-                'X-access-token': token
+                [headerAccessToken]: token
             }
         })
         .then(res => {
@@ -100,7 +97,7 @@ export default {
             store.commit('setCategories', res.data.categories)
             store.commit('setPopularProducts', res.data.productsPopular)
             store.commit('setCart', res.data.shoppingCart)
-            store.commit('setOrders', [...res.data.orders])
+            store.commit('setOrders', [...res.data.orders ?? []])
         })
     },
     createUser: (user) => {
@@ -119,9 +116,9 @@ export default {
         .then(res => {
             store.commit('setUser', res.data.user)
             store.commit('setAccessToken', res.data.accessToken)
-            cookies.setCookie('X-access-token', res.data.accessToken)
+            cookies.setCookie(headerAccessToken, res.data.accessToken)
             store.commit('setRefreshToken', res.data.refreshToken)
-            cookies.setCookie('X-refresh-token', res.data.refreshToken)
+            cookies.setCookie(headerRefreshToken, res.data.refreshToken)
             return res
         })
     },
@@ -136,9 +133,15 @@ export default {
             }
         })
         .then(res => {
-            store.commit('setCurrentCategory', res.data.category)
-            store.commit('setMainCategory', res.data.parentCategory ?? {})
-            store.commit('setProducts', res.data.products ?? [])
+            if(res.data.category !== null){
+                store.commit('setCurrentCategory', res.data.category)
+            }
+            if(res.data.parentCategory !== null){
+                store.commit('setMainCategory', res.data.parentCategory)
+            }
+            if(res.data.products !== null){
+                store.commit('setProducts', res.data.products)
+            }
             return res
         })
     },
