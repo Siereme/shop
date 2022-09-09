@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "options")
 @Entity
 @Table(name = "product_option")
 public class ProductOption implements IOption {

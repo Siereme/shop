@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "categories")
 @Table(name = "category")
 public class Category implements ICategory {
 
@@ -40,7 +40,7 @@ public class Category implements ICategory {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "categories")
     private Set<Category> categories = new HashSet<>();
 
     @Column(name = "path")

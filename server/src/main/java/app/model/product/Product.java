@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "products")
 @Table(name = "product")
 public class Product implements IProduct {
 
@@ -52,12 +52,12 @@ public class Product implements IProduct {
             joinColumns = {@JoinColumn(name = "product_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "option_id", nullable = false)}
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "options")
     private Set<ProductOption> options = new HashSet<>();
 
     @JsonIgnoreProperties(value = "categories", allowSetters = true)
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "categories")
     private Set<Category> categories = new HashSet<>();
 
 
