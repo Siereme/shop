@@ -29,7 +29,7 @@ public class UserService implements IUserService<User> {
     }
 
     public User createUser(User user) {
-        userValidation.createUserValidation(user);
+        userValidation.verifyUserCreate(user);
         UserRole role = getUserRole(user);
         IUserConstructor<User> constructor = userFactory.getFactory(role);
         User newUser = constructor.createUser(user);

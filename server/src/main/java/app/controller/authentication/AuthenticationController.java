@@ -1,6 +1,7 @@
 package app.controller.authentication;
 
 import app.exception.JwtAuthenticationException;
+import app.exception.UserAlreadyExistsException;
 import app.model.dto.authentication.AuthenticationRequest;
 import app.model.dto.user.AuthenticationUserResponse;
 import app.model.user.User;
@@ -95,6 +96,12 @@ public class AuthenticationController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public Map<String, String> handleUserAlreadyExistsExceptions(UserAlreadyExistsException ex) {
+        return ex.getMessages();
     }
 
 }

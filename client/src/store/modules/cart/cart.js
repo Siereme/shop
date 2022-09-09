@@ -30,6 +30,7 @@ export default {
             state.cartProducts.push(product)
         },
         removeCartProduct: (state, productId) => {
+            state.cartCount--
             state.cartProducts = state.cartProducts.filter(cart => cart.product.id !== productId)
         },
         setCartModalShown: (state, shown) => {

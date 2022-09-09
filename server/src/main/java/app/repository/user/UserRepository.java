@@ -29,4 +29,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.phone = :phone")
     Optional<User> findByPhone(String phone);
 
+
 }

@@ -2,14 +2,17 @@ package app.service.authentication;
 
 import app.model.dto.user.AuthenticationUserResponse;
 import app.model.user.User;
+import app.repository.user.UserRepository;
 import app.security.JwtTokenProvider;
 import app.security.SecurityUser;
 import app.service.user.UserService;
+import app.utils.validation.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
@@ -23,14 +26,17 @@ public class AuthenticationService implements IAuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserService userService;
+    private UserRepository userRepo;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserValidation userValidation;
 
 
     public AuthenticationUserResponse authenticate(String email, String password) {
+        User user = userRepo.findByEmail(email).orElseGet(User::new);
+        userValidation.verifyLogin(user, email, password);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        User user = userService.findByEmail(email);
         return createToken(user);
     }
 
@@ -45,7 +51,8 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     public AuthenticationUserResponse refreshAuthenticate(String refreshToken) {
-        User user = userService.findById(jwtTokenProvider.getId(refreshToken));
+        User user = userRepo.findById(jwtTokenProvider.getId(refreshToken))
+                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
         SecurityContextHolder.clearContext();
         return createToken(user);
     }

@@ -50,10 +50,7 @@ export default defineComponent({
             .then(res => {
                 if(res.status === 200){
                     store.commit('setShownAuthModal', 'hide')
-                    
-                    router.currentRoute.value.fullPath.includes('/order')
-                    ? router.push("/")
-                    : router.go()
+                    router.push("/")
                 }
             }).catch(res => handleValidation(res.response.data))
         }
@@ -66,6 +63,7 @@ export default defineComponent({
                 let currentField = fieldItems.find(item => field.includes(item.dataset.type))
                 if(currentField){
                     currentField.classList.add('unvalid')
+                    currentField.value = ''
                     currentField.placeholder = massages[field]
                 }
             })

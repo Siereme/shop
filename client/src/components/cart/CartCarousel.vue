@@ -52,6 +52,7 @@ export default defineComponent({
 
       let deleteProduct = () => {
         store.commit('removeCartProduct', props.cart.product.id)
+        store.commit('setCartModalShown', store.getters.getCartCount() > 0)
         api.removeCartProduct(props.cart.product.id)
       }
 

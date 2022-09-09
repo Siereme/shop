@@ -4,7 +4,7 @@ import app.exception.UserAlreadyExistsException;
 import app.model.user.User;
 import app.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,17 +16,30 @@ public class UserValidation {
 
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
 
-    public void createUserValidation(User user){
+    public void verifyUserCreate(User user){
         Map<String, String> messages = new HashMap<>();
 
-        User verifyUserEmail = userRepo.findByEmail(user.getEmail()).orElseGet(User::new);
-        if(Objects.equals(verifyUserEmail.getEmail(), user.getEmail())){
-            messages.put("email", "Пользователь с таким email уже существует");
+        userRepo.findByEmail(user.getEmail())
+                .ifPresent(verifyUserEmail -> messages.put("email", "Пользователь с таким email уже существует"));
+        userRepo.findByPhone(user.getPhone())
+                .ifPresent(verifyUserPhone -> messages.put("phone", "Пользователь с таким телефоном уже существует"));
+
+        if(!messages.isEmpty()){
+            throw new UserAlreadyExistsException(messages);
         }
-        User verifyUserPhone = userRepo.findByPhone(user.getPhone()).orElseGet(User::new);
-        if(Objects.equals(verifyUserPhone.getPhone(), user.getPhone())){
-            messages.put("phone", "Пользователь с таким телефоном уже существует");
+    }
+
+    public void verifyLogin(User user, String email, String password){
+        Map<String, String> messages = new HashMap<>();
+
+        if(!Objects.equals(email, user.getEmail())){
+            messages.put("email", "Пользователя с таким email не существует");
+        }
+        else if(!passwordEncoder.matches(password, user.getPassword())){
+            messages.put("password", "Неверный пароль");
         }
 
         if(!messages.isEmpty()){

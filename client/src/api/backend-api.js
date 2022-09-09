@@ -97,7 +97,7 @@ export default {
             store.commit('setCategories', res.data.categories)
             store.commit('setPopularProducts', res.data.productsPopular)
             store.commit('setCart', res.data.shoppingCart)
-            store.commit('setOrders', [...res.data.orders ?? []])
+            store.commit('setOrders', [...res.data.orders])
         })
     },
     createUser: (user) => {
