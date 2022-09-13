@@ -14,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Enumeration;
 
 @Component
 public class JwtTokenProvider {
@@ -30,8 +29,8 @@ public class JwtTokenProvider {
     private String accessHeader;
     @Value("${jwt.refreshHeader}")
     private String refreshHeader;
-    @Value("${jwt.expirationMs}")
-    private long expirationMs;
+    @Value("${jwt.accessExpirationMs}")
+    private long accessExpirationMs;
     @Value("${jwt.refreshExpirationMs}")
     private long refreshExpirationMs;
 
@@ -47,7 +46,7 @@ public class JwtTokenProvider {
         claims.put("username", username);
         claims.put("role", role);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + expirationMs);
+        Date validity = new Date(now.getTime() + accessExpirationMs);
 
         return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(validity).signWith(SignatureAlgorithm.HS256, accessSecretKey).compact();
     }
@@ -57,7 +56,7 @@ public class JwtTokenProvider {
         claims.put("id", id);
         claims.put("role", role);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + expirationMs);
+        Date validity = new Date(now.getTime() + refreshExpirationMs);
 
         return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(validity).signWith(SignatureAlgorithm.HS256, refreshSecretKey).compact();
     }
