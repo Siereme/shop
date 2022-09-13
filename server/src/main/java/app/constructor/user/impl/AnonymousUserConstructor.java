@@ -11,7 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 @Component
-public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
+public class AnonymousUserConstructor extends AbstractUserConstructor {
 
     @Override
     public User createUser(User user) {
@@ -19,7 +19,7 @@ public class AnonymousUserConstructor extends AbstractUserConstructor<User> {
     }
 
     @Override
-    public User createUser(User user, UserStatus status) {;
+    public User createUser(User user, UserStatus status) {
         user.setName(UUID.randomUUID().toString());
         user.setSurname(UUID.randomUUID().toString());
         user.setPatronymic(UUID.randomUUID().toString());

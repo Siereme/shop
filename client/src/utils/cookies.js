@@ -10,11 +10,19 @@ globalCookiesConfig ({
 
 const { cookies } = useCookies();
 
+let getCookie = (name) => cookies.get(name)
+
+let deleteCookie = name => {
+    cookies.remove(name)
+}
+
+let setCookie = (name, value) => {
+    deleteCookie(name)
+    cookies.set(name, value)
+}
+
 export default {
-    getCookie: (name) => cookies.get(name),
-    deleteCookie: name => cookies.remove(name),
-    setCookie: (name, value) => {
-        cookies.remove(name)
-        cookies.set(name, value)
-    },
+    getCookie,
+    deleteCookie,
+    setCookie,
 }

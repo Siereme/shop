@@ -78,7 +78,7 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
     @Override
     public void setProductItems(long userId) {
         ShoppingCart cart = cartRepo.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order constructor - Shopping cart is not found"));
 
         Set<ShoppingCartProductItem> cartItems = cart.getCartItems();
         for (ShoppingCartProductItem cartItem : cartItems) {
@@ -93,7 +93,7 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
     @Override
     public void setPayment(long paymentId) {
         Payment payment = paymentRepo.findById(paymentId)
-                .orElseThrow(() -> new EntityNotFoundException("Payment is not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order constructor - Payment is not found"));
         order.setPayment(payment);
     }
 

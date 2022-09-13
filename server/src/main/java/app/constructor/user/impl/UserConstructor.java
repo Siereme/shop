@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityNotFoundException;
 
 @Component
-public class UserConstructor extends AbstractUserConstructor<User> {
+public class UserConstructor extends AbstractUserConstructor {
 
     @Override
     public User createUser(User user) {

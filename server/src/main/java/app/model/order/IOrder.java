@@ -2,15 +2,16 @@ package app.model.order;
 
 import app.model.order.payment.Payment;
 import app.model.order.userDetails.IOrderUserDetails;
+import app.model.order.userDetails.OrderUserDetails;
 
 import java.util.Set;
 
-public interface IOrder<T extends IOrderUserDetails> {
+public interface IOrder {
     void setOrderProduct(OrderProductItem orderProductItem);
 
     Long getId();
 
-    T getUserDetails();
+    OrderUserDetails getUserDetails();
 
     Set<OrderProductItem> getOrderItems();
 
@@ -20,7 +21,7 @@ public interface IOrder<T extends IOrderUserDetails> {
 
     void setId(Long id);
 
-    void setUserDetails(T user);
+    void setUserDetails(OrderUserDetails user);
 
     void setOrderItems(Set<OrderProductItem> orderItems);
 

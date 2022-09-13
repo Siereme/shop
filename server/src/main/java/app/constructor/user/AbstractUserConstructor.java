@@ -1,6 +1,5 @@
 package app.constructor.user;
 
-import app.model.user.IUser;
 import app.model.user.User;
 import app.model.user.role.Role;
 import app.repository.user.UserRepository;
@@ -11,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityNotFoundException;
 
-public abstract class AbstractUserConstructor<T extends IUser> implements IUserConstructor<T> {
+public abstract class AbstractUserConstructor implements IUserConstructor<User> {
 
     @Autowired
     protected UserRepository userRepo;
@@ -20,11 +19,14 @@ public abstract class AbstractUserConstructor<T extends IUser> implements IUserC
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
-    public abstract T createUser(T user);
+    @Override
+    public abstract User createUser(User user);
 
-    public abstract T createUser(T user, UserStatus status);
+    @Override
+    public abstract User createUser(User user, UserStatus status);
 
-    public User updateUser(T user) {
+    @Override
+    public User updateUser(User user) {
         User newUser = userRepo.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User is not found"));
 

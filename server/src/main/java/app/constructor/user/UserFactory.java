@@ -7,21 +7,24 @@ import app.exception.UnknownConstructorTypeException;
 import app.model.user.User;
 import app.utils.constants.user.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserFactory {
     @Autowired
-    private ApplicationContext context;
+    private UserConstructor userConstructor;
+    @Autowired
+    private AdminConstructor adminConstructor;
+    @Autowired
+    private AnonymousUserConstructor anonymousConstructor;
 
     public IUserConstructor<User> getFactory(UserRole role) {
         if (role == UserRole.USER) {
-            return context.getBean(UserConstructor.class);
+            return userConstructor;
         } else if (role == UserRole.ADMIN) {
-            return context.getBean(AdminConstructor.class);
+            return adminConstructor;
         } else if (role == UserRole.ANONYMOUS) {
-            return context.getBean(AnonymousUserConstructor.class);
+            return anonymousConstructor;
         } else {
             throw new UnknownConstructorTypeException();
         }

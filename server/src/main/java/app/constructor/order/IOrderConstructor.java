@@ -1,12 +1,10 @@
 package app.constructor.order;
 
 import app.model.order.IOrder;
-import app.model.order.Order;
 import app.model.order.delivery.Delivery;
-import app.model.order.userDetails.IOrderUserDetails;
 import app.model.user.IUser;
 
-public interface IOrderConstructor<R extends IOrder<? extends IOrderUserDetails>, U extends IUser> {
+public interface IOrderConstructor<R extends IOrder, U extends IUser> {
 
     void create();
 
@@ -26,7 +24,7 @@ public interface IOrderConstructor<R extends IOrder<? extends IOrderUserDetails>
 
     void setTotal();
 
-    Order getOrder();
+    R getOrder();
 
     void refreshShoppingCart();
 

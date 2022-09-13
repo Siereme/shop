@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Order implements IOrder<OrderUserDetails> {
+public class Order implements IOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,6 +10,6 @@ public interface IUserConstructor<T extends IUser> {
 
     T createUser(T user, UserStatus status);
 
-    User updateUser(T user);
+    T updateUser(T user);
 
 }
