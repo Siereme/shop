@@ -65,8 +65,7 @@ public class TestShoppingCartConstructor {
     }
 
     public ShoppingCart getById(Long id) {
-        return shoppingCartList
-                .stream()
+        return shoppingCartList.stream()
                 .filter(shoppingCart -> Objects.equals(shoppingCart.getId(), id))
                 .findFirst().orElseGet(ShoppingCart::new);
     }

@@ -33,4 +33,9 @@ public class AnonymousUserConstructor extends AbstractUserConstructor {
         return user;
     }
 
+    @Override
+    public boolean findType(UserRole role) {
+        return role == UserRole.ANONYMOUS;
+    }
+
 }

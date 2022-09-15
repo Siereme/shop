@@ -62,22 +62,19 @@ public class TestCategoryConstructor {
     }
 
     public List<Category> getFirstLevelCategories() {
-        return categoryList
-                .stream()
+        return categoryList.stream()
                 .filter(category -> category.getParent() == null)
                 .collect(Collectors.toList());
     }
 
     public List<Category> getCategoriesByDepth(long depth) {
-        return categoryList
-                .stream()
+        return categoryList.stream()
                 .filter(category -> category.getDepth() == depth)
                 .collect(Collectors.toList());
     }
 
     public Category getById(Long id){
-        return categoryList
-                .stream()
+        return categoryList.stream()
                 .filter(category -> Objects.equals(category.getId(), id))
                 .findFirst().orElseGet(Category::new);
     }

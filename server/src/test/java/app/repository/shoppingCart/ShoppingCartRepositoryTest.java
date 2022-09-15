@@ -43,11 +43,9 @@ class ShoppingCartRepositoryTest {
         //// Check shopping cart items
         Assertions.assertEquals(checkShoppingCart.getCartItems().size(), shoppingCart.getCartItems().size());
         Assertions.assertTrue(
-                shoppingCart.getCartItems()
-                        .stream()
+                shoppingCart.getCartItems().stream()
                         .map(ShoppingCartProductItem::getId)
-                        .allMatch(itemId -> checkShoppingCart.getCartItems()
-                                .stream()
+                        .allMatch(itemId -> checkShoppingCart.getCartItems().stream()
                                 .map(ShoppingCartProductItem::getId)
                                 .anyMatch(itemId::equals))
         );

@@ -54,11 +54,9 @@ class OrderRepositoryTest {
         //// Check order items
         Assertions.assertEquals(checkOrderList.get(0).getOrderItems().size(), orders.get(0).getOrderItems().size());
         Assertions.assertTrue(
-                orders.get(0).getOrderItems()
-                        .stream()
+                orders.get(0).getOrderItems().stream()
                         .map(OrderProductItem::getId)
-                        .allMatch(orderId -> checkOrderList.get(0).getOrderItems()
-                                .stream()
+                        .allMatch(orderId -> checkOrderList.get(0).getOrderItems().stream()
                                 .map(OrderProductItem::getId)
                                 .anyMatch(orderId::equals))
         );
@@ -77,11 +75,9 @@ class OrderRepositoryTest {
         //// Check order items
         Assertions.assertEquals(checkOrderList.get(1).getOrderItems().size(), orders.get(1).getOrderItems().size());
         Assertions.assertTrue(
-                orders.get(1).getOrderItems()
-                        .stream()
+                orders.get(1).getOrderItems().stream()
                         .map(OrderProductItem::getId)
-                        .allMatch(orderId -> checkOrderList.get(1).getOrderItems()
-                                .stream()
+                        .allMatch(orderId -> checkOrderList.get(1).getOrderItems().stream()
                                 .map(OrderProductItem::getId)
                                 .anyMatch(orderId::equals))
         );
@@ -112,11 +108,9 @@ class OrderRepositoryTest {
         //// Check order items
         Assertions.assertEquals(checkOrderList.get(0).getOrderItems().size(), orders.get(0).getOrderItems().size());
         Assertions.assertTrue(
-                orders.get(0).getOrderItems()
-                        .stream()
+                orders.get(0).getOrderItems().stream()
                         .map(OrderProductItem::getId)
-                        .allMatch(itemId -> checkOrderList.get(0).getOrderItems()
-                                .stream()
+                        .allMatch(itemId -> checkOrderList.get(0).getOrderItems().stream()
                                 .map(OrderProductItem::getId)
                                 .anyMatch(itemId::equals))
         );

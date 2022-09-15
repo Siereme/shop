@@ -59,8 +59,7 @@ class ShoppingCartServiceTest {
 
         //Check the resulting object
         Assertions.assertTrue(
-                shoppingCart.getCartItems()
-                        .stream()
+                shoppingCart.getCartItems().stream()
                         .map(item -> item.getProduct().getId())
                         .anyMatch(Long.valueOf(5)::equals)
         );
@@ -96,8 +95,7 @@ class ShoppingCartServiceTest {
 
         //Check the resulting object
         Assertions.assertFalse(
-                shoppingCart.getCartItems()
-                        .stream()
+                shoppingCart.getCartItems().stream()
                         .map(item -> item.getProduct().getId())
                         .anyMatch(Long.valueOf(1)::equals)
         );

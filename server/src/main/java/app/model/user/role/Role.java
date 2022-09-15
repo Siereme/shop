@@ -43,8 +43,7 @@ public class Role implements IRole {
     private Set<User> users;
 
     public Set<SimpleGrantedAuthority> getAuthorities() {
-        return getPermissions()
-                .stream()
+        return getPermissions().stream()
                 .map(Permission::getName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());

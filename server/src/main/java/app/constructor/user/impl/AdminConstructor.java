@@ -26,4 +26,9 @@ public class AdminConstructor extends AbstractUserConstructor {
         user.setRole(role);
         return user;
     }
+
+    @Override
+    public boolean findType(UserRole role) {
+        return role == UserRole.ADMIN;
+    }
 }

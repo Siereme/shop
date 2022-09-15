@@ -8,21 +8,21 @@ import app.utils.constants.user.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class OrderFactory {
-    @Autowired
-    private AnonymousOrderManager anonymousManager;
-    @Autowired
-    private DefaultOrderManager defaultManager;
+
+    private final Set<IOrderManager<Order>> managers;
+
+    public OrderFactory(AnonymousOrderManager anonymousManager, DefaultOrderManager defaultManager) {
+        this.managers = Set.of(anonymousManager, defaultManager);
+    }
 
     public IOrderManager<Order> getFactory(UserRole role) {
-        if (role == UserRole.ANONYMOUS) {
-            return anonymousManager;
-        } else if (role == UserRole.USER || role == UserRole.ADMIN) {
-            return defaultManager;
-        } else {
-            throw new UnknownConstructorTypeException();
-        }
+        return managers.stream()
+                .filter(manager -> manager.findType(role))
+                .findFirst().orElseThrow(UnknownConstructorTypeException::new);
     }
 
 }

@@ -4,6 +4,7 @@ import app.model.user.User;
 import app.model.user.role.Role;
 import app.repository.user.UserRepository;
 import app.repository.user.UserRoleRepository;
+import app.utils.constants.user.UserRole;
 import app.utils.constants.user.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,4 +43,7 @@ public abstract class AbstractUserConstructor implements IUserConstructor<User> 
         newUser.setStatus(user.getStatus());
         return newUser;
     }
+
+    @Override
+    public abstract boolean findType(UserRole role);
 }

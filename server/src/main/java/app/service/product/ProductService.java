@@ -54,8 +54,7 @@ public class ProductService implements IProductService<Product> {
         product.setDescription(description);
 
         //add options
-        Set<ProductOption> options = productDTO.getOptions()
-                .stream()
+        Set<ProductOption> options = productDTO.getOptions().stream()
                 .map(option -> {
                     try {
                         return optionRepo.findByNameAndValue(option.getName(), option.getValue())

@@ -101,26 +101,21 @@ public class TestProductConstructor {
     }
 
     public Product getById(Long id) {
-        return productList
-                .stream()
+        return productList.stream()
                 .filter(product -> Objects.equals(product.getId(), id))
                 .findFirst().orElseGet(Product::new);
     }
 
     public List<Product> getAllById(List<Long> ids) {
-        return productList
-                .stream()
-                .filter(product -> ids
-                        .stream()
+        return productList.stream()
+                .filter(product -> ids.stream()
                         .anyMatch(id -> Objects.equals(product.getId(), id)))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getByCategoryId(Long id) {
-        return productList
-                .stream()
-                .filter(product -> product.getCategories()
-                        .stream()
+        return productList.stream()
+                .filter(product -> product.getCategories().stream()
                         .anyMatch(category -> Objects.equals(category.getId(), id)))
                 .collect(Collectors.toList());
     }

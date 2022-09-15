@@ -4,6 +4,7 @@ import app.constructor.order.IOrderManager;
 import app.model.dto.order.OrderDTO;
 import app.model.order.Order;
 import app.model.user.User;
+import app.utils.constants.user.UserRole;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,5 +29,10 @@ public class AnonymousOrderManager implements IOrderManager<Order> {
         constructor.getUser().setOrder(order);
         constructor.refreshShoppingCart();
         return order;
+    }
+
+    @Override
+    public boolean findType(UserRole role) {
+        return role == UserRole.ANONYMOUS;
     }
 }

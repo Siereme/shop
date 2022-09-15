@@ -43,8 +43,7 @@ public class OrderController {
     @GetMapping(value = "/user-id/{id}")
     public ResponseEntity<?> getOrdersByUserId(@PathVariable Long id) {
         try {
-            List<Order> orders = orderRepo.findAllByUserId(id)
-                    .stream()
+            List<Order> orders = orderRepo.findAllByUserId(id).stream()
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(orders);

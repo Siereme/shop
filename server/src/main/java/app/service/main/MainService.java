@@ -53,8 +53,7 @@ public class MainService implements IMainService {
         }
 
         if(config.isWithOrders()){
-            List<Order> orders = orderRepo.findAllByUserId(config.getUserId())
-                    .stream()
+            List<Order> orders = orderRepo.findAllByUserId(config.getUserId()).stream()
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
             response.setOrders(orders);

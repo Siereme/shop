@@ -26,4 +26,9 @@ public class UserConstructor extends AbstractUserConstructor {
         user.setRole(role);
         return user;
     }
+
+    @Override
+    public boolean findType(UserRole role) {
+        return role == UserRole.USER;
+    }
 }
