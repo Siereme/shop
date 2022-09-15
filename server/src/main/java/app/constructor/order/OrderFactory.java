@@ -1,7 +1,5 @@
 package app.constructor.order;
 
-import app.constructor.order.impl.AnonymousOrderManager;
-import app.constructor.order.impl.DefaultOrderManager;
 import app.exception.UnknownConstructorTypeException;
 import app.model.order.Order;
 import app.utils.constants.user.UserRole;
@@ -13,11 +11,8 @@ import java.util.Set;
 @Component
 public class OrderFactory {
 
-    private final Set<IOrderManager<Order>> managers;
-
-    public OrderFactory(AnonymousOrderManager anonymousManager, DefaultOrderManager defaultManager) {
-        this.managers = Set.of(anonymousManager, defaultManager);
-    }
+    @Autowired
+    private Set<IOrderManager<Order>> managers;
 
     public IOrderManager<Order> getFactory(UserRole role) {
         return managers.stream()
