@@ -34,6 +34,7 @@ INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (29, 27,
 INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (30, 27, 'Камеры', '6/27/30/', 3);
 INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (31, 27, 'Комплекты умный дом', '6/27/31/', 3);
 INSERT INTO category (category_id, parent_id, name, path, depth) VALUES (32, 27, 'Лампы, светодиодные ленты', '6/27,', 3);
+alter sequence category_category_id_seq restart with 32;
 
 
 
@@ -202,6 +203,8 @@ INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (77
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (78, 324928, 'Электронная книга PocketBook 740 InkPad 3 Pro Metallic Grey', 20990, '/assets/img/products/e-books/product_10_324928.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (79, 433323, 'Электронная книга Ritmix RBK-678FL black', 6990, '/assets/img/products/e-books/product_10_433323.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (80, 433322, 'Электронная книга Ritmix RBK-677FL black', 6490, '/assets/img/products/e-books/product_10_433322.jpg');
+alter sequence product_product_id_seq restart with 81;
+
 
 INSERT INTO product_category (product_id, category_id) VALUES (73, 10);
 INSERT INTO product_category (product_id, category_id) VALUES (74, 10);
@@ -220,9 +223,11 @@ INSERT INTO product_category (product_id, category_id) VALUES (80, 10);
 INSERT INTO role (role_id, name) VALUES (1, 'ADMIN');
 INSERT INTO role (role_id, name) VALUES (2, 'USER');
 INSERT INTO role (role_id, name) VALUES (3, 'ANONYMOUS');
+--alter sequence role_id_seq restart with 3;
 
 INSERT INTO permission (permission_id, name) VALUES (1, 'site:read');
 INSERT INTO permission (permission_id, name) VALUES (2, 'site:write');
+alter sequence permission_permission_id_seq restart with 3;
 
 INSERT INTO role_permission (role_id, permission_id) VALUES (1, 1);
 INSERT INTO role_permission (role_id, permission_id) VALUES (1, 2);
@@ -230,6 +235,7 @@ INSERT INTO role_permission (role_id, permission_id) VALUES (2, 2);
 INSERT INTO role_permission (role_id, permission_id) VALUES (3, 2);
 
 INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
+alter sequence payment_id_seq restart with 2;
 
 --INSERT INTO orders (id, payment_id, total) VALUES (1, 1, 194500);
 --INSERT INTO orders (id, payment_id, total) VALUES (2, 1, 194500);
@@ -258,24 +264,25 @@ INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
 
 INSERT INTO shopping_cart (id, total, count_items) VALUES (1, 194500, 0);
 INSERT INTO shopping_cart (id, total, count_items) VALUES (2, 194500, 3);
+alter sequence shopping_cart_id_seq restart with 3;
 
 --INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (1, 2, 1, 1);
 --INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (2, 2, 2, 1);
 --INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (3, 2, 3, 1);
 
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','7 (999) 999-9999', 1, 'ACTIVE', 1);
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '7 (999) 999-9998', 2, 'ACTIVE', 2);
-
+INSERT INTO user_account (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','7 (999) 999-9999', 1, 'ACTIVE', 1);
+INSERT INTO user_account (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '7 (999) 999-9998', 2, 'ACTIVE', 2);
+alter sequence user_account_id_seq restart with 3;
 
 
 INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (1, 'User1', 'User1', 'User1', 'userdetails1@mail.com', '+79999999999');
 INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (2, 'User2', 'User2', 'User2', 'userdetails2@mail.com', '+78888888888');
+alter sequence order_user_details_id_seq restart with 3;
 
 INSERT INTO orders (order_id, user_id, user_details_id, payment_id, total) VALUES (1, 1, 1, 1, 194500);
 INSERT INTO orders (order_id, user_id, user_details_id, payment_id, total) VALUES (2, 2, 2, 1, 214500);
---INSERT INTO orders (id, payment_id, total) VALUES (2, 1, 194500);
---INSERT INTO orders (id, payment_id, total) VALUES (3, 1, 194500);
---
+alter sequence orders_order_id_seq restart with 3;
+
 INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 1, 2);
 INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (1, 3, 8);
 INSERT INTO order_product_items (order_id, order_product_id, count) VALUES (2, 4, 10);

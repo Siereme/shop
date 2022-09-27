@@ -28,7 +28,7 @@ public class TestUserConstructor {
         user1.setSurname("Admin1");
         user1.setEmail("admin@mail.com");
         user1.setPassword("$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba");
-        user1.setPhone("+7-999-999-99-99");
+        user1.setPhone("+79999999999");
 
         Role role1 = new Role();
         role1.setId(1L);
@@ -48,7 +48,7 @@ public class TestUserConstructor {
         user2.setSurname("User1");
         user2.setEmail("user@mail.com");
         user2.setPassword("$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S");
-        user2.setPhone("+7-999-999-99-99");
+        user2.setPhone("+79999999998");
 
         Role role2 = new Role();
         role2.setId(2L);

@@ -60,8 +60,8 @@ INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) V
 INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (3, 2, 3, 9);
 INSERT INTO shopping_cart_items (id, shopping_cart_id, cart_product_id, count) VALUES (4, 2, 4, 10);
 
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','7 (999) 999-9999', 1, 'ACTIVE', 1);
-INSERT INTO user (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '7 (999) 999-9998', 2, 'ACTIVE', 2);
+INSERT INTO user_account (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (1, 'Admin1', 'Admin1', 'Admin1', 'admin@mail.com', '$2a$12$/GE5oRkYarA4Zsrf9l8vNOMhLxDK8B4mPI8zAaCmgoGz4R6Ptmwba','+79999999999', 1, 'ACTIVE', 1);
+INSERT INTO user_account (id, name, surname, patronymic, email, password, phone, role_id, status, shopping_cart_id) VALUES (2, 'User1', 'User1', 'User1', 'user@mail.com', '$2a$12$F11pS2k4m0.9KXlOiF5W0O8QZH2jHRqNLQ7fJatlJcR5zkBJvmI7S', '+79999999998', 2, 'ACTIVE', 2);
 
 
 INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
