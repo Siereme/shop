@@ -1,6 +1,6 @@
 <template>
     <div class="fields-group__item">
-        <input type="tel" class="field-control__label" 
+        <input class="field-control__label" 
             :disabled="isDisabled" 
             :placeholder="placeholder" :value="value" 
             :data-type="type" :data-name="placeholder" 
@@ -11,8 +11,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-// import {useStore} from "vuex"
-// import {computed} from 'vue'
 
 export default defineComponent({
     name: 'Registration',
@@ -73,6 +71,9 @@ a {
     background-color: transparent;
     background-repeat: no-repeat;
     box-sizing: border-box;
+}
+.fields-group__item input:hover{
+    border-color: #aaaeb7;
 }
 .fields-group__item input::placeholder{
     color: #adadad;

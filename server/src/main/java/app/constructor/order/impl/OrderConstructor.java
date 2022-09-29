@@ -3,13 +3,15 @@ package app.constructor.order.impl;
 import app.constructor.order.IOrderConstructor;
 import app.model.order.Order;
 import app.model.order.OrderProductItem;
-import app.model.order.delivery.Delivery;
+import app.model.order.receipt.receiptDetail.ReceiptDetail;
 import app.model.order.payment.Payment;
+import app.model.order.receipt.Receipt;
 import app.model.order.userDetails.OrderUserDetails;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
 import app.model.user.User;
 import app.repository.order.PaymentRepository;
+import app.repository.order.ReceiptRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
 import app.service.shoppingCart.ShoppingCartService;
@@ -32,6 +34,8 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
     private ShoppingCartRepository cartRepo;
     @Autowired
     private ShoppingCartService cartService;
+    @Autowired
+    private ReceiptRepository receiptRepo;
     @Autowired
     private PaymentRepository paymentRepo;
 
@@ -70,9 +74,17 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
         this.order.setUserDetails(userDetails);
     }
 
+
     @Override
-    public void setDelivery(Delivery delivery) {
-        this.order.getUserDetails().setDelivery(delivery);
+    public void setReceiptDetail(ReceiptDetail receiptDetailDTO) {
+        Receipt receipt = receiptRepo.findById(receiptDetailDTO.getReceipt().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("Order constructor - Receipt doesn't exist"));
+
+        ReceiptDetail receiptDetail = new ReceiptDetail();
+        receiptDetail.setReceipt(receipt);
+        receiptDetail.setAddress(receiptDetailDTO.getAddress());
+        receiptDetail.setDate(receiptDetailDTO.getDate());
+        this.order.setReceiptDetail(receiptDetail);
     }
 
     @Override

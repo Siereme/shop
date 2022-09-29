@@ -1,7 +1,8 @@
 package app.constructor.order;
 
 import app.model.order.IOrder;
-import app.model.order.delivery.Delivery;
+import app.model.order.receipt.receiptDetail.ReceiptDetail;
+import app.model.order.receipt.Receipt;
 import app.model.user.IUser;
 
 public interface IOrderConstructor<R extends IOrder, U extends IUser> {
@@ -16,7 +17,7 @@ public interface IOrderConstructor<R extends IOrder, U extends IUser> {
 
     void setUserDetails(U user);
 
-    void setDelivery(Delivery delivery);
+    void setReceiptDetail(ReceiptDetail receiptDetail);
 
     void setProductItems(long userId);
 

@@ -234,14 +234,11 @@ let getOrders = () => {
     })
 }
 
-let createOrder = (user, payment) => {
+let createOrder = (order) => {
     return axiosApi({
         method: 'post',
         url: `/order/add`,
-        data : {
-            user,
-            payment
-        }
+        data : order
     })
     .then(res => {
         store.commit('setOrder', res.data.order)
@@ -257,6 +254,28 @@ let getPayments = () => {
     })
     .then(res => {
         store.commit('setPayments', res.data)
+        return res
+    })       
+}
+
+let getReceipts = () => {
+    return axiosApi({
+        method: 'get',
+        url: `/receipt/all`
+    })
+    .then(res => {
+        store.commit('setReceipts', res.data)
+        return res
+    })       
+}
+
+let getShopAddress = () => {
+    return axiosApi({
+        method: 'get',
+        url: `/shop-address/all`
+    })
+    .then(res => {
+        store.commit('setShopAddress', res.data)
         return res
     })       
 }
@@ -278,5 +297,7 @@ export default {
     removeCartProduct,
     getOrders,
     createOrder,
-    getPayments
+    getPayments,
+    getReceipts,
+    getShopAddress
 }

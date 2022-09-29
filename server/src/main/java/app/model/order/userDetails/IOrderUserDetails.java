@@ -1,7 +1,5 @@
 package app.model.order.userDetails;
 
-import app.model.order.delivery.Delivery;
-
 public interface IOrderUserDetails {
 
     Long getId();
@@ -27,9 +25,5 @@ public interface IOrderUserDetails {
     String getPhone();
 
     void setPhone(String phone);
-
-    Delivery getDelivery();
-
-    void setDelivery(Delivery delivery);
 
 }

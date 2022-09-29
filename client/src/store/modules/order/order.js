@@ -2,6 +2,8 @@ export default {
     state: {
         orders: [],
         payments: [],
+        receipts: [],
+        shopAddress: []
     },
     getters: {
         geOrders: (state) => () => {
@@ -12,6 +14,12 @@ export default {
         },
         getPayments: (state) => () => {
             return state.payments
+        },
+        getReceipts: (state) => () => {
+            return state.receipts
+        },
+        getShopAddress: (state) => () => {
+            return state.shopAddress
         }
     },
     mutations: {
@@ -23,6 +31,12 @@ export default {
         },
         setPayments: (state, payments) => {
             state.payments = payments
+        },
+        setReceipts: (state, receipts) => {
+            state.receipts = receipts
+        },
+        setShopAddress: (state, shopAddress) => {
+            state.shopAddress = shopAddress
         }
     }
 }

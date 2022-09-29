@@ -15,33 +15,32 @@
                                 </div>
                             </div>
                         </div>
-                        <StepUserInfo :user="user" :errorMessages="messages" />
+                        <div class="checkout__step-body">
+                            <StepUserInfo :user="userForm" :errorMessages="errorMessages" />
+                        </div>
                     </div>
                     <div class="checkout__step">
                         <div class="checkout__step-header">
-                            <div class="checkout__step-header-num">2</div>
-                            <div class="checkout__step-header-content checkout__step-header-payment">
+                            <div class="checkout__step-header-num">3</div>
+                            <div class="checkout__step-header-content checkout__step-header-row">
+                                <div class="checkout__step-header-title">Способ получения</div>
+                                <div class="checkout__step-header-error" v-if="shownReceiptError">Выберите способ получения</div>
+                            </div>
+                        </div>
+                        <div class="checkout__step-body">
+                            <OrderReceipt ref="receiptWrapper" :errorMessages="errorMessages" :shownError="shownReceiptError" :handleError="() => handleReceiptError(false)"/>
+                        </div>
+                    </div>
+                    <div class="checkout__step">
+                        <div class="checkout__step-header">
+                            <div class="checkout__step-header-num">3</div>
+                            <div class="checkout__step-header-content checkout__step-header-row">
                                 <div class="checkout__step-header-title">Способ оплаты</div>
                                 <div class="checkout__step-header-error" v-if="shownPaymentError">Выберите способ оплаты</div>
                             </div>
                         </div>
                         <div class="checkout__step-body">
-                            <div class="checkout__payments" ref="paymentWrapper">
-                                <div class="checkout__payments-item" v-for="item in payments" :key="item.id" @click="handlePaymentError(false)">
-                                    <input v-model="payment" type="radio" id="OrderOplata_1" class="field-radio__input" :value="item">
-                                    <label for="OrderOplata_1" class="field-radio__label">
-                                        <div class="field-radio__label-content-heading">
-                                            При получении
-                                        </div>
-                                        <div class="field-radio__label-content-description">
-                                            Картой / наличными
-                                        </div>
-                                        <div class="field-radio__label-content-icons">
-                                            
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
+                            <Payments ref="paymentWrapper" :shownError="shownPaymentError" :handleError="() => handlePaymentError(false)"/>
                         </div>
                     </div>
                 </div>
@@ -51,7 +50,7 @@
                         <span class="checkout__proceed-action-total-price">{{orderTotal}} ₽</span>
                     </div>
                     <div class="checkout__proceed-action-item">
-                        <div class="checkout__proceed-action-button" @click="createOrder()">Оформить</div>
+                        <div class="checkout__proceed-action-button" @click="sendOrder()">Оформить</div>
                     </div>
                 </div>
             </div>
@@ -68,96 +67,89 @@ import {computed, ref} from 'vue'
 import {useStore} from "vuex"
 import { useRouter } from 'vue-router'
 import StepUserInfo from './form/StepUserInfo.vue'
+import Payments from './checkout/Payments.vue'
+import OrderReceipt from './checkout/orderReceipt/OrderReceipt.vue'
 
 export default defineComponent({
     name: 'CheckoutPage',
     components: {
-    CartModal,
-    StepUserInfo
-},
+        CartModal,
+        StepUserInfo,
+        Payments,
+        OrderReceipt
+    },
     setup() {
         const store = useStore()     
         const router = useRouter()
 
         const orderTotal = computed(() => {
-            if(!store.getters.getIsLoading() && store.state.cart.cartTotal === 0){
+            if(!store.getters.getIsLoading() && !store.state.cart.cartTotal){
                 router.replace({name: 'Home'})
             }
             return store.state.cart.cartTotal
         })
 
-        api.getPayments()
-
-        let storeUser = computed(() => store.state.user.user)
-        let sendUserForm = ref(Object.assign({}, storeUser.value))
-        let user = ref(storeUser.value && storeUser.value.status !== 'ANONYMOUS' ? Object.assign({}, storeUser.value) : {})
-        let payments = computed(() => store.state.order.payments)
-        let payment = ref({})
+        let user = computed(() => store.state.user.user)
+        let userForm = ref(user.value && user.value.status !== 'ANONYMOUS' ? Object.assign({}, user.value) : {})
+        let userSend = ref(user.value)
+        
+        let receiptWrapper = ref({})
         let paymentWrapper = ref({})
+
         let shownPaymentError = ref(false)
+        let shownReceiptError = ref(false)
+        let errorMessages = ref({})
 
-        let messages = ref({})
 
-        let setUserData = () => {
-            sendUserForm.value.phone = user.value.phone
-            sendUserForm.value.email = user.value.email
-            sendUserForm.value.surname = user.value.surname
-            sendUserForm.value.name = user.value.name
-            sendUserForm.value.patronymic = user.value.patronymic
+        let getUserData = () => {
+            userSend.value.phone = userForm.value.phone
+            userSend.value.email = userForm.value.email
+            userSend.value.surname = userForm.value.surname
+            userSend.value.name = userForm.value.name
+            userSend.value.patronymic = userForm.value.patronymic
+            return Object.assign({}, userSend.value)
         }
 
-        let createOrder = () => {
-            !validationPaymentChecked()
-            ? handlePaymentError(true)
-            : sendOrder()
-        }
+        let createOrder = () => ({
+            'user': getUserData(),
+            'receiptDetail': receiptWrapper.value.getReceiptDetail(),
+            'payment': paymentWrapper.value.getPayment()
+        })
 
         let sendOrder = () => {
-            setUserData()
             store.commit('setIsLoading', true)
-            api.createOrder(sendUserForm.value, payment.value)
+            api.createOrder(createOrder())
             .then(res => {
                 if(res.status === 200){
                     router.replace({name: 'OrderPage'})
                 }
-                handlePaymentError(false)
+                paymentWrapper.value.handleError(false)
             }).catch(res => {
-                messages.value = res.response.data
+                handleErrorMessages(res.response.data)
                 store.commit('setIsLoading', false)
             })
         }
 
-        let validationPaymentChecked = () => {
-            return Array.from(paymentWrapper.value.children)
-            .map(field => Array.from(field.children).find(item => item.tagName === 'INPUT'))
-            .find(field => field.checked)
+        let handleErrorMessages = messages => {
+            errorMessages.value = messages
+            Object.keys(messages).find(message => message.includes('payment.')) ? handlePaymentError(true) : null
+            Object.keys(messages).find(message => message.includes('receipt.')) ? handleReceiptError(true) : null
         }
-
-        let handlePaymentError = (flag) => {
-            if(flag) {
-                paymentWrapper.value.classList.add('unchecked')
-                shownPaymentError.value = true
-            }
-            if(!flag){
-                paymentWrapper.value.classList.remove('unchecked')
-                shownPaymentError.value = false
-            }
-            
-        }
-
+        let handlePaymentError = flag => shownPaymentError.value = flag ?? false
+        let handleReceiptError = flag => shownReceiptError.value = flag ?? false
 
         return {
-            storeUser,
             user,
+            userForm,
             orderTotal,
-            payments,
-            payment,
-            messages,
             paymentWrapper,
+            receiptWrapper,
+            errorMessages,
             shownPaymentError,
-            setUserData,
-            createOrder,
-            handlePaymentError
+            shownReceiptError,
+            sendOrder,
+            handlePaymentError,
+            handleReceiptError
         }
     }
 })
@@ -266,62 +258,6 @@ h1 {
 .fields-group__item input::placeholder{
     color: #adadad;
 }
-.checkout__payments-item{
-    min-width: 200px;
-    min-height: 90px;
-    width: fit-content;
-    display: flex;
-    flex: 0 0 auto;
-    padding: 5px;
-    box-sizing: border-box;
-}
-.field-radio__label{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    cursor: pointer;
-    color: #7d858c;
-    border-color: #eee;
-    font-weight: 400;
-    padding: 13px;
-    border: 1px solid #ced8e1;
-    border-radius: 6px;
-    transition: all .15s ease-in-out;
-}
-.field-radio__label div{
-    color: #7d858c;
-}
-.field-radio__label .field-radio__label-content-heading{
-    font-size: 15px;
-    line-height: 18px;
-}
-.field-radio__label .field-radio__label-content-description{
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    margin-top: 2px;
-}
-.field-radio__input{
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-}
-.field-radio__input:checked ~ .field-radio__label{
-    border-color: #06a4fd;
-}
-.field-radio__input:checked ~ .field-radio__label div{
-    color: #353d4a;
-    font-weight: 600;
-}
-.field-radio__input:checked ~ .field-radio__label .field-radio__label-content-heading{
-    font-size: 14px;
-}
-.field-radio__input:checked ~ .field-radio__label .field-radio__label-content-description{
-    font-size: 11px;
-}
 .checkout-main .cart-modal-container{
     position: relative;
     padding: 0;
@@ -390,7 +326,7 @@ h1 {
 .checkout__proceed-action-button:hover{
     background-color: #06a4fd;
 }
-.checkout__step-header-payment{
+.checkout__step-header-row{
     flex-direction: row;
     align-items: center;
 }
@@ -401,8 +337,5 @@ h1 {
     margin-right: 20px;
     color: red;
     font-weight: 400;
-}
-.checkout__payments.unchecked .field-radio__label{
-    border-color: red;
 }
 </style>

@@ -1,6 +1,8 @@
 package app.model.order;
 
+import app.model.order.receipt.receiptDetail.ReceiptDetail;
 import app.model.order.payment.Payment;
+import app.model.order.receipt.Receipt;
 import app.model.order.userDetails.OrderUserDetails;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,10 @@ public class Order implements IOrder {
     private Set<OrderProductItem> orderItems = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "delivery_id", referencedColumnName = "id")
+    private ReceiptDetail receiptDetail;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     private Payment payment;
 

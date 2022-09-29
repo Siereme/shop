@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class User implements IUser {
     private String patronymic;
 
     @NotBlank(message = "Email является обязательным")
+//    @Email(message = "Неправельный формат email")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 

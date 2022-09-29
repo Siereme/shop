@@ -1,27 +1,26 @@
-package app.model.order.payment;
+package app.model.order.receipt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "receipt")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Payment implements IPayment {
+public class Receipt implements IReceipt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Getter(onMethod_ = @NotNull(message = "Выберите способ оплаты"))
-    @Column(name = "payment_type")
+    @Getter(onMethod_ = @NotNull(message = "Выберите способ получения"))
+    @Column(name = "receipt_type")
     private String type;
 
 }

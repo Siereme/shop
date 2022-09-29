@@ -23,6 +23,7 @@ public class AnonymousOrderManager implements IOrderManager<Order> {
         constructor.setUser(user);
         constructor.setUserDetails(user);
         constructor.setProductItems(user.getId());
+        constructor.setReceiptDetail(orderDTO.getReceiptDetail());
         constructor.setPayment(orderDTO.getPayment().getId());
         constructor.setTotal();
         Order order = constructor.getOrder();

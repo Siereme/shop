@@ -26,8 +26,6 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
     name: 'PersonalCabinet',
-    components: {
-    },
     setup() {
         const store = useStore()     
         const router = useRouter()

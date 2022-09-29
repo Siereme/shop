@@ -1,4 +1,4 @@
-package app.controller.payment;
+package app.controller.order;
 
 import app.model.order.payment.Payment;
 import app.repository.order.PaymentRepository;

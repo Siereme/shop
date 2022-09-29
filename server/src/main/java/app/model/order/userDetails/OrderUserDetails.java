@@ -1,6 +1,5 @@
 package app.model.order.userDetails;
 
-import app.model.order.delivery.Delivery;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,9 +32,5 @@ public class OrderUserDetails implements IOrderUserDetails {
 
     @Column(name = "phone")
     private String phone;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "delivery_id", referencedColumnName = "id")
-    private Delivery delivery;
 
 }

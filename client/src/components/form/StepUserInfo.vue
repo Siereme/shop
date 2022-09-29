@@ -1,5 +1,5 @@
 <template>
-    <div class="checkout__step-body" :class="{'is-disabled': isDisabled}">
+    <div class="step-user-info" :class="{'is-disabled': isDisabled}">
         <div class="fields-group" ref="contacts">
             <FieldInput :isDisabled="isDisabled"
                 :placeholder="'Телефон'"  :type="'phone'" :value="userData.phone ?? ''"

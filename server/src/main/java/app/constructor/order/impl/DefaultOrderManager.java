@@ -23,6 +23,7 @@ public class DefaultOrderManager implements IOrderManager<Order> {
         constructor.setUserDetails(user);
         constructor.setUser(user);
         constructor.setProductItems(user.getId());
+        constructor.setReceiptDetail(orderDTO.getReceiptDetail());
         constructor.setPayment(orderDTO.getPayment().getId());
         constructor.setTotal();
         Order order = constructor.getOrder();

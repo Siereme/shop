@@ -237,6 +237,17 @@ INSERT INTO role_permission (role_id, permission_id) VALUES (3, 2);
 INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
 alter sequence payment_id_seq restart with 2;
 
+INSERT INTO receipt (id, receipt_type) VALUES (1, 'Самовывоз');
+INSERT INTO receipt (id, receipt_type) VALUES (2, 'Доставка');
+alter sequence payment_id_seq restart with 3;
+
+INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (1, 'Россия', 'Москва', 'ул. Вешняковская', '22А', '');
+INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (2, 'Россия', 'Москва', 'Комсомольский пр.', '28', '');
+INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (3, 'Россия', 'Москва', 'Манежная пл.', '1', '');
+INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (4, 'Россия', 'Москва', 'Большая Бронная ул.', '29', '8');
+INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (5, 'Россия', 'Москва', 'пл. Тверская Застава', '2', '8');
+alter sequence shop_address_id_seq restart with 6;
+
 --INSERT INTO orders (id, payment_id, total) VALUES (1, 1, 194500);
 --INSERT INTO orders (id, payment_id, total) VALUES (2, 1, 194500);
 --INSERT INTO orders (id, payment_id, total) VALUES (3, 1, 194500);
@@ -279,7 +290,8 @@ INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VAL
 INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (2, 'User2', 'User2', 'User2', 'userdetails2@mail.com', '+78888888888');
 alter sequence order_user_details_id_seq restart with 3;
 
-INSERT INTO orders (order_id, user_id, user_details_id, payment_id, total) VALUES (1, 1, 1, 1, 194500);
+
+INSERT INTO orders (order_id, user_id, user_details_id,payment_id, total) VALUES (1, 1, 1, 1, 194500);
 INSERT INTO orders (order_id, user_id, user_details_id, payment_id, total) VALUES (2, 2, 2, 1, 214500);
 alter sequence orders_order_id_seq restart with 3;
 
