@@ -11,6 +11,9 @@ import app.service.product.ProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -69,8 +72,10 @@ public class CategoryService implements ICategoryService<Category> {
         }
 
         if(categoryDTO.isWithProducts()){
-            List<IProductDTO> products = productService.findByCategoryPathWithIds(category.getPath(), category.getDepth());
-            responseDTO.setProducts(products);
+            Pageable page = PageRequest.of(categoryDTO.getPage(), categoryDTO.getPageSize());
+            Page<IProductDTO> products = productService.findByPathWithCategoryIds(category.getPath(), category.getDepth(), page);
+            responseDTO.setProducts(products.getContent());
+            responseDTO.setPageCount(products.getTotalPages());
         }
 
         return responseDTO;

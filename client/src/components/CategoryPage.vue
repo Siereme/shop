@@ -8,6 +8,7 @@
             </div>
             <div class="category-products-container">
                 <ProductList :products="products" />
+                <Pagination :page="page" />
             </div>
         </div>
     </div>
@@ -20,42 +21,57 @@ import ProductList from './product/ProductList.vue'
 import FacetsVue from './facets/Facets.vue'
 import {computed, watch, onMounted } from 'vue'
 import {useStore} from "vuex"
+import Pagination from './pagination/Pagination.vue'
 
 export default defineComponent({
     name: 'CategoryPage',
     components: {
-        ProductList,
-        Facets: FacetsVue
-    },
+    ProductList,
+    Facets: FacetsVue,
+    Pagination
+},
     props: {
         categoryId: {
+            default: () => {}
+        },
+        page: {
             default: () => {}
         }
     },
     setup(props) {
-        const store = useStore();    
-            
-        let loadData = categoryId => {
-            if(token.value && currentCategory.value.id != categoryId){
-                let isShowParent = Object.keys(mainCategory.value).length === 0
-                api.loadCategory(categoryId, isShowParent, true)
-                .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
-            }
+        const store = useStore();   
+        
+        let token = computed(() => store.getters.getAccessToken())
+
+        
+        let getRequestDTO = () => {
+            var request = {}
+            request.id = props.categoryId
+            request.withParent = Object.keys(mainCategory.value).length === 0
+            request.withProducts = true
+            props.page ? request.page = props.page : null
+            return request
         }
+            
+        let loadData = () => api.loadCategory(getRequestDTO())
+                    .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
 
 
         onMounted(() => loadData(props.categoryId))
 
         watch(
             () => props.categoryId,
-            id => loadData(id)
+            () => loadData()
         )
-
-        let token = computed(() => store.getters.getAccessToken())
+        watch(
+            () => props.page,
+            () => loadData()
+        )
         watch(
             () => token.value,
             () => loadData(props.categoryId)
         )
+
 
 
         let mainCategory = computed(() => {

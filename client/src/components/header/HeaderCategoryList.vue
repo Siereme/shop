@@ -24,9 +24,17 @@ export default defineComponent({
       const store = useStore()
       const router = useRouter()
 
+      let getRequestDTO = (categoryId) => {
+            var request = {}
+            request.id = categoryId
+            request.withParent = true
+            request.withProducts = true
+            return request
+      }
+
       let handleClick = (categoryId) => {
         store.commit('setIsLoading', true)
-        api.loadCategory(categoryId, true, true)
+        api.loadCategory(getRequestDTO(categoryId))
         .then((res) => {
           if(res.status === 200){
             router.push({name: 'CategoryPage', params: {id: categoryId}})

@@ -134,15 +134,11 @@ let updateUser = (user) => {
     })
 }
 
-let loadCategory = (id, withParent, withProducts) => {
+let loadCategory = (request) => {
     return axiosApi({
         method: 'post',
         url: '/main/category-page',
-        data: {
-            "id": id, 
-            "withParent": withParent,
-            "withProducts": withProducts
-        }
+        data: request
     })
     .then(res => {
         if(res.data.category !== null){
@@ -153,6 +149,9 @@ let loadCategory = (id, withParent, withProducts) => {
         }
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
+        }
+        if(res.data.pageCount !== null){
+            store.commit('setPageCount', res.data.pageCount)
         }
         return res
     })

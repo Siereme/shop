@@ -22,7 +22,8 @@ const routes = [
     name: "CategoryPage",
     component: CategoryPage,
     props: route => ({
-      categoryId: route.params.id
+      categoryId: route.params.id,
+      page: route.query.page
     })
   },
   {
@@ -59,6 +60,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior () {
+    return { top: 0 }
+  }
 });
 
 const getUserRole = () => new Promise(resolve => {

@@ -3,7 +3,10 @@ package app.repository.product;
 import app.model.dto.product.IProductDTO;
 import app.model.product.Product;
 import app.model.shoppingCart.ShoppingCartProductItem;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -49,11 +52,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "where c.path like :path%")
     Optional<List<Product>> findByPath(String path);
 
+    @EntityGraph(attributePaths = { "categories", "options" })
     @Query(value = "select distinct p from Product p " +
-            "left join fetch p.categories c " +
-            "left join fetch p.options " +
+            "left join p.categories c " +
+            "left join p.options " +
             "where c.path like :path%")
-    Optional<List<IProductDTO>> findByPathWithIds(String path);
+    Page<IProductDTO> findByPathWithCategoryIds(String path, Pageable page);
 
     @Query(value = "select distinct count(oi) from Order o " +
             "left join o.orderItems oi " +

@@ -1,7 +1,8 @@
 export default {
     state: {
         products: [],
-        popularProducts: []
+        popularProducts: [],
+        pageCount: 0
     },
     getters: {
         getProducts: state => {
@@ -9,6 +10,9 @@ export default {
         },
         getPopularProducts: state => {
             return state.popularProducts
+        },
+        getPageCount: state => {
+            return state.pageCount
         }
     },
     mutations: {
@@ -17,6 +21,9 @@ export default {
         },
         setPopularProducts: (state, products) => {
             state.popularProducts = products
+        },
+        setPageCount: (state, pageCount) => {
+            state.pageCount = pageCount - 1
         }
     }
 }

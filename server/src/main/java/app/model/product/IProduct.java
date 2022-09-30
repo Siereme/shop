@@ -33,6 +33,6 @@ public interface IProduct {
 
     void setDescription(ProductDescription description);
 
-    void setOptions(java.util.Set<ProductOption> options);
+    void setOptions(Set<ProductOption> options);
 
 }

@@ -14,7 +14,9 @@ import app.repository.shoppingCart.ShoppingCartProductItemRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -112,9 +114,8 @@ public class ProductService implements IProductService<Product> {
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 
-    public List<IProductDTO> findByCategoryPathWithIds(String path, int depth) {
+    public Page<IProductDTO> findByPathWithCategoryIds(String path, int depth, Pageable page) {
         String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
-        return productRepo.findByPathWithIds(targetPath)
-                .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
+        return productRepo.findByPathWithCategoryIds(targetPath, page);
     }
 }

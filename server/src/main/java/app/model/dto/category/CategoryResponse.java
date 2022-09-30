@@ -16,5 +16,6 @@ public class CategoryResponse {
     private ICategoryDTO category;
     private Category parentCategory;
     private List<IProductDTO> products;
+    private int pageCount;
 
 }
