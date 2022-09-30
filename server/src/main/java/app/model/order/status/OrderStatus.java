@@ -1,30 +1,26 @@
-package app.model.order.payment;
+package app.model.order.status;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "order_status")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Payment implements IPayment {
+public class OrderStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Getter(onMethod_ = @NotNull(message = "Выберите способ оплаты"))
-    @Column(name = "payment_type")
+    @Column(name = "status_type")
     private String type;
 
     @Column(name = "description")
     private String description;
-
 }

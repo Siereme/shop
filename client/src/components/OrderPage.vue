@@ -7,7 +7,7 @@
                 <div class="order-success__status-description">Ваш заказ успешно оформлен и принят в обработку.</div>
                 <div class="order-success__status-contacts">{{order.userDetails.phone}}, {{order.userDetails.email}}</div>
             </div>
-            <OrderSummary :products="order.orderItems" :payment="order.payment" :total="order.total" />
+            <OrderSummary :products="order.orderItems" :payment="order.payment" :status="order.status" :total="order.total" />
         </div>
     </div>
 </template>

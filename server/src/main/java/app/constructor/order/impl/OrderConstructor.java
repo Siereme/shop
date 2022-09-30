@@ -3,24 +3,29 @@ package app.constructor.order.impl;
 import app.constructor.order.IOrderConstructor;
 import app.model.order.Order;
 import app.model.order.OrderProductItem;
-import app.model.order.receipt.receiptDetail.ReceiptDetail;
 import app.model.order.payment.Payment;
 import app.model.order.receipt.Receipt;
+import app.model.order.receipt.receiptDetail.ReceiptDetail;
+import app.model.order.status.OrderStatus;
 import app.model.order.userDetails.OrderUserDetails;
 import app.model.shoppingCart.ShoppingCart;
 import app.model.shoppingCart.ShoppingCartProductItem;
 import app.model.user.User;
+import app.repository.order.OrderStatusRepository;
 import app.repository.order.PaymentRepository;
 import app.repository.order.ReceiptRepository;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.repository.user.UserRepository;
 import app.service.shoppingCart.ShoppingCartService;
 import app.service.user.UserService;
+import app.utils.constants.order.OrderPayments;
+import app.utils.constants.order.OrderStatuses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Objects;
 import java.util.Set;
 
 @Component
@@ -38,6 +43,8 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
     private ReceiptRepository receiptRepo;
     @Autowired
     private PaymentRepository paymentRepo;
+    @Autowired
+    private OrderStatusRepository statusRepo;
 
     private Order order;
     private User user;
@@ -107,6 +114,21 @@ public class OrderConstructor implements IOrderConstructor<Order, User> {
         Payment payment = paymentRepo.findById(paymentId)
                 .orElseThrow(() -> new EntityNotFoundException("Order constructor - Payment is not found"));
         order.setPayment(payment);
+    }
+
+    @Override
+    public void setStatus() {
+        String statusType = Objects.equals(this.order.getPayment().getType(), OrderPayments.CASH.value)
+                ? OrderStatuses.ACCEPT_PROCESS.value
+                : OrderStatuses.AWAITING_PAYMENT.value;
+        setStatus(statusType);
+    }
+
+    @Override
+    public void setStatus(String statusType) {
+        OrderStatus status = statusRepo.findByType(statusType)
+                .orElseThrow(() -> new EntityNotFoundException("Order constructor - OrderStatus is not found"));
+        this.order.setStatus(status);
     }
 
     @Override

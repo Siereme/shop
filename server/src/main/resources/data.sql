@@ -234,12 +234,20 @@ INSERT INTO role_permission (role_id, permission_id) VALUES (1, 2);
 INSERT INTO role_permission (role_id, permission_id) VALUES (2, 2);
 INSERT INTO role_permission (role_id, permission_id) VALUES (3, 2);
 
-INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
-alter sequence payment_id_seq restart with 2;
+INSERT INTO payment (id, payment_type, description) VALUES (1, 'Наличными', 'При получении');
+INSERT INTO payment (id, payment_type, description) VALUES (2, 'Картой', 'Оплата онлайн');
+alter sequence payment_id_seq restart with 3;
 
 INSERT INTO receipt (id, receipt_type) VALUES (1, 'Самовывоз');
 INSERT INTO receipt (id, receipt_type) VALUES (2, 'Доставка');
 alter sequence payment_id_seq restart with 3;
+
+INSERT INTO order_status (id, status_type, description) VALUES (1, 'Ожидает оплаты', 'Заказ создан и ожидает оплаты');
+INSERT INTO order_status (id, status_type, description) VALUES (2, 'Принят в обработку', 'Заказ оплачен и принят в обработку');
+INSERT INTO order_status (id, status_type, description) VALUES (3, 'Отправлен', 'Заказ отправлен в место назначения');
+INSERT INTO order_status (id, status_type, description) VALUES (4, 'Доставлен', 'Заказ прибыл в место назначения');
+INSERT INTO order_status (id, status_type, description) VALUES (5, 'Получен', 'Заказ получен');
+alter sequence payment_id_seq restart with 6;
 
 INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (1, 'Россия', 'Москва', 'ул. Вешняковская', '22А', '');
 INSERT INTO shop_address (id, country, city, street, building, flat) VALUES (2, 'Россия', 'Москва', 'Комсомольский пр.', '28', '');

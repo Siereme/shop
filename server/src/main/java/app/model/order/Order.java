@@ -3,6 +3,7 @@ package app.model.order;
 import app.model.order.receipt.receiptDetail.ReceiptDetail;
 import app.model.order.payment.Payment;
 import app.model.order.receipt.Receipt;
+import app.model.order.status.OrderStatus;
 import app.model.order.userDetails.OrderUserDetails;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,10 @@ public class Order implements IOrder {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     private Payment payment;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private OrderStatus status;
 
     @Column(name = "total")
     private Double total;
