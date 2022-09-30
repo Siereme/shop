@@ -11,7 +11,7 @@
                 </div>
                 <div class="order-summary__info-row-name">
                     <span><b>Способ оплаты:</b></span>
-                    <span>При получении</span>
+                    <span>{{ payment.description }}</span>
                 </div>
             </div>
         </div>

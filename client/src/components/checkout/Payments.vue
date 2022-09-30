@@ -7,7 +7,7 @@
                     {{ item.type }}
                 </div>
                 <div class="field-radio__label-content-description">
-                    Картой / наличными
+                    {{ item.description }}
                 </div>
                 <div class="field-radio__label-content-icons">
                     
@@ -62,6 +62,9 @@ li {
 }
 a {
   text-decoration: none;
+}
+.checkout__payments {
+    display: flex;
 }
 .checkout__payments.unchecked .field-radio__label{
     border-color: red;
