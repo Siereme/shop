@@ -66,6 +66,10 @@ INSERT INTO user_account (id, name, surname, patronymic, email, password, phone,
 
 INSERT INTO payment (id, payment_type) VALUES (1, 'При получении');
 
+INSERT INTO receipt (id, receipt_type) VALUES (1, 'Самовывоз');
+INSERT INTO receipt (id, receipt_type) VALUES (2, 'Доставка');
+
+--INSERT INTO receipt_detail (id, receipt_id, country, city, street, building, flat, receipt_date) VALUES (1, 1, 'Россия', 'Москва', 'ул. Вешняковская', '22А', '')
 
 INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (1, 'User1', 'User1', 'User1', 'userdetails1@mail.com', '+79999999999');
 INSERT INTO order_user_details (id, name, surname, patronymic, email, phone) VALUES (2, 'User2', 'User2', 'User2', 'userdetails2@mail.com', '+78888888888');

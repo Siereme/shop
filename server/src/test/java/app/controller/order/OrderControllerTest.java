@@ -131,7 +131,7 @@ class OrderControllerTest {
         //Prepare request objects
         User user = userRepo.findById(1L).orElseGet(User::new);
         Payment payment = paymentRepo.findById(1L).orElseGet(Payment::new);
-        OrderDTO orderDTO = new OrderDTO(user, payment);
+        OrderDTO orderDTO = new OrderDTO(user, payment, null);
 
         //Send a request
         MvcResult mvcResult = mvc

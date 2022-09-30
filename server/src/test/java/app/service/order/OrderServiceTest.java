@@ -50,7 +50,7 @@ class OrderServiceTest {
         Order orderMock = orderConstructor.getById(1L);
         User user = userRepo.findById(1L).orElseGet(User::new);
         Payment payment = paymentRepo.findById(1L).orElseGet(Payment::new);
-        OrderDTO orderDTO = new OrderDTO(user, payment);
+        OrderDTO orderDTO = new OrderDTO(user, payment, null);
         UserRole role = UserRole.valueOf(orderDTO.getUser().getRole().getName());
 
         //When stubs are called

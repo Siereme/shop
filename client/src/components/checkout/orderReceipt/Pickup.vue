@@ -3,7 +3,7 @@
         <select class="pickup-select" ref="pickupSelectWrapper" v-model="selected" @click="handleClick(false)">
             <option disabled value="">Выберите магазин</option>
             <option v-for="address in shopAddress" :value="address" :key="address.id">
-            {{ Object.values(address).slice(1).join(', ') }}
+              {{ Object.values(address).slice(1).filter(item => item).join(', ') }}
             </option>
         </select>
         <DeliveryDate  ref="pickupDateWrapper" :errorMessages="errorMessages"/>

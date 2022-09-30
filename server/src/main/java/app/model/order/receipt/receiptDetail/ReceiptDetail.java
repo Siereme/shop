@@ -37,7 +37,7 @@ public class ReceiptDetail implements IReceiptDetail {
     @Future
     @DateTimeFormat(pattern = "YYYY-MM-DD")
     @Getter(onMethod_ = @NotNull(message = "Выберите дату"))
-    @Column(name = "date")
+    @Column(name = "receipt_date")
     private Date date;
 
 }
