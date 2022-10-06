@@ -26,7 +26,7 @@ export default defineComponent({
 
       let getRequestDTO = (categoryId) => {
             var request = {}
-            request.id = categoryId
+            request.categoryId = categoryId
             request.withParent = true
             request.withProducts = true
             return request
@@ -34,7 +34,7 @@ export default defineComponent({
 
       let handleClick = (categoryId) => {
         store.commit('setIsLoading', true)
-        api.loadCategory(getRequestDTO(categoryId))
+        api.searchCategory(getRequestDTO(categoryId))
         .then((res) => {
           if(res.status === 200){
             router.push({name: 'CategoryPage', params: {id: categoryId}})

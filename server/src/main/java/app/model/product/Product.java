@@ -7,12 +7,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.apache.lucene.search.SortField;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.apache.lucene.search.SortField.FIELD_SCORE;
 
 @RequiredArgsConstructor
 @Getter
@@ -21,6 +30,7 @@ import java.util.Set;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "products")
 @Table(name = "product")
+@Indexed
 public class Product implements IProduct {
 
     @Id
@@ -31,6 +41,7 @@ public class Product implements IProduct {
     @Column(name = "article_id")
     private Long article;
 
+    @FullTextField(analyzer = "simple")
     @Column(name = "name")
     private String name;
 
@@ -40,6 +51,7 @@ public class Product implements IProduct {
     @Column(name = "image_link")
     private String imageLink;
 
+    @IndexedEmbedded
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "shortDescription", column = @Column(name = "short_description")),
@@ -47,6 +59,7 @@ public class Product implements IProduct {
     })
     private ProductDescription description;
 
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "product_attribute_option",
             joinColumns = {@JoinColumn(name = "product_id", nullable = false)},
@@ -55,6 +68,7 @@ public class Product implements IProduct {
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "options")
     private Set<ProductOption> options = new HashSet<>();
 
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JsonIgnoreProperties(value = "categories", allowSetters = true)
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "categories")
@@ -74,7 +88,7 @@ public class Product implements IProduct {
 
     public void removeOption(ProductOption option) {
         options.remove(option);
-        option.getProducts().remove(this);
+//        option.getProducts().remove(this);
     }
 
 }

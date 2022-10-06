@@ -4,7 +4,8 @@ import user from './modules/user/user.js'
 import product from './modules/product/product.js'
 import category from './modules/category/category.js'
 import cart from './modules/cart/cart.js'
-import order from "./modules/order/order.js";
+import order from "./modules/order/order.js"
+import facet from "./modules/facet/facet.js"
 
 export default createStore({
   modules: {
@@ -13,6 +14,7 @@ export default createStore({
     product,
     category,
     cart,
-    order
+    order,
+    facet
   }
 })

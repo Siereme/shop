@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router"
 import Home from "@/components/Home.vue"
 import CategoryPage from "@/components/CategoryPage.vue"
+import SearchPage from "@/components/SearchPage.vue"
 import CheckoutPage from '@/components/CheckoutPage.vue'
 import OrderPage from '@/components/OrderPage.vue'
 import PersonalCabinet from '@/components/PersonalCabinet.vue'
@@ -23,6 +24,15 @@ const routes = [
     component: CategoryPage,
     props: route => ({
       categoryId: route.params.id,
+      page: route.query.page
+    })
+  },
+  {
+    path: "/search/?query=:term",
+    name: "SearchPage",
+    component: SearchPage,
+    props: route => ({
+      term: route.params.term,
       page: route.query.page
     })
   },

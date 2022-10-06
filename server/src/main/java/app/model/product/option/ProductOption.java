@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -27,9 +30,11 @@ public class ProductOption implements IOption {
     @JsonIgnore
     private Long id;
 
+    @KeywordField
     @Column(name = "name")
     private String name;
 
+    @KeywordField
     @Column(name = "value")
     private String value;
 

@@ -9,6 +9,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -43,6 +44,7 @@ public class Category implements ICategory {
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "categories")
     private Set<Category> categories = new HashSet<>();
 
+    @KeywordField
     @Column(name = "path")
     private String path;
 

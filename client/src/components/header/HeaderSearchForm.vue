@@ -1,7 +1,7 @@
 <template>
   <div class="header-search-form">
     <div class="header-search__input-wrapper">
-        <input type="text" class="header-search__input">
+        <input type="text" class="header-search__input" v-model="term" v-on:keyup.enter="handleSearch">
     </div>
     <div class="header-search-button">
         <svg class="icon icon--24x24 " viewBox="0 0 24 24">
@@ -12,9 +12,34 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import api from "@/api/backend-api"
 export default defineComponent({
-    name: 'HeaderSearchForm'
+    name: 'HeaderSearchForm',
+    setup() {
+      const store = useStore()
+      const router = useRouter()
+
+      let term = ref('')
+
+      let handleSearch = () => {
+        store.commit('setIsLoading', true)
+        api.search(term.value)
+        .then((res) => {
+            if(res.status === 200){
+              router.push({name: 'SearchPage', params: {term: term.value}})
+              store.commit('setIsLoading', false)
+            }
+        })
+      }
+
+      return {
+        term,
+        handleSearch
+      }
+    }
 })
 </script>
 

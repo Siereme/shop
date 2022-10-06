@@ -52,6 +52,10 @@ public class CategoryService implements ICategoryService<Category> {
         categoryRepo.delete(category);
     }
 
+    public ICategoryDTO findByIdWithoutSubcategories(Long id){
+        return categoryRepo.findByIdWithoutSubcategories(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
+    }
 
     public Category getByPathAndDepth(String path, int depth) {
         String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
@@ -59,21 +63,20 @@ public class CategoryService implements ICategoryService<Category> {
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
     }
 
-    public CategoryResponse getByConfig(CategoryConfigDTO categoryDTO) {
+    public CategoryResponse getByConfig(CategoryConfigDTO config) {
         CategoryResponse responseDTO = new CategoryResponse();
 
-        ICategoryDTO category = categoryRepo.findByIdWithoutSubcategories(categoryDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
+        ICategoryDTO category = findByIdWithoutSubcategories(config.getCategoryId());
         responseDTO.setCategory(category);
 
-        if(categoryDTO.isWithParent()){
-            Category parentCategory = this.getByPathAndDepth(category.getPath(), 1);
+        if(config.isWithParent()){
+            Category parentCategory = getByPathAndDepth(category.getPath(), 1);
             responseDTO.setParentCategory(parentCategory);
         }
 
-        if(categoryDTO.isWithProducts()){
-            Pageable page = PageRequest.of(categoryDTO.getPage(), categoryDTO.getPageSize());
-            Page<IProductDTO> products = productService.findByPathWithCategoryIds(category.getPath(), category.getDepth(), page);
+        if(config.isWithProducts()){
+            Pageable page = PageRequest.of(config.getPage(), config.getPageSize());
+            Page<IProductDTO> products = productService.findByPathWithCategoryIds(category.getPath(), page);
             responseDTO.setProducts(products.getContent());
             responseDTO.setPageCount(products.getTotalPages());
         }

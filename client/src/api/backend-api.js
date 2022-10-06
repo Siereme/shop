@@ -134,10 +134,10 @@ let updateUser = (user) => {
     })
 }
 
-let loadCategory = (request) => {
+let searchCategory = (request) => {
     return axiosApi({
         method: 'post',
-        url: '/main/category-page',
+        url: '/search/category',
         data: request
     })
     .then(res => {
@@ -153,6 +153,28 @@ let loadCategory = (request) => {
         if(res.data.pageCount !== null){
             store.commit('setPageCount', res.data.pageCount)
         }
+        return res
+    })
+}
+
+let search = (query) => {
+    return axiosApi({
+        method: 'get',
+        url: '/search/?query=' + query
+    })
+    .then(res => {
+        if(res.data.products !== null){
+            store.commit('setProducts', res.data.products)
+        }
+        if(res.data.priceRange !== null){
+            store.commit('setPriceRange', res.data.priceRange)
+        }
+        if(res.data.options !== null){
+            store.commit('setOptions', res.data.options)
+        }
+        // if(res.data.pageCount !== null){
+        //     store.commit('setPageCount', res.data.pageCount)
+        // }
         return res
     })
 }
@@ -288,7 +310,8 @@ export default {
     loadMain,
     createUser,
     updateUser,
-    loadCategory,
+    searchCategory,
+    search,
     loadProducts,
     loadPopularProducts,
     loadCartProducts,

@@ -114,8 +114,7 @@ public class ProductService implements IProductService<Product> {
                 .orElseThrow(() -> new EntityNotFoundException("Products is not found"));
     }
 
-    public Page<IProductDTO> findByPathWithCategoryIds(String path, int depth, Pageable page) {
-        String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
-        return productRepo.findByPathWithCategoryIds(targetPath, page);
+    public Page<IProductDTO> findByPathWithCategoryIds(String path, Pageable page) {
+        return productRepo.findByPathWithCategoryIds(path, page);
     }
 }

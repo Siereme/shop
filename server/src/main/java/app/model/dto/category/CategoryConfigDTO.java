@@ -8,9 +8,11 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class CategoryConfigDTO {
-    private Long id;
-    private boolean withParent;
-    private boolean withProducts;
-    private int page = 0;
-    private int pageSize = 24;
+
+    long categoryId;
+    boolean withParent;
+    boolean withProducts;
+    int page = 0;
+    int pageSize = 24;
+
 }

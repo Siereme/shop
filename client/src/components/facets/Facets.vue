@@ -1,6 +1,6 @@
 <template>
   <div class="facets">
-    <FacetCategory :mainCategory="mainCategory" :currentCategory="currentCategory" />
+    <FacetCategory v-if="!disableCategory" :mainCategory="mainCategory" :currentCategory="currentCategory" />
   </div>
 </template>
 
@@ -14,6 +14,9 @@ export default defineComponent({
       FacetCategory: FacetCategoryVue
     },
     props: {
+        disableCategory: {
+            default: () => {}
+        },
         mainCategory: {
             default: () => {}
         },

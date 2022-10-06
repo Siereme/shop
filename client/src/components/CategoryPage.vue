@@ -46,14 +46,14 @@ export default defineComponent({
         
         let getRequestDTO = () => {
             var request = {}
-            request.id = props.categoryId
+            request.categoryId = props.categoryId
             request.withParent = Object.keys(mainCategory.value).length === 0
             request.withProducts = true
             props.page ? request.page = props.page : null
             return request
         }
             
-        let loadData = () => api.loadCategory(getRequestDTO())
+        let loadData = () => api.searchCategory(getRequestDTO())
                     .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
 
 
@@ -74,13 +74,9 @@ export default defineComponent({
 
 
 
-        let mainCategory = computed(() => {
-            return store.state.category.mainCategory ? store.state.category.mainCategory : null
-        })
+        let mainCategory = computed(() => store.state.category.mainCategory ? store.state.category.mainCategory : null)
 
-        let currentCategory = computed(() => {
-            return store.state.category.currentCategory ? store.state.category.currentCategory  : null
-        })
+        let currentCategory = computed(() => store.state.category.currentCategory ? store.state.category.currentCategory  : null)
 
         let products = computed(() => store.state.product.products)
         
