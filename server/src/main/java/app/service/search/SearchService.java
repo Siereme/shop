@@ -1,9 +1,8 @@
 package app.service.search;
 
-import app.constructor.search.IQueryConstructor;
 import app.constructor.search.impl.CategoryQueryConstructor;
 import app.constructor.search.impl.SearchQueryConstructor;
-import app.constructor.search.impl.SearchResponseConstructor;
+import app.constructor.search.impl.SearchResponseBuilder;
 import app.model.category.Category;
 import app.model.dto.category.CategoryConfigDTO;
 import app.model.dto.category.ICategoryDTO;
@@ -27,40 +26,62 @@ public class SearchService {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private SearchResponseBuilder responseBuilder;
 
     private final SearchSession searchSession;
 
-    public SearchService(EntityManager entityManager) throws InterruptedException {
+    public SearchService(EntityManager entityManager) {
         searchSession = Search.session( entityManager.getEntityManagerFactory().createEntityManager() );
     }
 
     public SearchResponse search(String query, int page){
-        IQueryConstructor queryConstructor = new SearchQueryConstructor();
+        SearchQueryConstructor queryConstructor = new SearchQueryConstructor();
         List<Product> products = searchSession.search( Product.class )
                 .where(f -> f.bool(queryConstructor.search(f, query)))
-                .fetchHits(page * 24,24);
+                .fetchAllHits();
+//                .fetchHits(page * 24,24);
 
-        SearchResponseConstructor<SearchResponse> builder = new SearchResponseConstructor<>(SearchResponse::new);
-        return builder.construct(products);
+        return (SearchResponse) responseBuilder
+                .create(new SearchResponse())
+                .setProducts(products)
+                .setPriceRange()
+                .setOptions()
+                .build();
     }
 
-    public List<Product> searchByOptions(SearchDTO config){
-        IQueryConstructor queryConstructor = new SearchQueryConstructor();
-        return searchSession.search( Product.class )
+    public SearchResponse searchByOptions(SearchDTO config){
+        SearchQueryConstructor queryConstructor = new SearchQueryConstructor();
+        List<Product> products = searchSession.search( Product.class )
                 .where(f -> f.bool(queryConstructor.searchByOptions(f, config.getQuery(), config.getOptions())))
-                .fetchHits(config.getPage() * 24,24);
+                .fetchAllHits();
+//                .fetchHits(config.getPage() * 24,24);
+
+        return (SearchResponse) responseBuilder
+                .create(new SearchResponse())
+                .setProducts(products)
+                .setPriceRange()
+                .setCheckedOptions(config.getOptions())
+                .setOptions()
+                .build();
     }
 
     public SearchCategoryResponse searchCategory(CategoryConfigDTO config){
         ICategoryDTO category = categoryService.findByIdWithoutSubcategories(config.getCategoryId());
 
-        IQueryConstructor queryConstructor = new CategoryQueryConstructor();
+        CategoryQueryConstructor queryConstructor = new CategoryQueryConstructor();
         List<Product> products = searchSession.search( Product.class )
                 .where(f -> f.bool(queryConstructor.search(f, category.getPath())))
-                .fetchHits(config.getPage() * config.getPageSize(), config.getPageSize());
+                .fetchAllHits();
+//                .fetchHits(config.getPage() * config.getPageSize(), config.getPageSize());
 
-        SearchResponseConstructor<SearchCategoryResponse> builder = new SearchResponseConstructor<>(SearchCategoryResponse::new);
-        SearchCategoryResponse response = builder.construct(products);
+        SearchCategoryResponse response = (SearchCategoryResponse) responseBuilder
+                .create(new SearchCategoryResponse())
+                .setProducts(products)
+                .setPriceRange()
+                .setOptions()
+                .build();
+
         response.setCategory(category);
 
         if(config.isWithParent()){
@@ -71,12 +92,20 @@ public class SearchService {
         return response;
     }
 
-    public List<Product> searchCategoryByOptions(SearchCategoryDTO config){
-        IQueryConstructor queryConstructor = new CategoryQueryConstructor();
+    public SearchResponse searchCategoryByOptions(SearchCategoryDTO config){
+        CategoryQueryConstructor queryConstructor = new CategoryQueryConstructor();
         String path = config.getPath().substring(0, StringUtils.ordinalIndexOf(config.getPath(), "/", config.getDepth()) + 1);
-        return searchSession.search( Product.class )
+        List<Product> products = searchSession.search( Product.class )
                 .where(f -> f.bool(queryConstructor.searchByOptions(f, path, config.getOptions())))
-                .fetchHits(config.getPage() * config.getPageSize(), config.getPageSize());
+                .fetchAllHits();
+//                .fetchHits(config.getPage() * config.getPageSize(), config.getPageSize());
+        return (SearchResponse) responseBuilder
+                .create(new SearchResponse())
+                .setProducts(products)
+                .setPriceRange()
+                .setCheckedOptions(config.getOptions())
+                .setOptions()
+                .build();
     }
 
 }

@@ -43,7 +43,7 @@ class ProductRepositoryTest {
         //Comparison of the first elements of collections
         Assertions.assertEquals(checkProductList.get(0).getId(), products.get(0).getId());
         Assertions.assertEquals(checkProductList.get(0).getArticle(), products.get(0).getArticle());
-        Assertions.assertEquals(checkProductList.get(0).getName(), products.get(0).getName());
+        Assertions.assertEquals(checkProductList.get(0).getTitle(), products.get(0).getTitle());
         Assertions.assertEquals(checkProductList.get(0).getImageLink(), products.get(0).getImageLink());
         Assertions.assertEquals(checkProductList.get(0).getCategories().size(), products.get(0).getCategories().size());
         Assertions.assertEquals(checkProductList.get(0).getCategories().iterator().next().getId(), products.get(0).getCategories().iterator().next().getId());
@@ -51,7 +51,7 @@ class ProductRepositoryTest {
         //Comparison of the third elements of collections
         Assertions.assertEquals(checkProductList.get(3).getId(), products.get(3).getId());
         Assertions.assertEquals(checkProductList.get(3).getArticle(), products.get(3).getArticle());
-        Assertions.assertEquals(checkProductList.get(3).getName(), products.get(3).getName());
+        Assertions.assertEquals(checkProductList.get(3).getTitle(), products.get(3).getTitle());
         Assertions.assertEquals(checkProductList.get(3).getImageLink(), products.get(3).getImageLink());
         Assertions.assertEquals(checkProductList.get(3).getCategories().size(), products.get(3).getCategories().size());
         Assertions.assertEquals(checkProductList.get(3).getCategories().iterator().next().getId(), products.get(3).getCategories().iterator().next().getId());
@@ -68,7 +68,7 @@ class ProductRepositoryTest {
         //Comparison of entities
         Assertions.assertEquals(checkUser.getId(), product.getId());
         Assertions.assertEquals(checkUser.getArticle(), product.getArticle());
-        Assertions.assertEquals(checkUser.getName(), product.getName());
+        Assertions.assertEquals(checkUser.getTitle(), product.getTitle());
         Assertions.assertEquals(checkUser.getImageLink(), product.getImageLink());
         Assertions.assertEquals(checkUser.getCategories().size(), product.getCategories().size());
         Assertions.assertEquals(checkUser.getCategories().iterator().next().getId(), product.getCategories().iterator().next().getId());
@@ -89,7 +89,7 @@ class ProductRepositoryTest {
         //Comparison of the first elements of collections
         Assertions.assertEquals(checkProductList.get(0).getId(), products.get(0).getId());
         Assertions.assertEquals(checkProductList.get(0).getArticle(), products.get(0).getArticle());
-        Assertions.assertEquals(checkProductList.get(0).getName(), products.get(0).getName());
+        Assertions.assertEquals(checkProductList.get(0).getTitle(), products.get(0).getTitle());
         Assertions.assertEquals(checkProductList.get(0).getImageLink(), products.get(0).getImageLink());
         Assertions.assertEquals(checkProductList.get(0).getCategories().size(), products.get(0).getCategories().size());
         Assertions.assertEquals(checkProductList.get(0).getCategories().iterator().next().getId(), products.get(0).getCategories().iterator().next().getId());
@@ -97,7 +97,7 @@ class ProductRepositoryTest {
         //Comparison of the second elements of collections
         Assertions.assertEquals(checkProductList.get(1).getId(), products.get(1).getId());
         Assertions.assertEquals(checkProductList.get(1).getArticle(), products.get(1).getArticle());
-        Assertions.assertEquals(checkProductList.get(1).getName(), products.get(1).getName());
+        Assertions.assertEquals(checkProductList.get(1).getTitle(), products.get(1).getTitle());
         Assertions.assertEquals(checkProductList.get(1).getImageLink(), products.get(1).getImageLink());
         Assertions.assertEquals(checkProductList.get(1).getCategories().size(), products.get(1).getCategories().size());
         Assertions.assertEquals(checkProductList.get(1).getCategories().iterator().next().getId(), products.get(1).getCategories().iterator().next().getId());

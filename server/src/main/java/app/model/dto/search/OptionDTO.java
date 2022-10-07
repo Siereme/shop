@@ -9,12 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class SearchDTO {
+public class OptionDTO {
 
-    long userId;
-    String query;
-    List<OptionDTO> options;
-    int page = 1;
-    int pageSize = 24;
+    long id;
+    String type;
+    List<OptionValueDTO> values;
 
 }

@@ -22,12 +22,12 @@ public class SearchController {
 
 
     @GetMapping(value = "/")
-    public ResponseEntity<SearchResponse> findAll(@RequestParam String query, @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<SearchResponse> findAll(@RequestParam String query, @RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok().body(searchService.search(query, page));
     }
 
     @PostMapping(value = "/options")
-    public ResponseEntity<List<Product>> findByOptions(@RequestBody SearchDTO config) {
+    public ResponseEntity<SearchResponse> findByOptions(@RequestBody SearchDTO config) {
         return ResponseEntity.ok().body(searchService.searchByOptions(config));
     }
 
@@ -37,7 +37,7 @@ public class SearchController {
     }
 
     @PostMapping(value = "/category/options")
-    public ResponseEntity<List<Product>> findByOptions(@RequestBody SearchCategoryDTO config) {
+    public ResponseEntity<SearchResponse> findByOptions(@RequestBody SearchCategoryDTO config) {
         return ResponseEntity.ok().body(searchService.searchCategoryByOptions(config));
     }
 }

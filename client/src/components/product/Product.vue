@@ -5,7 +5,7 @@
       </div>
       <div class="product-main">
         <div class="product-main__title">
-          <a href="#">{{product.name}}</a>
+          <a href="#">{{product.title}}</a>
         </div>
         <div class="product-main__price">
           <div class="product-main__price-actual">

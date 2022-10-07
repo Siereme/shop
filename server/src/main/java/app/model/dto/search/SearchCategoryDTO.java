@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ public class SearchCategoryDTO {
 
     String path;
     int depth = 1;
-    Map<String, Set<String>> options;
+    List<OptionDTO> options;
     int page = 1;
     int pageSize = 24;
 

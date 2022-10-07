@@ -216,16 +216,24 @@ INSERT INTO product_category (product_id, category_id) VALUES (79, 10);
 INSERT INTO product_category (product_id, category_id) VALUES (80, 10);
 
 
+INSERT INTO product_option_type (id, type) VALUES (1, 'Вес');
+INSERT INTO product_option_type (id, type) VALUES (2, 'Цвет');
+alter sequence product_option_type_id_seq restart with 4;
 
-INSERT INTO product_option (option_id, name, value) VALUES (1, 'вес', '200г');
-INSERT INTO product_option (option_id, name, value) VALUES (2, 'вес', '150г');
-INSERT INTO product_option (option_id, name, value) VALUES (3, 'вес', '100г');
-alter sequence product_option_option_id_seq restart with 4;
+INSERT INTO product_option (option_id, type_id, value) VALUES (1, 1, '200г');
+INSERT INTO product_option (option_id, type_id, value) VALUES (2, 1, '150г');
+INSERT INTO product_option (option_id, type_id, value) VALUES (3, 1, '100г');
+INSERT INTO product_option (option_id, type_id, value) VALUES (4, 2, 'черный');
+INSERT INTO product_option (option_id, type_id, value) VALUES (5, 2, 'белый');
+INSERT INTO product_option (option_id, type_id, value) VALUES (6, 2, 'серый');
+alter sequence product_option_option_id_seq restart with 7;
 
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 1);
+INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 2);
+INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 4);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (2, 2);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (3, 3);
-INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 2);
+INSERT INTO product_attribute_option (product_id, option_id) VALUES (4, 2);
 
 INSERT INTO role (role_id, name) VALUES (1, 'ADMIN');
 INSERT INTO role (role_id, name) VALUES (2, 'USER');

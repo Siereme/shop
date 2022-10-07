@@ -2,8 +2,8 @@ import CONFIG from "@/config.json"
 
 export default {
     state: {
-        accessToken: "",
-        refreshToken: "",
+        accessToken: '',
+        refreshToken: '',
         headerAccessToken: CONFIG.headerAccessToken,
         headerRefreshToken: CONFIG.headerRefreshToken,
         shownAuthModal: 'hide',

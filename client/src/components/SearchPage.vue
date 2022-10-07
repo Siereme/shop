@@ -4,7 +4,7 @@
 
         <div class="search-main-container">
             <div class="search-facets-container">
-                <Facets :disableCategory="true"/>
+                <Facets :disableCategory="true" :handleOptionClick="handleClick"/>
             </div>
             <div class="search-products-container">
                 <ProductList :products="products" />
@@ -16,10 +16,10 @@
 
 <script>
 import { defineComponent } from 'vue'
-// import api from "@/api/backend-api"
+import api from "@/api/backend-api"
 import ProductList from './product/ProductList.vue'
 import Facets from './facets/Facets.vue'
-import { computed } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import { useStore } from "vuex"
 import Pagination from './pagination/Pagination.vue'
 
@@ -31,11 +31,24 @@ export default defineComponent({
         Pagination
     },
     props: {
-        term: String,
+        query: String,
         page: Number
     },
-    setup() {
+    setup(props) {
         const store = useStore();   
+
+        let loadData = () => api.search(props.query)
+                    .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
+
+        onMounted(() => loadData())
+        watch(
+            () => props.term,
+            () => loadData()
+        )
+        watch(
+            () => props.page,
+            () => loadData()
+        )
 
         let products = computed(() => store.state.product.products)
 
@@ -45,11 +58,42 @@ export default defineComponent({
         
         const shown = computed(() => products.value)
 
+
+        let getCheckedOptions = () => {
+            let checkedOptions = []
+
+            let optionsList = options.value
+            optionsList.forEach(option => {
+                let values = option.values.filter(item => item.checked)
+                
+                if(values.length){
+                    checkedOptions.push({
+                        id: option.id,
+                        type: option.type,
+                        values: values
+                    })
+                }
+            })
+
+            return checkedOptions
+        }
+
+        let getSearchRequestObject = () => ({
+            'query': props.query,
+            'options': getCheckedOptions()
+        })
+
+        let handleClick = (event, id, value) => {
+          store.commit('setOption', {id: id, value: value, checked: event.target.checked})
+          api.searchByOptions(getSearchRequestObject())
+        }
+
         return {
             shown,
             products,
             priceRange,
-            options
+            options,
+            handleClick
         }
     }
 })

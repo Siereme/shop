@@ -87,12 +87,17 @@ li {
 a {
   color: #0595e6;
 }
+.facet-category {
+    border: 1px solid #b8ced9;
+    border-radius: 5px;
+    padding: 20px 15px;
+    margin-bottom: 30px;
+}
 .facet-category ul{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px 15px;
 }
 .facet-category ul .facet-category-item{
     font-size: 14px;

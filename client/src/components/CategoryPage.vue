@@ -4,7 +4,7 @@
 
         <div class="category-main-container">
             <div class="category-facets-container">
-                <Facets :mainCategory="mainCategory" :currentCategory="currentCategory" />
+                <Facets :mainCategory="mainCategory" :currentCategory="currentCategory" :handleOptionClick="handleOptionClick" />
             </div>
             <div class="category-products-container">
                 <ProductList :products="products" />
@@ -19,8 +19,8 @@ import { defineComponent } from 'vue'
 import api from "@/api/backend-api"
 import ProductList from './product/ProductList.vue'
 import FacetsVue from './facets/Facets.vue'
-import {computed, watch, onMounted } from 'vue'
-import {useStore} from "vuex"
+import { computed, watch, onMounted } from 'vue'
+import { useStore } from "vuex"
 import Pagination from './pagination/Pagination.vue'
 
 export default defineComponent({
@@ -39,7 +39,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const store = useStore();   
+        const store = useStore()   
         
         let token = computed(() => store.getters.getAccessToken())
 
@@ -79,14 +79,47 @@ export default defineComponent({
         let currentCategory = computed(() => store.state.category.currentCategory ? store.state.category.currentCategory  : null)
 
         let products = computed(() => store.state.product.products)
+
+        let options = computed(() => store.state.facet.options)
         
         const shown = computed(() => mainCategory.value !== null && currentCategory.value !== null)
+
+        let getCheckedOptions = () => {
+            let checkedOptions = []
+
+            let optionsList = options.value
+            optionsList.forEach(option => {
+                let values = option.values.filter(item => item.checked)
+                
+                if(values.length){
+                    checkedOptions.push({
+                        id: option.id,
+                        type: option.type,
+                        values: values
+                    })
+                }
+            })
+
+            return checkedOptions
+        }
+
+        let getSearchRequestObject = () => ({
+            'path': currentCategory.value.path,
+            'depth': currentCategory.value.depth,
+            'options': getCheckedOptions()
+        })
+
+        let handleOptionClick = (event, id, value) => {
+          store.commit('setOption', {id: id, value: value, checked: event.target.checked})
+          api.searchCategoryByOptions(getSearchRequestObject())
+        }
 
         return {
             shown,
             products,
             mainCategory,
-            currentCategory
+            currentCategory,
+            handleOptionClick
         }
     }
 })

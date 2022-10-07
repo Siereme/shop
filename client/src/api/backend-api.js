@@ -150,8 +150,35 @@ let searchCategory = (request) => {
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }
+        if(res.data.priceRange !== null){
+            store.commit('setPriceRange', res.data.priceRange)
+        }
+        if(res.data.options !== null){
+            store.commit('setOptions', res.data.options)
+        }     
         if(res.data.pageCount !== null){
             store.commit('setPageCount', res.data.pageCount)
+        }
+        return res
+    })
+}
+
+let searchCategoryByOptions = (options) => {
+    console.log(options)
+    return axiosApi({
+        method: 'post',
+        url: '/search/category/options',
+        data: options
+    })
+    .then(res => {
+        if(res.data.products !== null){
+            store.commit('setProducts', res.data.products)
+        }
+        if(res.data.priceRange !== null){
+            store.commit('setPriceRange', res.data.priceRange)
+        }
+        if(res.data.options !== null){
+            store.commit('setOptions', res.data.options)
         }
         return res
     })
@@ -163,6 +190,7 @@ let search = (query) => {
         url: '/search/?query=' + query
     })
     .then(res => {
+        store.commit('setQuery', query)
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }
@@ -175,6 +203,27 @@ let search = (query) => {
         // if(res.data.pageCount !== null){
         //     store.commit('setPageCount', res.data.pageCount)
         // }
+        return res
+    })
+}
+
+let searchByOptions = (options) => {
+    console.log(options)
+    return axiosApi({
+        method: 'post',
+        url: '/search/options',
+        data: options
+    })
+    .then(res => {
+        if(res.data.products !== null){
+            store.commit('setProducts', res.data.products)
+        }
+        if(res.data.priceRange !== null){
+            store.commit('setPriceRange', res.data.priceRange)
+        }
+        if(res.data.options !== null){
+            store.commit('setOptions', res.data.options)
+        }
         return res
     })
 }
@@ -311,7 +360,9 @@ export default {
     createUser,
     updateUser,
     searchCategory,
+    searchCategoryByOptions,
     search,
+    searchByOptions,
     loadProducts,
     loadPopularProducts,
     loadCartProducts,

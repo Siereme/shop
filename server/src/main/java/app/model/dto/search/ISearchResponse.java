@@ -1,10 +1,9 @@
 package app.model.dto.search;
 
 import app.model.product.Product;
+import app.model.product.option.OptionType;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public interface ISearchResponse {
 
@@ -12,11 +11,11 @@ public interface ISearchResponse {
 
     PriceRangeDTO getPriceRange();
 
-    Map<String, Set<String>> getOptions();
+    List<OptionDTO> getOptions();
 
     void setProducts(List<Product> products);
 
     void setPriceRange(PriceRangeDTO priceRange);
 
-    void setOptions(Map<String, Set<String>> options);
+    void setOptions(List<OptionDTO> options);
 }

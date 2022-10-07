@@ -5,7 +5,7 @@
     </div>
     <div class="product-snippet-main">
         <div class="product-snippet-title">
-            <a href="#">{{product.name}}</a>
+            <a href="#">{{product.title}}</a>
         </div>
         <div class="product-snippet__main-bottom">
             <SnippetCartButton :productId="product.id" />

@@ -5,7 +5,7 @@ import app.consrtructor.TestProductConstructor;
 import app.model.category.Category;
 import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
-import app.model.product.option.ProductOption;
+import app.model.product.option.Option;
 import app.repository.category.CategoryRepository;
 import app.repository.product.ProductOptionRepository;
 import app.repository.product.ProductRepository;
@@ -53,15 +53,15 @@ class ProductServiceTest {
 
         ProductDTO productDTO = new ProductDTO();
         productDTO.setArticle(productMock.getArticle());
-        productDTO.setName(productMock.getName());
+        productDTO.setName(productMock.getTitle());
         productDTO.setPrice(productMock.getPrice());
         productDTO.setImageLink(productMock.getImageLink());
         productDTO.setOptions(productMock.getOptions());
         Set<Long> ids = categories.stream().map(Category::getId).collect(Collectors.toSet());
         productDTO.setCategoriesIds(ids);
 
-        ProductOption option = productDTO.getOptions().iterator().next();
-        Optional<ProductOption> productOptionOptional = Optional.of(option);
+        Option option = productDTO.getOptions().iterator().next();
+        Optional<Option> productOptionOptional = Optional.of(option);
         String optionName = option.getName();
         String optionValue = option.getValue();
 
@@ -81,7 +81,7 @@ class ProductServiceTest {
         //Check the resulting object
         Assertions.assertEquals(productMock.getId(), product.getId());
         Assertions.assertEquals(productMock.getArticle(), product.getArticle());
-        Assertions.assertEquals(productMock.getName(), product.getName());
+        Assertions.assertEquals(productMock.getTitle(), product.getTitle());
         Assertions.assertEquals(productMock.getOptions().size(), product.getOptions().size());
         Assertions.assertEquals(categories.size(), product.getCategories().size());
     }

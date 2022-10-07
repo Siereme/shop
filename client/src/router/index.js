@@ -28,11 +28,11 @@ const routes = [
     })
   },
   {
-    path: "/search/?query=:term",
+    path: "/search",
     name: "SearchPage",
     component: SearchPage,
     props: route => ({
-      term: route.params.term,
+      query: route.query.query,
       page: route.query.page
     })
   },

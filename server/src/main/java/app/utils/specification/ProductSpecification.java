@@ -3,7 +3,7 @@ package app.utils.specification;
 import app.model.dto.filter.Filter;
 import app.model.dto.filter.FilterOption;
 import app.model.product.Product;
-import app.model.product.option.ProductOption;
+import app.model.product.option.Option;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -18,7 +18,7 @@ public class ProductSpecification implements Specification<Product> {
 
     @Override
     public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        Join<Product, ProductOption> join = root.join(filter.getName(), JoinType.LEFT);
+        Join<Product, Option> join = root.join(filter.getName(), JoinType.LEFT);
         root.fetch("categories");
         root.fetch("description");
         root.fetch("options");

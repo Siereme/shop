@@ -3,13 +3,13 @@ package app.model.product.option;
 public interface IOption {
     Long getId();
 
-    String getName();
+    OptionType getOptionType();
 
     String getValue();
 
     void setId(Long id);
 
-    void setName(String name);
+    void setOptionType(OptionType optionType);
 
     void setValue(String value);
 }

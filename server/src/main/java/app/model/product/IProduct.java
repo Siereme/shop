@@ -1,7 +1,7 @@
 package app.model.product;
 
 import app.model.product.description.ProductDescription;
-import app.model.product.option.ProductOption;
+import app.model.product.option.Option;
 
 import java.util.Set;
 
@@ -11,7 +11,7 @@ public interface IProduct {
 
     Long getArticle();
 
-    String getName();
+    String getTitle();
 
     Double getPrice();
 
@@ -19,13 +19,13 @@ public interface IProduct {
 
     ProductDescription getDescription();
 
-    Set<ProductOption> getOptions();
+    Set<Option> getOptions();
 
     void setId(Long id);
 
     void setArticle(Long article);
 
-    void setName(String name);
+    void setTitle(String title);
 
     void setPrice(Double price);
 
@@ -33,6 +33,6 @@ public interface IProduct {
 
     void setDescription(ProductDescription description);
 
-    void setOptions(Set<ProductOption> options);
+    void setOptions(Set<Option> options);
 
 }

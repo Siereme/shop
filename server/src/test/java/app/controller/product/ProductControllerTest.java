@@ -82,12 +82,12 @@ class ProductControllerTest {
         assertEquals(productList.size(), products.size());
         assertEquals(productList.get(0).getId(), products.get(0).getId());
         assertEquals(productList.get(0).getArticle(), products.get(0).getArticle());
-        assertEquals(productList.get(0).getName(), products.get(0).getName());
+        assertEquals(productList.get(0).getTitle(), products.get(0).getTitle());
         assertEquals(productList.get(0).getCategories().size(), products.get(0).getCategories().size());
 
         assertEquals(productList.get(4).getId(), products.get(4).getId());
         assertEquals(productList.get(4).getArticle(), products.get(4).getArticle());
-        assertEquals(productList.get(4).getName(), products.get(4).getName());
+        assertEquals(productList.get(4).getTitle(), products.get(4).getTitle());
         assertEquals(productList.get(4).getCategories().size(), products.get(4).getCategories().size());
     }
 
@@ -113,7 +113,7 @@ class ProductControllerTest {
         //Check the resulting object
         assertEquals(productList.get(3).getId(), product.getId());
         assertEquals(productList.get(3).getArticle(), product.getArticle());
-        assertEquals(productList.get(3).getName(), product.getName());
+        assertEquals(productList.get(3).getTitle(), product.getTitle());
         assertEquals(productList.get(3).getCategories().size(), product.getCategories().size());
     }
 
@@ -142,12 +142,12 @@ class ProductControllerTest {
         assertEquals(2, products.size());
         assertEquals(productList.get(0).getId(), products.get(0).getId());
         assertEquals(productList.get(0).getArticle(), products.get(0).getArticle());
-        assertEquals(productList.get(0).getName(), products.get(0).getName());
+        assertEquals(productList.get(0).getTitle(), products.get(0).getTitle());
         assertEquals(productList.get(0).getCategories().size(), products.get(0).getCategories().size());
 
         assertEquals(productList.get(4).getId(), products.get(1).getId());
         assertEquals(productList.get(4).getArticle(), products.get(1).getArticle());
-        assertEquals(productList.get(4).getName(), products.get(1).getName());
+        assertEquals(productList.get(4).getTitle(), products.get(1).getTitle());
         assertEquals(productList.get(4).getCategories().size(), products.get(1).getCategories().size());
     }
 
@@ -176,12 +176,12 @@ class ProductControllerTest {
         assertEquals(2, products.size());
         assertEquals(productList.get(2).getId(), products.get(0).getId());
         assertEquals(productList.get(2).getArticle(), products.get(0).getArticle());
-        assertEquals(productList.get(2).getName(), products.get(0).getName());
+        assertEquals(productList.get(2).getTitle(), products.get(0).getTitle());
         assertEquals(productList.get(2).getCategories().size(), products.get(0).getCategories().size());
 
         assertEquals(productList.get(3).getId(), products.get(1).getId());
         assertEquals(productList.get(3).getArticle(), products.get(1).getArticle());
-        assertEquals(productList.get(3).getName(), products.get(1).getName());
+        assertEquals(productList.get(3).getTitle(), products.get(1).getTitle());
         assertEquals(productList.get(3).getCategories().size(), products.get(1).getCategories().size());
     }
 
@@ -210,12 +210,12 @@ class ProductControllerTest {
         assertTrue(10 >= products.size());
         assertEquals(productList.get(0).getId(), products.get(0).getId());
         assertEquals(productList.get(0).getArticle(), products.get(0).getArticle());
-        assertEquals(productList.get(0).getName(), products.get(0).getName());
+        assertEquals(productList.get(0).getTitle(), products.get(0).getTitle());
         assertEquals(productList.get(0).getCategories().size(), products.get(0).getCategories().size());
 
         assertEquals(productList.get(3).getId(), products.get(3).getId());
         assertEquals(productList.get(3).getArticle(), products.get(3).getArticle());
-        assertEquals(productList.get(3).getName(), products.get(3).getName());
+        assertEquals(productList.get(3).getTitle(), products.get(3).getTitle());
         assertEquals(productList.get(3).getCategories().size(), products.get(3).getCategories().size());
     }
 
@@ -225,7 +225,7 @@ class ProductControllerTest {
         //Prepare request objects
         ProductDTO productDTO = new ProductDTO();
         productDTO.setArticle(productList.get(5).getArticle());
-        productDTO.setName(productList.get(5).getName());
+        productDTO.setName(productList.get(5).getTitle());
         productDTO.setPrice(productList.get(5).getPrice());
         productDTO.setImageLink(productList.get(5).getImageLink());
         productDTO.setOptions(productList.get(5).getOptions());
@@ -251,7 +251,7 @@ class ProductControllerTest {
 
         //Check the resulting object
         assertEquals(productList.get(5).getArticle(), product.getArticle());
-        assertEquals(productList.get(5).getName(), product.getName());
+        assertEquals(productList.get(5).getTitle(), product.getTitle());
         assertEquals(productList.get(5).getPrice(), product.getPrice());
         assertEquals(productList.get(5).getImageLink(), product.getImageLink());
         assertEquals(productList.get(5).getCategories().size(), product.getCategories().size());

@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -16,6 +14,6 @@ public class SearchResponse implements ISearchResponse {
 
     List<Product> products;
     PriceRangeDTO priceRange;
-    Map<String, Set<String>> options;
+    List<OptionDTO> options;
 
 }

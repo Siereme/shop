@@ -2,26 +2,24 @@ package app.model.product;
 
 import app.model.category.Category;
 import app.model.product.description.ProductDescription;
-import app.model.product.option.ProductOption;
+import app.model.product.option.Option;
+import app.search.SearchPredicateProvider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.apache.lucene.search.SortField;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
 import org.hibernate.search.engine.backend.types.ObjectStructure;
-import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.PropertyBinderRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyBinding;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.apache.lucene.search.SortField.FIELD_SCORE;
 
 @RequiredArgsConstructor
 @Getter
@@ -41,9 +39,9 @@ public class Product implements IProduct {
     @Column(name = "article_id")
     private Long article;
 
-    @FullTextField(analyzer = "simple")
+    @FullTextField
     @Column(name = "name")
-    private String name;
+    private String title;
 
     @Column(name = "price")
     private Double price;
@@ -66,7 +64,7 @@ public class Product implements IProduct {
             inverseJoinColumns = {@JoinColumn(name = "option_id", nullable = false)}
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "options")
-    private Set<ProductOption> options = new HashSet<>();
+    private Set<Option> options = new HashSet<>();
 
     @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JsonIgnoreProperties(value = "categories", allowSetters = true)
@@ -86,7 +84,7 @@ public class Product implements IProduct {
         category.getProducts().remove(this);
     }
 
-    public void removeOption(ProductOption option) {
+    public void removeOption(Option option) {
         options.remove(option);
 //        option.getProducts().remove(this);
     }

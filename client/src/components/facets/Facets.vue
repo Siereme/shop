@@ -1,17 +1,20 @@
 <template>
   <div class="facets">
     <FacetCategory v-if="!disableCategory" :mainCategory="mainCategory" :currentCategory="currentCategory" />
+    <FacetCommons :handleClick="handleOptionClick"/>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import FacetCategoryVue from './FacetCategory.vue'
+import FacetCategory from './FacetCategory.vue'
+import FacetCommons from './FacetCommons.vue';
 
 export default defineComponent({
     name: 'Facets',
     components: {
-      FacetCategory: FacetCategoryVue
+      FacetCategory,
+      FacetCommons
     },
     props: {
         disableCategory: {
@@ -22,7 +25,8 @@ export default defineComponent({
         },
         currentCategory: {
             default: () => {}
-        }
+        },
+        handleOptionClick: Function
     }
 })
 </script>
@@ -43,8 +47,6 @@ a {
   color: #0595e6;
 }
 .facets{
-  border: 1px solid #b8ced9;
-  border-radius: 5px;
   color: #464b51;
   font-size: 16px;
 }

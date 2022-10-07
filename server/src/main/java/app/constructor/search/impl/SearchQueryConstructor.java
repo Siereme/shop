@@ -1,11 +1,12 @@
 package app.constructor.search.impl;
 
 import app.constructor.search.IQueryConstructor;
+import app.model.dto.search.OptionDTO;
+import app.model.dto.search.OptionValueDTO;
 import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SearchQueryConstructor implements IQueryConstructor {
@@ -14,7 +15,7 @@ public class SearchQueryConstructor implements IQueryConstructor {
     public Consumer<? super BooleanPredicateClausesStep<?>> search(SearchPredicateFactory f, String query) {
         return b -> {
             b.must(f.matchAll());
-            b.must(f.match().field("name").matching(query)
+            b.must(f.match().field("title").matching(query)
                     .constantScore().boost(2.0f));
             b.should(f.match().field("description.shortDescription").matching(query));
             b.should(f.match().field("description.longDescription").matching(query));
@@ -22,22 +23,25 @@ public class SearchQueryConstructor implements IQueryConstructor {
     }
 
     @Override
-    public Consumer<? super BooleanPredicateClausesStep<?>> searchByOptions(SearchPredicateFactory f, String query, Map<String, Set<String>> options) {
+    public Consumer<? super BooleanPredicateClausesStep<?>> searchByOptions(SearchPredicateFactory f, String query, List<OptionDTO> options) {
         return b -> {
-            b.should(f.match().field("name").matching(query)
-                    .constantScore().boost(2.0f));
+            b.must(f.match().field("title").matching(query)
+                    .constantScore().boost(6.0f));
             b.should(f.match().field("description.shortDescription").matching(query));
             b.should(f.match().field("description.longDescription").matching(query));
-            b.should(f.nested().objectField("options")
-                    .nest(f.bool(o -> {
-                        o.must(f.matchAll());
-                        for (String name : options.keySet()) {
-                            o.must(f.match().field("options.name").matching(name));
-                            for (String value : options.get(name)) {
-                                o.must(f.match().field("options.value").matching(value));
+            if(!options.isEmpty()){
+                b.must(f.nested().objectField("options")
+                        .nest(f.bool(o -> {
+                            o.must(f.matchAll());
+                            for (OptionDTO option : options) {
+                                o.must(f.nested().objectField("options.optionType")
+                                        .nest(f.bool().must(f.match().field("options.optionType.type").matching(option.getType()))));
+                                for (OptionValueDTO optionValue : option.getValues()) {
+                                    o.should(f.match().field("options.value").matching(optionValue.getValue()));
+                                }
                             }
-                        }
-                    })));
+                        })));
+            }
         };
     }
 
