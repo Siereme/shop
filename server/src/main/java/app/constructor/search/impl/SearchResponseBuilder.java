@@ -16,28 +16,28 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class SearchResponseBuilder implements ISearchResponseBuilder {
+public class SearchResponseBuilder<T extends ISearchResponse> implements ISearchResponseBuilder<T> {
 
     @Autowired
     private ProductOptionRepository optionRepo;
-    private ISearchResponse response;
+    private T response;
     private final List<OptionValueDTO> checkedValues = new ArrayList<>();
 
     @Override
-    public SearchResponseBuilder create(ISearchResponse response){
+    public SearchResponseBuilder<T> create(T response){
         this.response = response;
         checkedValues.clear();
         return this;
     }
 
     @Override
-    public SearchResponseBuilder setProducts(List<Product> products){
+    public SearchResponseBuilder<T> setProducts(List<Product> products){
         response.setProducts(products);
         return this;
     }
 
     @Override
-    public SearchResponseBuilder setPriceRange(){
+    public SearchResponseBuilder<T> setPriceRange(PriceRangeDTO priceRangeDTO){
         //Get range of product prices
         PriceRangeDTO priceRange = response.getProducts().stream()
                 .collect(Collectors.collectingAndThen(
@@ -49,7 +49,12 @@ public class SearchResponseBuilder implements ISearchResponseBuilder {
                             int maxPrice = list.stream()
                                     .map(product -> product.getPrice().intValue())
                                     .max(Integer::compareTo).orElse(0);
-                            return new PriceRangeDTO(minPrice, maxPrice);
+                            return new PriceRangeDTO(
+                                        priceRangeDTO != null && priceRangeDTO.getPriceMin() != 0 ? priceRangeDTO.getPriceMin() : minPrice,
+                                        priceRangeDTO != null && priceRangeDTO.getMin() != 0 ? priceRangeDTO.getMin() : minPrice,
+                                        priceRangeDTO != null && priceRangeDTO.getPriceMax() != 0 ? priceRangeDTO.getPriceMax() : maxPrice,
+                                        priceRangeDTO != null && priceRangeDTO.getMax() != 0 ? priceRangeDTO.getMax() : maxPrice
+                                    );
                         }
                 ));
         response.setPriceRange(priceRange);
@@ -57,7 +62,7 @@ public class SearchResponseBuilder implements ISearchResponseBuilder {
     }
 
     @Override
-    public SearchResponseBuilder setCheckedOptions(List<OptionDTO> options){
+    public SearchResponseBuilder<T> setCheckedOptions(List<OptionDTO> options){
         List<OptionValueDTO> values = options.stream()
                 .map(OptionDTO::getValues)
                 .flatMap(Collection::stream)
@@ -67,7 +72,7 @@ public class SearchResponseBuilder implements ISearchResponseBuilder {
     }
 
     @Override
-    public SearchResponseBuilder setOptions(){
+    public SearchResponseBuilder<T> setOptions(){
         //Get options for products
         List<Option> productOptions = response.getProducts().stream()
                 .map(Product::getOptions)
@@ -114,7 +119,7 @@ public class SearchResponseBuilder implements ISearchResponseBuilder {
     }
 
     @Override
-    public ISearchResponse build(){
+    public T build(){
         return response;
     }
 

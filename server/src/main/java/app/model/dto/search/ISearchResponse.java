@@ -1,7 +1,6 @@
 package app.model.dto.search;
 
 import app.model.product.Product;
-import app.model.product.option.OptionType;
 
 import java.util.List;
 

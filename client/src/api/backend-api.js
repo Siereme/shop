@@ -144,7 +144,7 @@ let searchCategory = (request) => {
         if(res.data.category !== null){
             store.commit('setCurrentCategory', res.data.category)
         }
-        if(res.data.parentCategory !== null){
+        if(res.data.parentCategory){
             store.commit('setMainCategory', res.data.parentCategory)
         }
         if(res.data.products !== null){
@@ -184,13 +184,14 @@ let searchCategoryByOptions = (options) => {
     })
 }
 
-let search = (query) => {
+let search = (request) => {
     return axiosApi({
-        method: 'get',
-        url: '/search/?query=' + query
+        method: 'post',
+        url: '/search/',
+        data: request
     })
     .then(res => {
-        store.commit('setQuery', query)
+        store.commit('setQuery', request.query)
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }

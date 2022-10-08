@@ -46,9 +46,10 @@ export default defineComponent({
         
         let getRequestDTO = () => {
             var request = {}
-            request.categoryId = props.categoryId
-            request.withParent = Object.keys(mainCategory.value).length === 0
-            request.withProducts = true
+            request['category'] = {
+                'id': props.categoryId,
+                'withParent': Object.keys(mainCategory.value).length === 0
+            }
             props.page ? request.page = props.page : null
             return request
         }
@@ -58,7 +59,6 @@ export default defineComponent({
 
 
         onMounted(() => loadData(props.categoryId))
-
         watch(
             () => props.categoryId,
             () => loadData()
@@ -84,6 +84,8 @@ export default defineComponent({
         
         const shown = computed(() => mainCategory.value !== null && currentCategory.value !== null)
 
+
+
         let getCheckedOptions = () => {
             let checkedOptions = []
 
@@ -104,15 +106,15 @@ export default defineComponent({
         }
 
         let getSearchRequestObject = () => ({
-            'path': currentCategory.value.path,
-            'depth': currentCategory.value.depth,
+            'category': {
+                'path': currentCategory.value.path,
+                'depth': currentCategory.value.depth
+            },
+            'priceRange': store.state.facet.price,
             'options': getCheckedOptions()
         })
 
-        let handleOptionClick = (event, id, value) => {
-          store.commit('setOption', {id: id, value: value, checked: event.target.checked})
-          api.searchCategoryByOptions(getSearchRequestObject())
-        }
+        let handleOptionClick = () => api.searchCategoryByOptions(getSearchRequestObject())
 
         return {
             shown,

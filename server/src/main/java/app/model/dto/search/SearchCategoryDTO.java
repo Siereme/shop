@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class SearchCategoryDTO {
+public class SearchCategoryDTO implements ISearchDTO {
 
-    String path;
-    int depth = 1;
+    CategoryDTO category;
+    PriceRangeDTO priceRange;
     List<OptionDTO> options;
     int page = 1;
     int pageSize = 24;

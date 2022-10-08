@@ -1,19 +1,17 @@
 package app.model.dto.search;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @RequiredArgsConstructor
-public class PriceRangeDTO {
+public class CategoryDTO {
 
-    double priceMin;
-    double min;
-    double priceMax;
-    double max;
+    long id;
+    String path;
+    int depth = 1;
+    boolean withParent;
 
 }

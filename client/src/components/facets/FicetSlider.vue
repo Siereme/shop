@@ -1,17 +1,85 @@
 <template>
-    <div class="facet-slider" v-if="shown">
+    <div class="facet-slider">
       <div class="facet-header">
+        <div class="facet-header__title">Цена</div>
+        <button class="facet-header__clear" v-if="showClear" @click="handleClear()">Очистить</button>
       </div>
-
+      <div class="facet-slider-container">
+        <div class="facet-slider__fields">
+          <div class="facet-slider__field">
+            <span class="facet-slider__label">от</span>
+            <input class="facet-slider__input" type="tel" :value="price[0]" />
+          </div>
+          <div class="facet-slider__separator"></div>
+          <div class="facet-slider__field">
+            <span class="facet-slider__label">до</span>
+            <input class="facet-slider__input" type="tel" :value="price[1]" />
+          </div>
+        </div>
+        <Slider class="facet-slider__carousel" v-model="price" :min="priceMin" :max="priceMax"/>
+      </div>
     </div>
   </template>
   
   <script>
-  import { defineComponent } from 'vue'
-  
+  import { defineComponent, ref, computed, onMounted, watch } from 'vue'
+  import Slider from '@vueform/slider'
+  import "@vueform/slider/themes/default.css"
+  import { useStore } from 'vuex'
+
   export default defineComponent({
       name: 'FacetSlider',
-      setup() {
+      components: {
+        Slider
+      },
+      props: {
+        handleClick: Function
+      },
+      setup(props) {
+        const store = useStore()
+
+        let price = ref([0, 100])
+        let priceMin = ref(0)
+        let priceMax = ref(1000)
+        
+        let setPriceRange = (priceRange) => {
+          price.value[0] = priceRange.min
+          price.value[1] = priceRange.max
+          
+          priceMin.value = priceRange.priceMin
+          priceMax.value = priceRange.priceMax
+        }
+
+        let handlePriceChange = () => {
+          store.commit('setPrice', {priceMin: priceMin.value, min: price.value[0], max: price.value[1], priceMax: priceMax.value})
+          props.handleClick()
+        }
+
+        let handleClear = () => {
+          store.commit('setPrice', null)
+          props.handleClick()
+        }
+
+        let showClear = computed(() => price.value[0] !== priceMin.value || price.value[1] !== priceMax.value)
+
+
+        onMounted(() => setPriceRange(store.state.facet.priceRange))
+        watch(
+            () => store.state.facet.priceRange,
+            priceRange => setPriceRange(priceRange)
+        )
+        watch(
+            () => price.value,
+            () => handlePriceChange()
+        )
+        
+        return {
+          price,
+          priceMin,
+          priceMax,
+          showClear,
+          handleClear
+        }
       }
   })
   </script>
@@ -32,28 +100,82 @@
   a {
     color: #0595e6;
   }
-  .facet-category ul{
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 20px 15px;
+  .facet-header{
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  .facet-category ul .facet-category-item{
-      font-size: 14px;
-      line-height: 16px;
-      margin-bottom: 16px;
-      cursor: pointer;
-      text-align: left;
+  .facet-header__title{
+    text-align: left;
+    font-size: 16px;
+    line-height: 18px;
   }
-  .facet-category ul .facet-category-item.selected,
-  .facet-category ul .facet-category-item:hover{
-      color: #0595e6;
+  .facet-header__clear{
+    font-size: 12px;
+    line-height: 13px;
+    color: #AAAAAA;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
   }
-  .facet-category ul .facet-category-item.facet-category-item__children{
-      padding-left: 15px;
+  .facet-header__clear:hover{
+    color: #0595e6;
   }
-  .facet-category ul .facet-category-item:last-child{
-      margin-bottom: 0;
+  .facet-slider__carousel{
+    --slider-connect-bg: #0595e6;
+    --slider-tooltip-bg: transparent;
+    --slider-handle-ring-color: #3B82F630;
+  }
+  .facet-slider {
+    border: 1px solid #b8ced9;
+    border-radius: 15px;
+    padding: 20px 15px;
+    margin-bottom: 30px;
+  }
+  .facet-slider__fields{
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-align-items: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .facet-slider__field {
+    position: relative;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+  }
+  .facet-slider__label{
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    color: var(--color-font-second);
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .facet-slider__input{
+    height: 36px;
+    font-size: 16px;
+    line-height: 16px;
+    width: 100%;
+    padding: 0 15px 0 30px;
+    border: 1px solid #D5D5D5;
+    border-radius: 2px;
+    color: #353d4a;
+    font-weight: 400;
+    box-sizing: border-box;
+  }
+  .facet-slider__separator{
+    display: block;
+    -webkit-flex: 1 1 15px;
+    flex: 1 1 15px;
+    margin: 0 10px;
+    height: 1px;
+    background-color: #D5D5D5;
   }
   </style>

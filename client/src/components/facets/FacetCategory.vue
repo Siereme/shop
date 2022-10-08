@@ -89,7 +89,7 @@ a {
 }
 .facet-category {
     border: 1px solid #b8ced9;
-    border-radius: 5px;
+    border-radius: 15px;
     padding: 20px 15px;
     margin-bottom: 30px;
 }

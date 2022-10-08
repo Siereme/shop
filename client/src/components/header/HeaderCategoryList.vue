@@ -25,11 +25,12 @@ export default defineComponent({
       const router = useRouter()
 
       let getRequestDTO = (categoryId) => {
-            var request = {}
-            request.categoryId = categoryId
-            request.withParent = true
-            request.withProducts = true
-            return request
+          var request = {}
+          request['category'] = {
+              'id': categoryId,
+              'withParent': true
+          }
+          return request
       }
 
       let handleClick = (categoryId) => {

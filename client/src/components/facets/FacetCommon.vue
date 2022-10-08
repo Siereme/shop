@@ -5,7 +5,11 @@
       </div>
       <ul class="facet-common__container">
         <li class="facet-common__item" v-for="item in option.values" :key="item.value">
-          <input type="checkbox" :id="item.value" :value="item.value" :checked="item.checked" v-model="checkedValues" @click="this.handleClick($event, option.id, item.value)">
+          <input type="checkbox" 
+            :id="item.value" :value="item.value" 
+            :checked="item.checked" v-model="checkedValues" 
+            @click="handleOptionClick($event, option.id, item.value)"
+          >
           <label :for="item.value">
             <span class="facet-common__checkmark"></span>
             <span class="facet-common__title">{{ item.value }}</span>
@@ -17,6 +21,7 @@
   
   <script>
   import { defineComponent, ref } from 'vue'
+  import { useStore } from "vuex"
   
   export default defineComponent({
       name: 'FacetCommon',
@@ -24,12 +29,19 @@
         option: Object,
         handleClick: Function
       },
-      setup() {
+      setup(props) {
+        const store = useStore()
 
         let checkedValues = ref([])
 
+        let handleOptionClick = (event, id, value) => {
+          store.commit('setOption', {id: id, value: value, checked: event.target.checked})
+          props.handleClick()
+        }
+
         return {
-          checkedValues
+          checkedValues,
+          handleOptionClick
         }
       }
   })

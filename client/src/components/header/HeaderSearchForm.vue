@@ -26,7 +26,7 @@ export default defineComponent({
 
       let handleSearch = () => {
         store.commit('setIsLoading', true)
-        api.search(query.value)
+        api.search({'query': query.value})
         .then((res) => {
             if(res.status === 200){
               router.push({name: 'SearchPage', query: {query: query.value}})

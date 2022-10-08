@@ -2,20 +2,23 @@ package app.constructor.search;
 
 import app.model.dto.search.ISearchResponse;
 import app.model.dto.search.OptionDTO;
+import app.model.dto.search.PriceRangeDTO;
 import app.model.product.Product;
 
 import java.util.List;
 
-public interface ISearchResponseBuilder {
-    ISearchResponseBuilder create(ISearchResponse response);
+public interface ISearchResponseBuilder<T extends ISearchResponse> {
 
-    ISearchResponseBuilder setProducts(List<Product> products);
+    ISearchResponseBuilder<T> create(T response);
 
-    ISearchResponseBuilder setPriceRange();
+    ISearchResponseBuilder<T> setProducts(List<Product> products);
 
-    ISearchResponseBuilder setCheckedOptions(List<OptionDTO> options);
+    ISearchResponseBuilder<T> setPriceRange(PriceRangeDTO priceRange);
 
-    ISearchResponseBuilder setOptions();
+    ISearchResponseBuilder<T> setCheckedOptions(List<OptionDTO> options);
 
-    ISearchResponse build();
+    ISearchResponseBuilder<T> setOptions();
+
+    T build();
+
 }

@@ -24,6 +24,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(value = "select distinct c from Category c where c.id = :id")
     Optional<ICategoryDTO> findByIdWithoutSubcategories(Long id);
 
+    @Query(value = "select distinct c from Category c where c.path = :path")
+    Optional<ICategoryDTO> findByPathWithoutSubcategories(String path);
+
     @Query(value = "select distinct c from Category c " +
             "left join fetch c.categories " +
             "where c.path = :path")

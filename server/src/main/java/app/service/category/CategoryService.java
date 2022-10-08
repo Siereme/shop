@@ -57,6 +57,11 @@ public class CategoryService implements ICategoryService<Category> {
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
     }
 
+    public ICategoryDTO findByPathWithoutSubcategories(String path){
+        return categoryRepo.findByPathWithoutSubcategories(path)
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
+    }
+
     public Category getByPathAndDepth(String path, int depth) {
         String targetPath = path.substring(0, StringUtils.ordinalIndexOf(path, "/", depth) + 1);
         return categoryRepo.findByPath(targetPath)

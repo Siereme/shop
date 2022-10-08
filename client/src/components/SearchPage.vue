@@ -37,7 +37,7 @@ export default defineComponent({
     setup(props) {
         const store = useStore();   
 
-        let loadData = () => api.search(props.query)
+        let loadData = () => api.search({'query': props.query})
                     .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
 
         onMounted(() => loadData())
@@ -80,13 +80,11 @@ export default defineComponent({
 
         let getSearchRequestObject = () => ({
             'query': props.query,
+            'priceRange': store.state.facet.price,
             'options': getCheckedOptions()
         })
 
-        let handleClick = (event, id, value) => {
-          store.commit('setOption', {id: id, value: value, checked: event.target.checked})
-          api.searchByOptions(getSearchRequestObject())
-        }
+        let handleClick = () => api.searchByOptions(getSearchRequestObject())
 
         return {
             shown,

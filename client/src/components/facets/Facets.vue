@@ -1,6 +1,7 @@
 <template>
   <div class="facets">
     <FacetCategory v-if="!disableCategory" :mainCategory="mainCategory" :currentCategory="currentCategory" />
+    <FicetSlider :handleClick="handleOptionClick"/>
     <FacetCommons :handleClick="handleOptionClick"/>
   </div>
 </template>
@@ -9,13 +10,15 @@
 import { defineComponent } from 'vue'
 import FacetCategory from './FacetCategory.vue'
 import FacetCommons from './FacetCommons.vue';
+import FicetSlider from './FicetSlider.vue';
 
 export default defineComponent({
     name: 'Facets',
     components: {
-      FacetCategory,
-      FacetCommons
-    },
+    FacetCategory,
+    FacetCommons,
+    FicetSlider
+},
     props: {
         disableCategory: {
             default: () => {}
