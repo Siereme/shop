@@ -8,13 +8,21 @@ public interface ISearchResponse {
 
     List<Product> getProducts();
 
-    PriceRangeDTO getPriceRange();
+    RangePriceDTO getRangePrice();
 
     List<OptionDTO> getOptions();
 
+    long getPage();
+
+    long getPagesCount();
+
     void setProducts(List<Product> products);
 
-    void setPriceRange(PriceRangeDTO priceRange);
+    void setRangePrice(RangePriceDTO rangePrice);
 
     void setOptions(List<OptionDTO> options);
+
+    void setPage(long page);
+
+    void setPagesCount(long pagesCount);
 }

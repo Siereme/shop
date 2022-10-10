@@ -4,10 +4,10 @@ import app.constructor.search.ISearchResponseBuilder;
 import app.model.dto.search.ISearchResponse;
 import app.model.dto.search.OptionDTO;
 import app.model.dto.search.OptionValueDTO;
-import app.model.dto.search.PriceRangeDTO;
+import app.model.dto.search.RangePriceDTO;
 import app.model.product.Product;
+import app.model.product.option.OptionValue;
 import app.model.product.option.Option;
-import app.model.product.option.OptionType;
 import app.repository.product.ProductOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,13 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
     private ProductOptionRepository optionRepo;
     private T response;
     private final List<OptionValueDTO> checkedValues = new ArrayList<>();
+    private RangePriceDTO fullRangePrice;
 
     @Override
     public SearchResponseBuilder<T> create(T response){
         this.response = response;
         checkedValues.clear();
+        fullRangePrice = new RangePriceDTO();
         return this;
     }
 
@@ -37,27 +39,45 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
     }
 
     @Override
-    public SearchResponseBuilder<T> setPriceRange(PriceRangeDTO priceRangeDTO){
-        //Get range of product prices
-        PriceRangeDTO priceRange = response.getProducts().stream()
+    public SearchResponseBuilder<T> setFullRangePrices(List<Double> prices){
+        fullRangePrice = prices.stream()
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),
                         list -> {
-                            int minPrice = list.stream()
-                                    .map(product -> product.getPrice().intValue())
-                                    .min(Integer::compareTo).orElse(0);
-                            int maxPrice = list.stream()
-                                    .map(product -> product.getPrice().intValue())
-                                    .max(Integer::compareTo).orElse(0);
-                            return new PriceRangeDTO(
-                                        priceRangeDTO != null && priceRangeDTO.getPriceMin() != 0 ? priceRangeDTO.getPriceMin() : minPrice,
-                                        priceRangeDTO != null && priceRangeDTO.getMin() != 0 ? priceRangeDTO.getMin() : minPrice,
-                                        priceRangeDTO != null && priceRangeDTO.getPriceMax() != 0 ? priceRangeDTO.getPriceMax() : maxPrice,
-                                        priceRangeDTO != null && priceRangeDTO.getMax() != 0 ? priceRangeDTO.getMax() : maxPrice
-                                    );
+                            int priceMin = list.stream().min(Double::compareTo).orElse(0d).intValue();
+                            int priceMax = list.stream().max(Double::compareTo).orElse(0d).intValue();
+                            return new RangePriceDTO(priceMin, priceMax, priceMin, priceMax);
                         }
                 ));
-        response.setPriceRange(priceRange);
+        return this;
+    }
+
+    @Override
+    public SearchResponseBuilder<T> setRangePrice(RangePriceDTO rangePriceDTO){
+        RangePriceDTO rangePrice;
+        if(rangePriceDTO == null){
+            rangePrice = response.getProducts().stream()
+                    .collect(Collectors.collectingAndThen(
+                            Collectors.toList(),
+                            list -> {
+                                int minPrice = list.stream()
+                                        .map(product -> product.getPrice().intValue())
+                                        .min(Integer::compareTo).orElse(0);
+                                int maxPrice = list.stream()
+                                        .map(product -> product.getPrice().intValue())
+                                        .max(Integer::compareTo).orElse(0);
+                                return new RangePriceDTO(minPrice, maxPrice, minPrice, maxPrice);
+                            }
+                    ));
+        } else {
+            rangePrice = new RangePriceDTO(
+                    Math.max(rangePriceDTO.getRangeMin(), fullRangePrice.getRangeMin()),
+                    Math.min(rangePriceDTO.getRangeMax(), fullRangePrice.getRangeMax()),
+                    Math.max(rangePriceDTO.getPriceMin(), fullRangePrice.getPriceMin()),
+                    Math.min(rangePriceDTO.getPriceMax(), fullRangePrice.getPriceMax())
+            );
+        }
+        response.setRangePrice(rangePrice);
         return this;
     }
 
@@ -74,7 +94,7 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
     @Override
     public SearchResponseBuilder<T> setOptions(){
         //Get options for products
-        List<Option> productOptions = response.getProducts().stream()
+        List<OptionValue> productOptions = response.getProducts().stream()
                 .map(Product::getOptions)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
@@ -82,26 +102,26 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
         ////Group the type and values of options from a selection of products
         Map<Long, List<String>> optionValues = productOptions.stream()
                 .collect(Collectors.groupingBy(
-                        option -> option.getOptionType().getId(),
-                        Collectors.mapping(Option::getValue, Collectors.toList())));
+                        option -> option.getOption().getId(),
+                        Collectors.mapping(OptionValue::getValue, Collectors.toList())));
 
         ////Get type ids
         List<Long> typesIds = productOptions.stream()
-                .map(option -> option.getOptionType().getId())
+                .map(option -> option.getOption().getId())
                 .distinct().collect(Collectors.toList());
 
         ////Get types of options by ids
-        List<OptionType> optionTypes = optionRepo.findAllOptionTypeByIds(typesIds).orElse(new ArrayList<>());
+        List<Option> optionTypes = optionRepo.findAllOptionByIds(typesIds).orElse(new ArrayList<>());
 
         ////Construct list of option dto
         List<OptionDTO> options = new ArrayList<>();
-        for(OptionType optionType : optionTypes){
+        for(Option optionType : optionTypes){
             OptionDTO option = new OptionDTO();
 
             option.setId(optionType.getId());
             option.setType(optionType.getType());
 
-            List<OptionValueDTO> optionValue = optionType.getOptions().stream()
+            List<OptionValueDTO> optionValue = optionType.getValues().stream()
                     .filter(item -> optionValues.get(option.getId()).contains(item.getValue()))
                     .map(item -> new OptionValueDTO(
                             item.getValue(),
@@ -115,6 +135,13 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
         }
 
         response.setOptions(options);
+        return this;
+    }
+
+    @Override
+    public SearchResponseBuilder<T> setPage(long page, long pagesCount){
+        response.setPage(page);
+        response.setPagesCount(pagesCount);
         return this;
     }
 

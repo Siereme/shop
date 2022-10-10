@@ -90,17 +90,17 @@ INSERT INTO product_category (product_id, category_id) VALUES (24, 7);
 
 
 
-INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (25, 392210, 'Планшет Huawei MatePad Pro 8 128 Gb WiFi Grey M-Pencil', 49990, '/assets/img/products/tablets/product_8_392210.jpg');
+INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (25, 392210, 'Планшет Huawei MatePad Pro 8 128Gb WiFi Grey M-Pencil', 49990, '/assets/img/products/tablets/product_8_392210.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (26, 403373, 'Планшет Xiaomi Mi Pad 5 RU 6 128 Pearl White', 36990, '/assets/img/products/tablets/product_8_403373.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (27, 390520, 'Планшет Samsung Galaxy Tab A7 Lite 8.7 32GB LTE SM-T225 (2021) серебро', 16490, '/assets/img/products/tablets/product_8_390520.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (28, 415824, 'Планшет Huawei MATEPAD T 10'' WIFI AGRK-W09 DEEPSEA BLUE', 12990, '/assets/img/products/tablets/product_8_415824.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (29, 410150, 'Планшет Huawei MATEPAD T10S 10'' LTE AGS3K-L09 DEEPSEA BLUE (53012NGU)', 19990, '/assets/img/products/tablets/product_8_410150.jpg');
-INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (30, 392209, 'Планшет Huawei MatePad11 6 256 Gb WiFi Green', 54339, '/assets/img/products/tablets/product_8_392209.jpg');
+INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (30, 392209, 'Планшет Huawei MatePad11 6 256Gb WiFi Green', 54339, '/assets/img/products/tablets/product_8_392209.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (31, 441251, 'Планшет Apple iPad Pro 2021 WiFi 128Gb (MHQR3LL/A) серый космос', 89990, '/assets/img/products/tablets/product_8_441251.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (32, 429389, 'Планшет Teclast T40 (Pro edition)', 24490, '/assets/img/products/tablets/product_8_429389.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (33, 429390, 'Планшет Teclast M40 (Pro edition)', 21990, '/assets/img/products/tablets/product_8_429390.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (34, 421114, 'Планшет Huawei MATEPAD T 10'' WIFI AGRK-W09 DEEPSEA BLUE', 13990, '/assets/img/products/tablets/product_8_421114.jpg');
-INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (35, 418350, 'Планшет Huawei MatePad 10.4'' 4 128 Gb WiFi stilus Grey', 28990, '/assets/img/products/tablets/product_8_418350.jpg');
+INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (35, 418350, 'Планшет Huawei MatePad 10.4'' 4 128Gb WiFi stilus Grey', 28990, '/assets/img/products/tablets/product_8_418350.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (36, 410151, 'Планшет Huawei MATEPAD 10.4'' 4GB WIFI 64GB BAH3-W59 GREY (53011UDW)', 44099, '/assets/img/products/tablets/product_8_410151.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (37, 385111, 'Планшет Apple iPad Pro 12.9 2021 256Gb Wi-Fi 5 Gen (MHNJ3RU/A) серебро', 151999, '/assets/img/products/tablets/product_8_385111.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (38, 345587, 'Планшет BQ (Bright&Quick) 8068L Hornet Plus Pro black', 7990, '/assets/img/products/tablets/product_8_345587.jpg');
@@ -113,7 +113,7 @@ INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (44
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (45, 414548, 'Планшет Samsung Galaxy Tab A8 SM-X205N T618 10.5'' 32Gb темно-серый', 21990, '/assets/img/products/tablets/product_8_414548.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (46, 403372, 'Планшет Xiaomi Pad 5 RU 6 128 Cosmic Gray', 36990, '/assets/img/products/tablets/product_8_403372.jpg');
 INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (47, 414544, 'Планшет Samsung Galaxy Tab A8 SM-X200N T618 10.5''темно-серый', 22990, '/assets/img/products/tablets/product_8_414544.jpg');
-INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (48, 392211, 'Планшет Huawei MatePad Pro12 8 256 Gb WiFi Grey', 64990, '/assets/img/products/tablets/product_8_392211.jpg');
+INSERT INTO product (product_id, article_id, name, price, image_link) VALUES (48, 392211, 'Планшет Huawei MatePad Pro12 8 256Gb WiFi Grey', 64990, '/assets/img/products/tablets/product_8_392211.jpg');
 
 INSERT INTO product_category (product_id, category_id) VALUES (25, 8);
 INSERT INTO product_category (product_id, category_id) VALUES (26, 8);
@@ -216,24 +216,27 @@ INSERT INTO product_category (product_id, category_id) VALUES (79, 10);
 INSERT INTO product_category (product_id, category_id) VALUES (80, 10);
 
 
-INSERT INTO product_option_type (id, type) VALUES (1, 'Вес');
-INSERT INTO product_option_type (id, type) VALUES (2, 'Цвет');
-alter sequence product_option_type_id_seq restart with 4;
+INSERT INTO product_option (id, type) VALUES (1, 'Вес');
+INSERT INTO product_option (id, type) VALUES (2, 'Цвет');
+alter sequence product_option_id_seq restart with 3;
 
-INSERT INTO product_option (option_id, type_id, value) VALUES (1, 1, '200г');
-INSERT INTO product_option (option_id, type_id, value) VALUES (2, 1, '150г');
-INSERT INTO product_option (option_id, type_id, value) VALUES (3, 1, '100г');
-INSERT INTO product_option (option_id, type_id, value) VALUES (4, 2, 'черный');
-INSERT INTO product_option (option_id, type_id, value) VALUES (5, 2, 'белый');
-INSERT INTO product_option (option_id, type_id, value) VALUES (6, 2, 'серый');
-alter sequence product_option_option_id_seq restart with 7;
+INSERT INTO product_option_value (option_id, type_id, value) VALUES (1, 1, '200г');
+INSERT INTO product_option_value (option_id, type_id, value) VALUES (2, 1, '150г');
+INSERT INTO product_option_value (option_id, type_id, value) VALUES (3, 1, '100г');
+INSERT INTO product_option_value (option_id, type_id, value) VALUES (4, 2, 'черный');
+INSERT INTO product_option_value (option_id, type_id, value) VALUES (5, 2, 'белый');
+INSERT INTO product_option_value (option_id, type_id, value) VALUES (6, 2, 'серый');
+alter sequence product_option_value_option_id_seq restart with 7;
 
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 1);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 2);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (1, 4);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (2, 2);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (3, 3);
+INSERT INTO product_attribute_option (product_id, option_id) VALUES (4, 1);
 INSERT INTO product_attribute_option (product_id, option_id) VALUES (4, 2);
+INSERT INTO product_attribute_option (product_id, option_id) VALUES (4, 3);
+INSERT INTO product_attribute_option (product_id, option_id) VALUES (4, 4);
 
 INSERT INTO role (role_id, name) VALUES (1, 'ADMIN');
 INSERT INTO role (role_id, name) VALUES (2, 'USER');

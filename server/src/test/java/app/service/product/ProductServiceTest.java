@@ -6,6 +6,7 @@ import app.model.category.Category;
 import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.model.product.option.Option;
+import app.model.product.option.OptionValue;
 import app.repository.category.CategoryRepository;
 import app.repository.product.ProductOptionRepository;
 import app.repository.product.ProductRepository;
@@ -60,13 +61,13 @@ class ProductServiceTest {
         Set<Long> ids = categories.stream().map(Category::getId).collect(Collectors.toSet());
         productDTO.setCategoriesIds(ids);
 
-        Option option = productDTO.getOptions().iterator().next();
-        Optional<Option> productOptionOptional = Optional.of(option);
-        String optionName = option.getName();
+        OptionValue option = productDTO.getOptions().iterator().next();
+        Optional<OptionValue> productOptionOptional = Optional.of(option);
+        Option optionName = option.getOption();
         String optionValue = option.getValue();
 
         //When stubs are called
-        Mockito.when(optionRepo.findByNameAndValue(optionName, optionValue)).thenReturn(productOptionOptional);
+        Mockito.when(optionRepo.findOptionValueByTypeAndValue(optionName, optionValue)).thenReturn(productOptionOptional);
         Mockito.when(categoryRepo.findAllById(productDTO.getCategoriesIds())).thenReturn(categories);
         Mockito.when(productRepo.save(any(Product.class))).thenReturn(productMock);
 
@@ -74,7 +75,7 @@ class ProductServiceTest {
         Product product = productService.addProduct(productDTO);
 
         //Verify stub calls
-        Mockito.verify(optionRepo, Mockito.times(1)).findByNameAndValue(optionName, optionValue);
+        Mockito.verify(optionRepo, Mockito.times(1)).findOptionValueByTypeAndValue(optionName, optionValue);
         Mockito.verify(categoryRepo, Mockito.times(1)).findAllById(productDTO.getCategoriesIds());
         Mockito.verify(productRepo, Mockito.times(1)).save(any(Product.class));
 

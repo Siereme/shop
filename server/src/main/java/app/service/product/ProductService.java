@@ -5,7 +5,7 @@ import app.model.dto.product.IProductDTO;
 import app.model.dto.product.ProductDTO;
 import app.model.product.Product;
 import app.model.product.description.ProductDescription;
-import app.model.product.option.Option;
+import app.model.product.option.OptionValue;
 import app.model.shoppingCart.ShoppingCartProductItem;
 import app.repository.category.CategoryRepository;
 import app.repository.product.ProductOptionRepository;
@@ -56,13 +56,13 @@ public class ProductService implements IProductService<Product> {
         product.setDescription(description);
 
         //add options
-        Set<Option> options = productDTO.getOptions().stream()
+        Set<OptionValue> options = productDTO.getOptions().stream()
                 .map(option -> {
                     try {
-                        return optionRepo.findByNameAndValue(option.getOptionType(), option.getValue())
+                        return optionRepo.findOptionValueByTypeAndValue(option.getOption(), option.getValue())
                                 .orElseThrow(() -> new EntityNotFoundException("Option is not found"));
                     } catch (EntityNotFoundException ex) {
-                        return new Option(option.getOptionType(), option.getValue());
+                        return new OptionValue(option.getOption(), option.getValue());
                     }
                 }).collect(Collectors.toSet());
         product.setOptions(options);

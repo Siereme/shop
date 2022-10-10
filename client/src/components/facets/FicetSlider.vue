@@ -16,7 +16,7 @@
             <input class="facet-slider__input" type="tel" :value="price[1]" />
           </div>
         </div>
-        <Slider class="facet-slider__carousel" v-model="price" :min="priceMin" :max="priceMax"/>
+        <Slider class="facet-slider__carousel" v-model="price" :min="rangeMin" :max="rangeMax"/>
       </div>
     </div>
   </template>
@@ -39,19 +39,21 @@
         const store = useStore()
 
         let price = ref([0, 100])
-        let priceMin = ref(0)
-        let priceMax = ref(1000)
+        let rangeMin = ref(0)
+        let rangeMax = ref(1000)
         
-        let setPriceRange = (priceRange) => {
-          price.value[0] = priceRange.min
-          price.value[1] = priceRange.max
+        let setrangePrice = (rangePrice) => {
+          price.value[0] = rangePrice.priceMin
+          price.value[1] = rangePrice.priceMax
           
-          priceMin.value = priceRange.priceMin
-          priceMax.value = priceRange.priceMax
+          rangeMin.value = rangePrice.rangeMin
+          rangeMax.value = rangePrice.rangeMax
+
+          store.commit('setPrice', {rangeMin: rangeMin.value, rangeMax: rangeMax.value, priceMin: price.value[0], priceMax: price.value[1]})
         }
 
         let handlePriceChange = () => {
-          store.commit('setPrice', {priceMin: priceMin.value, min: price.value[0], max: price.value[1], priceMax: priceMax.value})
+          store.commit('setPrice', {rangeMin: rangeMin.value, rangeMax: rangeMax.value, priceMin: price.value[0], priceMax: price.value[1]})
           props.handleClick()
         }
 
@@ -60,13 +62,13 @@
           props.handleClick()
         }
 
-        let showClear = computed(() => price.value[0] !== priceMin.value || price.value[1] !== priceMax.value)
+        let showClear = computed(() => price.value[0] !== rangeMin.value || price.value[1] !== rangeMax.value)
 
 
-        onMounted(() => setPriceRange(store.state.facet.priceRange))
+        onMounted(() => setrangePrice(store.state.facet.rangePrice))
         watch(
-            () => store.state.facet.priceRange,
-            priceRange => setPriceRange(priceRange)
+            () => store.state.facet.rangePrice,
+            rangePrice => setrangePrice(rangePrice)
         )
         watch(
             () => price.value,
@@ -75,8 +77,8 @@
         
         return {
           price,
-          priceMin,
-          priceMax,
+          rangeMin,
+          rangeMax,
           showClear,
           handleClear
         }

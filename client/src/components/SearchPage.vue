@@ -52,7 +52,7 @@ export default defineComponent({
 
         let products = computed(() => store.state.product.products)
 
-        let priceRange = computed(() => store.state.facet.priceRange)
+        let rangePrice = computed(() => store.state.facet.rangePrice)
 
         let options = computed(() => store.state.facet.options)
         
@@ -80,7 +80,7 @@ export default defineComponent({
 
         let getSearchRequestObject = () => ({
             'query': props.query,
-            'priceRange': store.state.facet.price,
+            'rangePrice': store.state.facet.price,
             'options': getCheckedOptions()
         })
 
@@ -89,7 +89,7 @@ export default defineComponent({
         return {
             shown,
             products,
-            priceRange,
+            rangePrice,
             options,
             handleClick
         }

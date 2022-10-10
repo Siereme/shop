@@ -1,22 +1,19 @@
 export default {
     state: {
         query: '',
-        priceRange: {},
-        price: {
-            min: 0,
-            max: 0
-        },
+        rangePrice: {},
+        price: {},
         options: []
     },
     getters: {
         getQuery: state => {
             return state.query
         },
-        getPriceRange: state => {
-            return state.priceRange
+        getRangePrice: state => {
+            return state.rangePrice
         },
         getPrice: state => {
-            return state.priceRange
+            return state.rangePrice
         },
         getOptions: state => {
             return state.options
@@ -26,8 +23,8 @@ export default {
         setQuery: (state, query) => {
             state.query = query
         },
-        setPriceRange: (state, priceRange) => {
-            state.priceRange = priceRange
+        setRangePrice: (state, rangePrice) => {
+            state.rangePrice = rangePrice
         },
         setPrice: (state, price) => {
             state.price = price

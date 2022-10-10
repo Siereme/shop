@@ -12,7 +12,7 @@ import java.util.List;
 public class SearchCategoryDTO implements ISearchDTO {
 
     CategoryDTO category;
-    PriceRangeDTO priceRange;
+    RangePriceDTO rangePrice;
     List<OptionDTO> options;
     int page = 1;
     int pageSize = 24;

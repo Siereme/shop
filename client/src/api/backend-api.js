@@ -150,14 +150,14 @@ let searchCategory = (request) => {
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }
-        if(res.data.priceRange !== null){
-            store.commit('setPriceRange', res.data.priceRange)
+        if(res.data.rangePrice !== null){
+            store.commit('setRangePrice', res.data.rangePrice)
         }
         if(res.data.options !== null){
             store.commit('setOptions', res.data.options)
         }     
-        if(res.data.pageCount !== null){
-            store.commit('setPageCount', res.data.pageCount)
+        if(res.data.pagesCount !== null){
+            store.commit('setPagesCount', res.data.pagesCount)
         }
         return res
     })
@@ -174,11 +174,14 @@ let searchCategoryByOptions = (options) => {
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }
-        if(res.data.priceRange !== null){
-            store.commit('setPriceRange', res.data.priceRange)
+        if(res.data.rangePrice !== null){
+            store.commit('setRangePrice', res.data.rangePrice)
         }
         if(res.data.options !== null){
             store.commit('setOptions', res.data.options)
+        }
+        if(res.data.pagesCount !== null){
+            store.commit('setPagesCount', res.data.pagesCount)
         }
         return res
     })
@@ -195,15 +198,15 @@ let search = (request) => {
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }
-        if(res.data.priceRange !== null){
-            store.commit('setPriceRange', res.data.priceRange)
+        if(res.data.rangePrice !== null){
+            store.commit('setRangePrice', res.data.rangePrice)
         }
         if(res.data.options !== null){
             store.commit('setOptions', res.data.options)
         }
-        // if(res.data.pageCount !== null){
-        //     store.commit('setPageCount', res.data.pageCount)
-        // }
+        if(res.data.pagesCount !== null){
+            store.commit('setPagesCount', res.data.pagesCount)
+        }
         return res
     })
 }
@@ -219,11 +222,14 @@ let searchByOptions = (options) => {
         if(res.data.products !== null){
             store.commit('setProducts', res.data.products)
         }
-        if(res.data.priceRange !== null){
-            store.commit('setPriceRange', res.data.priceRange)
+        if(res.data.rangePrice !== null){
+            store.commit('setRangePrice', res.data.rangePrice)
         }
         if(res.data.options !== null){
             store.commit('setOptions', res.data.options)
+        }
+        if(res.data.pagesCount !== null){
+            store.commit('setPagesCount', res.data.pagesCount)
         }
         return res
     })

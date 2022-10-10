@@ -22,8 +22,12 @@ public class SearchCategoryResponse implements ISearchResponse{
     @JsonInclude(JsonInclude.Include.NON_NULL)
     List<Product> products;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    PriceRangeDTO priceRange;
+    RangePriceDTO rangePrice;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     List<OptionDTO> options;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    long page;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    long pagesCount;
 
 }

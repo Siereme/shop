@@ -2,17 +2,20 @@ package app.model.product;
 
 import app.model.category.Category;
 import app.model.product.description.ProductDescription;
-import app.model.product.option.Option;
-import app.search.SearchPredicateProvider;
+import app.model.product.option.OptionValue;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.engine.backend.types.ObjectStructure;
-import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.PropertyBinderRef;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
+import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -40,7 +43,7 @@ public class Product implements IProduct {
     @Column(name = "name")
     private String title;
 
-    @GenericField
+    @GenericField(projectable = Projectable.YES, sortable = Sortable.YES)
     @Column(name = "price")
     private Double price;
 
@@ -55,14 +58,14 @@ public class Product implements IProduct {
     })
     private ProductDescription description;
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "product_attribute_option",
             joinColumns = {@JoinColumn(name = "product_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "option_id", nullable = false)}
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "options")
-    private Set<Option> options = new HashSet<>();
+    private Set<OptionValue> options = new HashSet<>();
 
     @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JsonIgnoreProperties(value = "categories", allowSetters = true)
@@ -82,7 +85,7 @@ public class Product implements IProduct {
         category.getProducts().remove(this);
     }
 
-    public void removeOption(Option option) {
+    public void removeOption(OptionValue option) {
         options.remove(option);
 //        option.getProducts().remove(this);
     }

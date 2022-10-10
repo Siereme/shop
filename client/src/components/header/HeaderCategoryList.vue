@@ -38,7 +38,7 @@ export default defineComponent({
         api.searchCategory(getRequestDTO(categoryId))
         .then((res) => {
           if(res.status === 200){
-            router.push({name: 'CategoryPage', params: {id: categoryId}})
+            router.push({name: 'CategoryPage', params: {id: categoryId}, query: {}})
             store.commit('setIsLoading', false)
           }
         })

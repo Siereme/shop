@@ -3,6 +3,7 @@ package app.consrtructor;
 import app.model.category.Category;
 import app.model.product.Product;
 import app.model.product.option.Option;
+import app.model.product.option.OptionValue;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,7 +59,10 @@ public class TestProductConstructor {
         product5.setPrice(3099d);
         product5.setImageLink("/assets/img/products/smart_watches_and_bracelets/product_9_379476.jpg");
         product5.setCategories(Set.of(categoryList.get(3)));
-        product5.setOptions(Set.copyOf(Collections.singletonList(new Option("Вес", "200г"))));
+        Option option = new Option();
+        option.setId(1L);
+        option.setType("Вес");
+        product5.setOptions(Set.copyOf(Collections.singletonList(new OptionValue(option, "200г"))));
 
         Product product6 = new Product();
         product6.setId(6L);

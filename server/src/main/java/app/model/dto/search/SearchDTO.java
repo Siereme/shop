@@ -11,8 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchDTO implements ISearchDTO {
 
-    String query;
-    PriceRangeDTO priceRange;
+    String query = "";
+    RangePriceDTO rangePrice;
     List<OptionDTO> options;
     int page = 1;
     int pageSize = 24;

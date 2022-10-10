@@ -4,7 +4,7 @@
         <div class="facet-header__title">{{option.type}}</div>
       </div>
       <ul class="facet-common__container">
-        <li class="facet-common__item" v-for="item in option.values" :key="item.value">
+        <li class="facet-common__item" v-for="item in option.values" :key="item.value + Date.now()">
           <input type="checkbox" 
             :id="item.value" :value="item.value" 
             :checked="item.checked" v-model="checkedValues" 

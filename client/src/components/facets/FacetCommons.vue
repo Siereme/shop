@@ -1,5 +1,5 @@
 <template>
-    <div class="facet-commons">
+    <div class="facet-commons" v-if="shown">
       <div class="facet-header">
       </div>
       <FacetCommon v-for="option in options" :key="option.id" :option="option" :handleClick="handleClick"/>
@@ -20,8 +20,11 @@
 
         let options = computed(() => store.state.facet.options)
 
+        let shown = computed(() => options.value && options.value.length)
+
         return {
-            options
+            options,
+            shown
         }
     },
     components: { FacetCommon }

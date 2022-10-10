@@ -18,7 +18,7 @@
 import { defineComponent } from 'vue'
 import api from "@/api/backend-api"
 import ProductList from './product/ProductList.vue'
-import FacetsVue from './facets/Facets.vue'
+import Facets from './facets/Facets.vue'
 import { computed, watch, onMounted } from 'vue'
 import { useStore } from "vuex"
 import Pagination from './pagination/Pagination.vue'
@@ -26,10 +26,10 @@ import Pagination from './pagination/Pagination.vue'
 export default defineComponent({
     name: 'CategoryPage',
     components: {
-    ProductList,
-    Facets: FacetsVue,
-    Pagination
-},
+        ProductList,
+        Facets,
+        Pagination
+    },
     props: {
         categoryId: {
             default: () => {}
@@ -110,7 +110,7 @@ export default defineComponent({
                 'path': currentCategory.value.path,
                 'depth': currentCategory.value.depth
             },
-            'priceRange': store.state.facet.price,
+            'rangePrice': store.state.facet.price,
             'options': getCheckedOptions()
         })
 

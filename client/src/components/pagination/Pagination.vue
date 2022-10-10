@@ -1,10 +1,10 @@
 <template>
-    <div class="pagination-container" v-if="pageCount && pageCount > 1">
+    <div class="pagination-container" v-if="shown">
       <div class="pagination-container__header">
       </div>
       <Paginate
         v-model="currentPage"
-        :pageCount="pageCount"
+        :pageCount="pagesCount"
         :clickHandler="setPage"
         :prevText="'<'"
         :nextText="'>'"
@@ -20,38 +20,38 @@
   import Paginate from "vuejs-paginate-next"
 
   export default defineComponent({
-      name: 'FacetCategory',
+      name: 'Pagination',
       components: {
         Paginate
       },
       props: {
-        page: {
-            default: () => {}
-        }
+        page: Number
       },
       setup(props) {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
 
-        let pageCount = computed(() => store.state.product.pageCount)
-
+        let pagesCount = computed(() => store.state.product.pagesCount)
+        let currentPage = ref(1)
+        
+        onMounted(() => currentPage.value = +props.page)
+        watch(
+          () => props.page,
+          () => currentPage.value = +props.page
+        )
+        
         let setPage = page => {
+          console.log(page)
           router.push({name: 'CategoryPage', params: {id: route.params.id}, query: {page: page}})
         }
-
-        let currentPage = ref(1)
-
-        onMounted(() => currentPage.value = props.page)
-
-        watch(
-            () => props.page,
-            () => currentPage.value = props.page
-        )
+          
+        let shown = computed(() => pagesCount.value && pagesCount.value > 1)
 
         return {
-          pageCount,
+          pagesCount,
           currentPage,
+          shown,
           setPage
         }
       }

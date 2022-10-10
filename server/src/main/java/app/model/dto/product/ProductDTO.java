@@ -1,7 +1,7 @@
 package app.model.dto.product;
 
 import app.model.product.description.ProductDescription;
-import app.model.product.option.Option;
+import app.model.product.option.OptionValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class ProductDTO {
     private Double price;
     private String imageLink;
     private ProductDescription description;
-    private Set<Option> options = new HashSet<>();
+    private Set<OptionValue> options = new HashSet<>();
     private Set<Long> categoriesIds = new HashSet<>();
     private int count;
 

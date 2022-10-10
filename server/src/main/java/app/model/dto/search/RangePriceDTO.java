@@ -9,11 +9,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class PriceRangeDTO {
+public class RangePriceDTO {
+
+    double rangeMin;
+    double rangeMax;
 
     double priceMin;
-    double min;
     double priceMax;
-    double max;
+
 
 }

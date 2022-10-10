@@ -38,7 +38,7 @@ export default defineComponent({
 
         let handleSelectCategory = category => {
             store.commit('setIsLoading', true)
-            router.push({name: 'CategoryPage', params: {id: category.id}})
+            router.push({name: 'CategoryPage', params: {id: category.id}, query: {}})
         }
 
         let current = ref(props.currentCategory)

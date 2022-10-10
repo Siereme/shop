@@ -4,11 +4,13 @@ import app.constructor.search.impl.CategoryQueryConstructor;
 import app.constructor.search.impl.SearchResponseBuilder;
 import app.model.category.Category;
 import app.model.dto.category.ICategoryDTO;
+import app.model.dto.search.RangePriceDTO;
 import app.model.dto.search.SearchCategoryDTO;
 import app.model.dto.search.SearchCategoryResponse;
 import app.model.product.Product;
 import app.service.category.CategoryService;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +37,22 @@ public class SearchCategoryService implements ISearchService<SearchCategoryDTO> 
     public SearchCategoryResponse search(SearchCategoryDTO config){
         ICategoryDTO category = categoryService.findByIdWithoutSubcategories(config.getCategory().getId());
         config.getCategory().setPath(category.getPath());
+
         CategoryQueryConstructor queryConstructor = new CategoryQueryConstructor();
-        List<Product> products = searchSession.search( Product.class )
+        int shift = (config.getPage() - 1) * config.getPageSize();
+        SearchResult<Product> result = searchSession.search( Product.class )
                 .where(f -> f.bool(queryConstructor.search(f, config)))
-                .fetchAllHits();
-//                .fetchHits(config.getPage() * config.getPageSize(), config.getPageSize());
+                .fetch(shift, config.getPageSize());
+
+        List<Product> products = result.hits();
+        long pagesCount = result.total().hitCount() / config.getPageSize();
 
         SearchCategoryResponse response = responseBuilder
                 .create(new SearchCategoryResponse())
                 .setProducts(products)
-                .setPriceRange(config.getPriceRange())
+                .setRangePrice(config.getRangePrice())
                 .setOptions()
+                .setPage(config.getPage(), pagesCount)
                 .build();
 
         response.setCategory(category);
@@ -65,16 +72,30 @@ public class SearchCategoryService implements ISearchService<SearchCategoryDTO> 
                 .substring(0, StringUtils.ordinalIndexOf(config.getCategory().getPath(), "/", config.getCategory().getDepth()) + 1);
         config.getCategory().setPath(path);
 
-        List<Product> products = searchSession.search( Product.class )
+        int shift = (config.getPage() - 1) * config.getPageSize();
+        SearchResult<Product> result = searchSession.search( Product.class )
                 .where(f -> f.bool(queryConstructor.searchByOptions(f, config)))
-                .fetchAllHits();
-//                .fetchHits(config.getPage() * config.getPageSize(), config.getPageSize());
+                .fetch(shift, config.getPageSize());
+
+        List<Product> products = result.hits();
+        long pagesCount = result.total().hitCount() / config.getPageSize();
+
+        RangePriceDTO rangePrice = config.getRangePrice();
+        config.setRangePrice(null);
+
+        List<Double> prices = searchSession.search(Product.class)
+                .select(f -> f.field("price", Double.class))
+                .where(f -> f.bool(queryConstructor.search(f, config)))
+                .fetchHits(shift, config.getPageSize());
+
         return responseBuilder
                 .create(new SearchCategoryResponse())
                 .setProducts(products)
-                .setPriceRange(config.getPriceRange())
+                .setFullRangePrices(prices)
+                .setRangePrice(rangePrice)
                 .setCheckedOptions(config.getOptions())
                 .setOptions()
+                .setPage(config.getPage(), pagesCount)
                 .build();
     }
 

@@ -1,17 +1,19 @@
 package app.model.dto.search;
 
-public interface ISearchDTO {
-    PriceRangeDTO getPriceRange();
+import java.util.List;
 
-    java.util.List<OptionDTO> getOptions();
+public interface ISearchDTO {
+    RangePriceDTO getRangePrice();
+
+    List<OptionDTO> getOptions();
 
     int getPage();
 
     int getPageSize();
 
-    void setPriceRange(PriceRangeDTO priceRange);
+    void setRangePrice(RangePriceDTO rangePrice);
 
-    void setOptions(java.util.List<OptionDTO> options);
+    void setOptions(List<OptionDTO> options);
 
     void setPage(int page);
 
