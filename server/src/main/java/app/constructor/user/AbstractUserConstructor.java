@@ -36,7 +36,6 @@ public abstract class AbstractUserConstructor implements IUserConstructor<User> 
         newUser.setPatronymic(user.getPatronymic());
         newUser.setPhone(user.getPhone());
         newUser.setEmail(user.getEmail());
-//        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepo.findByName(user.getRole().getName())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
         newUser.setRole(role);

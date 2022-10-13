@@ -27,7 +27,7 @@ public class MainController {
     private CategoryService categoryService;
 
     @PostMapping(value = "/main-page")
-    public ResponseEntity<?> getMainByConfig(@RequestBody MainConfigDTO config){
+    public ResponseEntity<?> getMainByConfig(@RequestBody MainConfigDTO config) {
         try {
             MainResponse response = mainService.getByConfig(config);
             return ResponseEntity.ok().body(response);

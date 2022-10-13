@@ -6,6 +6,8 @@ import app.model.dto.category.CategoryRequest;
 import app.model.dto.category.CategoryResponse;
 import app.model.dto.category.ICategoryDTO;
 import app.model.dto.product.IProductDTO;
+import app.model.dto.search.SearchCategoryDTO;
+import app.model.dto.search.SearchCategoryResponse;
 import app.repository.category.CategoryRepository;
 import app.service.product.ProductService;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 @Service
 public class CategoryService implements ICategoryService<Category> {
@@ -52,13 +53,8 @@ public class CategoryService implements ICategoryService<Category> {
         categoryRepo.delete(category);
     }
 
-    public ICategoryDTO findByIdWithoutSubcategories(Long id){
+    public ICategoryDTO findByIdWithoutSubcategories(Long id) {
         return categoryRepo.findByIdWithoutSubcategories(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
-    }
-
-    public ICategoryDTO findByPathWithoutSubcategories(String path){
-        return categoryRepo.findByPathWithoutSubcategories(path)
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found"));
     }
 
@@ -74,12 +70,12 @@ public class CategoryService implements ICategoryService<Category> {
         ICategoryDTO category = findByIdWithoutSubcategories(config.getCategoryId());
         responseDTO.setCategory(category);
 
-        if(config.isWithParent()){
+        if (config.isWithParent()) {
             Category parentCategory = getByPathAndDepth(category.getPath(), 1);
             responseDTO.setParentCategory(parentCategory);
         }
 
-        if(config.isWithProducts()){
+        if (config.isWithProducts()) {
             Pageable page = PageRequest.of(config.getPage(), config.getPageSize());
             Page<IProductDTO> products = productService.findByPathWithCategoryIds(category.getPath(), page);
             responseDTO.setProducts(products.getContent());
@@ -87,5 +83,19 @@ public class CategoryService implements ICategoryService<Category> {
         }
 
         return responseDTO;
+    }
+
+    public SearchCategoryResponse getBySearchConfig(SearchCategoryDTO config) {
+        SearchCategoryResponse response = new SearchCategoryResponse();
+
+        ICategoryDTO category = findByIdWithoutSubcategories(config.getCategory().getId());
+        response.setCategory(category);
+
+        if (config.getCategory().isWithParent()) {
+            Category parentCategory = getByPathAndDepth(category.getPath(), 1);
+            response.setParentCategory(parentCategory);
+        }
+
+        return response;
     }
 }

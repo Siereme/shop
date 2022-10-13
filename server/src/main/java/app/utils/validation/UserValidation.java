@@ -19,7 +19,7 @@ public class UserValidation {
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
-    public void verifyUserCreate(User user){
+    public void verifyUserCreate(User user) {
         Map<String, String> messages = new HashMap<>();
 
         userRepo.findByEmail(user.getEmail())
@@ -27,22 +27,21 @@ public class UserValidation {
         userRepo.findByPhone(user.getPhone())
                 .ifPresent(verifyUserPhone -> messages.put("phone", "Пользователь с таким телефоном уже существует"));
 
-        if(!messages.isEmpty()){
+        if (!messages.isEmpty()) {
             throw new UserAlreadyExistsException(messages);
         }
     }
 
-    public void verifyLogin(User user, String email, String password){
+    public void verifyLogin(User user, String email, String password) {
         Map<String, String> messages = new HashMap<>();
 
-        if(!Objects.equals(email, user.getEmail())){
+        if (!Objects.equals(email, user.getEmail())) {
             messages.put("email", "Пользователя с таким email не существует");
-        }
-        else if(!passwordEncoder.matches(password, user.getPassword())){
+        } else if (!passwordEncoder.matches(password, user.getPassword())) {
             messages.put("password", "Неверный пароль");
         }
 
-        if(!messages.isEmpty()){
+        if (!messages.isEmpty()) {
             throw new UserAlreadyExistsException(messages);
         }
     }

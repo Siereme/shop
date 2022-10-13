@@ -5,6 +5,7 @@ import app.model.dto.search.ISearchResponse;
 import app.model.dto.search.OptionDTO;
 import app.model.dto.search.RangePriceDTO;
 import app.model.product.Product;
+import app.model.product.option.OptionValue;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface ISearchResponseBuilder<T extends ISearchResponse> {
 
     ISearchResponseBuilder<T> setCheckedOptions(List<OptionDTO> options);
 
-    ISearchResponseBuilder<T> setOptions();
+    SearchResponseBuilder<T> setOptions(List<List<OptionValue>> options);
 
     SearchResponseBuilder<T> setPage(long page, long pagesCount);
 

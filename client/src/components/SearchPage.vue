@@ -21,6 +21,7 @@ import ProductList from './product/ProductList.vue'
 import Facets from './facets/Facets.vue'
 import { computed, watch, onMounted } from 'vue'
 import { useStore } from "vuex"
+// import { useRoute, useRouter } from 'vue-router'
 import Pagination from './pagination/Pagination.vue'
 
 export default defineComponent({
@@ -36,6 +37,8 @@ export default defineComponent({
     },
     setup(props) {
         const store = useStore();   
+        // const router = useRouter()
+        // const route = useRoute()
 
         let loadData = () => api.search({'query': props.query})
                     .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
@@ -61,9 +64,7 @@ export default defineComponent({
 
         let getCheckedOptions = () => {
             let checkedOptions = []
-
-            let optionsList = options.value
-            optionsList.forEach(option => {
+            options.value.forEach(option => {
                 let values = option.values.filter(item => item.checked)
                 
                 if(values.length){
@@ -84,8 +85,10 @@ export default defineComponent({
             'options': getCheckedOptions()
         })
 
-        let handleClick = () => api.searchByOptions(getSearchRequestObject())
-
+        let handleClick = () => {
+            // router.replace({path: route.path, query: {query: route.query.query, page: 1}})
+            api.searchByOptions(getSearchRequestObject())
+        }
         return {
             shown,
             products,

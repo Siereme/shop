@@ -3,7 +3,7 @@ package app.exception;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserAlreadyExistsException extends RuntimeException{
+public class UserAlreadyExistsException extends RuntimeException {
     Map<String, String> messages = new HashMap<>();
 
     public UserAlreadyExistsException() {

@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
@@ -18,8 +17,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "options")
+@Indexed
 @Entity
 @Table(name = "product_option_value")
 public class OptionValue implements IOptionValue {

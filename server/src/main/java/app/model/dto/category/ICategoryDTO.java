@@ -1,6 +1,7 @@
 package app.model.dto.category;
 
 public interface ICategoryDTO {
+
     Long getId();
 
     String getName();

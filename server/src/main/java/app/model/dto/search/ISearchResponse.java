@@ -25,4 +25,5 @@ public interface ISearchResponse {
     void setPage(long page);
 
     void setPagesCount(long pagesCount);
+
 }

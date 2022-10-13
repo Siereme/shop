@@ -1,7 +1,6 @@
 package app.constructor.user;
 
 import app.model.user.IUser;
-import app.model.user.User;
 import app.utils.constants.user.UserRole;
 import app.utils.constants.user.UserStatus;
 

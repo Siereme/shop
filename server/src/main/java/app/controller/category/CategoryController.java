@@ -1,10 +1,8 @@
 package app.controller.category;
 
 import app.model.category.Category;
-import app.model.dto.category.CategoryConfigDTO;
 import app.model.dto.category.CategoryPathDTO;
 import app.model.dto.category.CategoryRequest;
-import app.model.dto.category.CategoryResponse;
 import app.repository.category.CategoryRepository;
 import app.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

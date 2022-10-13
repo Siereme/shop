@@ -5,7 +5,6 @@ import app.model.user.User;
 import app.repository.user.UserRepository;
 import app.security.JwtTokenProvider;
 import app.security.SecurityUser;
-import app.service.user.UserService;
 import app.utils.validation.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

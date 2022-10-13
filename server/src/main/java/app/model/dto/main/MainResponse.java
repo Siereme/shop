@@ -14,8 +14,10 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 public class MainResponse {
+
     private List<Category> categories;
     private ShoppingCart shoppingCart;
     private List<Order> orders;
     private List<Product> productsPopular;
+
 }

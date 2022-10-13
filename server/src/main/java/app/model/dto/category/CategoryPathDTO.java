@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class CategoryPathDTO {
+
     private String path;
     private int depth;
+
 }

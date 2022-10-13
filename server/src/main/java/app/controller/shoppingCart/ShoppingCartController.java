@@ -1,7 +1,6 @@
 package app.controller.shoppingCart;
 
 import app.model.shoppingCart.ShoppingCart;
-import app.model.shoppingCart.ShoppingCartProductItem;
 import app.repository.shoppingCart.ShoppingCartRepository;
 import app.service.shoppingCart.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;

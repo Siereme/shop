@@ -17,5 +17,9 @@ public class RangePriceDTO {
     double priceMin;
     double priceMax;
 
+    public boolean isValid() {
+        return rangeMin != rangeMax && priceMin != priceMax
+                && (rangeMin != priceMin || rangeMax != priceMax);
+    }
 
 }

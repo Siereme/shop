@@ -87,7 +87,7 @@ public class ProductService implements IProductService<Product> {
         }
 
         List<ShoppingCartProductItem> productItems = productRepo.findCartItems(id).orElseGet(Collections::emptyList);
-        if(!productItems.isEmpty()){
+        if (!productItems.isEmpty()) {
             productItems.forEach(cartItemRepo::delete);
         }
 

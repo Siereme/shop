@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class SearchCategoryResponse implements ISearchResponse{
+public class SearchCategoryResponse implements ISearchResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     ICategoryDTO category;

@@ -3,6 +3,7 @@ package app.model.dto.search;
 import java.util.List;
 
 public interface ISearchDTO {
+
     RangePriceDTO getRangePrice();
 
     List<OptionDTO> getOptions();
@@ -11,6 +12,8 @@ public interface ISearchDTO {
 
     int getPageSize();
 
+    int getShift();
+
     void setRangePrice(RangePriceDTO rangePrice);
 
     void setOptions(List<OptionDTO> options);
@@ -18,4 +21,7 @@ public interface ISearchDTO {
     void setPage(int page);
 
     void setPageSize(int pageSize);
+
+    void setShift(int shift);
+
 }

@@ -52,12 +52,12 @@ public class Category implements ICategory {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade =
-            {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.REFRESH,
-                    CascadeType.PERSIST
-            })
+                    {
+                            CascadeType.DETACH,
+                            CascadeType.MERGE,
+                            CascadeType.REFRESH,
+                            CascadeType.PERSIST
+                    })
     @JoinTable(name = "product_category",
             joinColumns = {@JoinColumn(name = "category_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "product_id", nullable = false)}
@@ -66,12 +66,12 @@ public class Category implements ICategory {
 
 
     @PreRemove
-    public void removeDependencies(){
+    public void removeDependencies() {
         Set.copyOf(products).forEach(this::removeProduct);
     }
 
 
-    public void removeProduct(Product product){
+    public void removeProduct(Product product) {
         products.remove(product);
         product.getCategories().remove(this);
     }

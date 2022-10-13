@@ -8,7 +8,7 @@ public interface IProductDTO extends IProduct {
 
     List<CategoryId> getCategories();
 
-    interface CategoryId{
+    interface CategoryId {
         Long getId();
     }
 }

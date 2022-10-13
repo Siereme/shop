@@ -1,8 +1,6 @@
 package app.controller.order;
 
 import app.model.order.address.ShopAddress;
-import app.model.order.receipt.Receipt;
-import app.repository.order.ReceiptRepository;
 import app.repository.order.ShopAddressRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

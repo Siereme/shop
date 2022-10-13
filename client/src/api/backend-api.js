@@ -212,7 +212,6 @@ let search = (request) => {
 }
 
 let searchByOptions = (options) => {
-    console.log(options)
     return axiosApi({
         method: 'post',
         url: '/search/options',

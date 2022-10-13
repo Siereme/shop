@@ -1,8 +1,7 @@
 package app.model.dto.order;
 
-import app.model.order.receipt.receiptDetail.ReceiptDetail;
 import app.model.order.payment.Payment;
-import app.model.order.receipt.Receipt;
+import app.model.order.receipt.receiptDetail.ReceiptDetail;
 import app.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +20,5 @@ public class OrderDTO {
     Payment payment;
     @Valid
     ReceiptDetail receiptDetail;
-    
+
 }

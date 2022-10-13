@@ -52,7 +52,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "where c.path like :path%")
     Optional<List<Product>> findByPath(String path);
 
-    @EntityGraph(attributePaths = { "categories", "options" })
+    @EntityGraph(attributePaths = {"categories", "options"})
     @Query(value = "select distinct p from Product p " +
             "left join p.categories c " +
             "left join p.options " +

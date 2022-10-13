@@ -16,5 +16,6 @@ public class SearchDTO implements ISearchDTO {
     List<OptionDTO> options;
     int page = 1;
     int pageSize = 24;
+    int shift;
 
 }
