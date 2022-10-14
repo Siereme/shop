@@ -4,6 +4,7 @@
 
 Main application modules:
 - Catalogue
+- Search
 - Shopping cart
 - Checkout
 - Order
@@ -14,8 +15,9 @@ Application consists of the following components:
   - Maven
   - PostgreSQL
   - Spring Data
-  - Hibernate Ehcache
   - Spring Security
+  - Hibernate Ehcache
+  - Hibernate Search / Lucene backend
 - Vue 3.2.13 / frontend application
 - Docker
 
