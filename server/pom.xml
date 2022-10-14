@@ -16,6 +16,16 @@
     <properties>
         <java.version>11</java.version>
         <hibernate-version>5.6.1.Final</hibernate-version>
+        <log4j.version>1.2.17</log4j.version>
+        <spring.data.jpa.version>2.7.3</spring.data.jpa.version>
+        <spring.starter.data.jpa.version>2.7.4</spring.starter.data.jpa.version>
+        <common.lang3.version>3.12.0</common.lang3.version>
+        <jwt.version>0.9.1</jwt.version>
+        <lombok.version>1.18.24</lombok.version>
+        <hibernate.ehcache.version>5.6.12.Final</hibernate.ehcache.version>
+        <hibernate.search.orm.version>6.1.7.Final</hibernate.search.orm.version>
+        <hibernate.search.backend.lucene.version>6.1.7.Final</hibernate.search.backend.lucene.version>
+        <spring.boot.maven.plugin.version>2.7.4</spring.boot.maven.plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -31,7 +41,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,27 +62,27 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>2.6.4</version>
+            <version>${spring.data.jpa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.6.7</version>
+            <version>${spring.starter.data.jpa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>${common.lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${jwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -93,19 +103,19 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version>5.6.0.Final</version>
+            <version>${hibernate.ehcache.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-mapper-orm</artifactId>
-            <version>6.1.7.Final</version>
+            <version>${hibernate.search.orm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-backend-lucene</artifactId>
-            <version>6.1.7.Final</version>
+            <version>${hibernate.search.backend.lucene.version}</version>
         </dependency>
 
     </dependencies>
@@ -115,7 +125,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.4</version>
+                <version>${spring.boot.maven.plugin.version}</version>
             </plugin>
         </plugins>
     </build>
