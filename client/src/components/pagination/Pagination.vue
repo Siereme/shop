@@ -16,7 +16,6 @@
   import { defineComponent } from 'vue'
   import { computed, watch, ref, onMounted } from 'vue'
   import { useStore } from "vuex"
-  import { useRoute, useRouter } from 'vue-router'
   import Paginate from "vuejs-paginate-next"
 
   export default defineComponent({
@@ -25,12 +24,11 @@
         Paginate
       },
       props: {
-        page: Number
+        page: Number,
+        handleClick: Function
       },
       setup(props) {
         const store = useStore()
-        const router = useRouter()
-        const route = useRoute()
 
         let pagesCount = computed(() => store.state.product.pagesCount)
         let currentPage = ref(1)
@@ -41,10 +39,7 @@
           () => currentPage.value = +props.page
         )
         
-        let setPage = page => {
-          console.log(page)
-          router.push({name: 'CategoryPage', params: {id: route.params.id}, query: {page: page}})
-        }
+        let setPage = page => props.handleClick(page)
           
         let shown = computed(() => pagesCount.value && pagesCount.value > 1)
 

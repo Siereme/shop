@@ -4,7 +4,7 @@
 
         <div class="search-main-container">
             <div class="search-facets-container">
-                <Facets :disableCategory="true" :handleOptionClick="handleClick"/>
+                <Facets :disableCategory="true" :handleClick="handleClick"/>
             </div>
             <div class="search-products-container">
                 <ProductList :products="products" />
@@ -21,7 +21,7 @@ import ProductList from './product/ProductList.vue'
 import Facets from './facets/Facets.vue'
 import { computed, watch, onMounted } from 'vue'
 import { useStore } from "vuex"
-// import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Pagination from './pagination/Pagination.vue'
 
 export default defineComponent({
@@ -37,8 +37,8 @@ export default defineComponent({
     },
     setup(props) {
         const store = useStore();   
-        // const router = useRouter()
-        // const route = useRoute()
+        const router = useRouter()
+        const route = useRoute()
 
         let loadData = () => api.search({'query': props.query})
                     .then((res) => res.status === 200 ? store.commit('setIsLoading', false) : null)
@@ -50,7 +50,7 @@ export default defineComponent({
         )
         watch(
             () => props.page,
-            () => loadData()
+            () => !store.state.main.isLoading ? loadData() : null
         )
 
         let products = computed(() => store.state.product.products)
@@ -79,15 +79,16 @@ export default defineComponent({
             return checkedOptions
         }
 
-        let getSearchRequestObject = () => ({
+        let getSearchRequestObject = (page) => ({
             'query': props.query,
             'rangePrice': store.state.facet.price,
-            'options': getCheckedOptions()
+            'options': getCheckedOptions(),
+            'page': page
         })
 
-        let handleClick = () => {
-            // router.replace({path: route.path, query: {query: route.query.query, page: 1}})
-            api.searchByOptions(getSearchRequestObject())
+        let handleClick = (page = 1) => {
+            router.replace({path: route.path, query: {query: route.query.query, page: page}})
+            api.searchByOptions(getSearchRequestObject(page))
         }
         return {
             shown,

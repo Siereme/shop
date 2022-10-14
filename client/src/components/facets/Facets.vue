@@ -1,8 +1,8 @@
 <template>
   <div class="facets">
     <FacetCategory v-if="!disableCategory" :mainCategory="mainCategory" :currentCategory="currentCategory" />
-    <FicetSlider :handleClick="handleOptionClick"/>
-    <FacetCommons :handleClick="handleOptionClick"/>
+    <FicetSlider :handleClick="handleClick"/>
+    <FacetCommons :handleClick="handleClick"/>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default defineComponent({
         currentCategory: {
             default: () => {}
         },
-        handleOptionClick: Function
+        handleClick: Function
     }
 })
 </script>

@@ -4,11 +4,11 @@
 
         <div class="category-main-container">
             <div class="category-facets-container">
-                <Facets :mainCategory="mainCategory" :currentCategory="currentCategory" :handleOptionClick="handleOptionClick" />
+                <Facets :mainCategory="mainCategory" :currentCategory="currentCategory" :handleClick="handleClick" />
             </div>
             <div class="category-products-container">
                 <ProductList :products="products" />
-                <Pagination :page="page" />
+                <Pagination :page="page" :handleClick="handleClick" />
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@ import ProductList from './product/ProductList.vue'
 import Facets from './facets/Facets.vue'
 import { computed, watch, onMounted } from 'vue'
 import { useStore } from "vuex"
-// import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Pagination from './pagination/Pagination.vue'
 
 export default defineComponent({
@@ -41,8 +41,8 @@ export default defineComponent({
     },
     setup(props) {
         const store = useStore()   
-        // const router = useRouter()
-        // const route = useRoute()
+        const router = useRouter()
+        const route = useRoute()
         
         let token = computed(() => store.getters.getAccessToken())
 
@@ -68,7 +68,7 @@ export default defineComponent({
         )
         watch(
             () => props.page,
-            () => loadData()
+            () => !store.state.main.isLoading ? loadData() : null
         )
         watch(
             () => token.value,
@@ -105,18 +105,21 @@ export default defineComponent({
             return checkedOptions
         }
 
-        let getSearchRequestObject = () => ({
+        let getSearchRequestObject = (page) => ({
             'category': {
                 'path': currentCategory.value.path,
                 'depth': currentCategory.value.depth
             },
             'rangePrice': store.state.facet.price,
-            'options': getCheckedOptions()
+            'options': getCheckedOptions(),
+            'page': page
         })
 
-        let handleOptionClick = () => {
-            // router.replace({path: route.path, params: {id: route.params.id}, query: {page: 1}})
-            api.searchCategoryByOptions(getSearchRequestObject())
+        let handleClick = (page = 1) => {
+            store.commit('setIsLoading', true)
+            router.replace({path: route.path, params: {id: route.params.id}, query: {page: page}})
+            api.searchCategoryByOptions(getSearchRequestObject(page))
+                .then(() => store.commit('setIsLoading', false))
         }
 
         return {
@@ -124,7 +127,7 @@ export default defineComponent({
             products,
             mainCategory,
             currentCategory,
-            handleOptionClick
+            handleClick
         }
     }
 })
