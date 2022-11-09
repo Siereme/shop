@@ -99,5 +99,18 @@ router.beforeEach(async (to) => {
   }
 });
 
+router.beforeEach((to, from) => {
+  if(from.path.includes('/search') && !to.path.includes('/search')){
+    store.commit('setQuery', '')
+  }
+});
+
+router.beforeEach((to, from) => {
+  if((from.path.includes('/search') || to.path.includes('/search') && to.path !== from.path)){
+    store.commit('setOptions', [])
+  }
+});
+
+
 
 export default router;

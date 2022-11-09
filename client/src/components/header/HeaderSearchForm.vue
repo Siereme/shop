@@ -22,7 +22,7 @@ export default defineComponent({
       const store = useStore()
       const router = useRouter()
 
-      let query = ref('')
+      let query = ref(store.state.facet.query ?? '')
 
       let handleSearch = () => {
         store.commit('setIsLoading', true)

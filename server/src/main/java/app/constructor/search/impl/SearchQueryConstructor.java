@@ -15,9 +15,11 @@ public class SearchQueryConstructor implements IQueryConstructor<SearchDTO> {
     public SearchPredicate search(SearchPredicateFactory f, SearchDTO config) {
         return f.bool(b -> {
             b.must(f.match().field("title").matching(config.getQuery())
-                    .constantScore().boost(6.0f));
-            b.should(f.match().field("description.shortDescription").matching(config.getQuery()));
-            b.should(f.match().field("description.longDescription").matching(config.getQuery()));
+                    .constantScore().boost(2.0f));
+            b.should(f.match().field("description.shortDescription").matching(config.getQuery())
+                    .constantScore().boost(1.0f));
+            b.should(f.match().field("description.longDescription").matching(config.getQuery())
+                    .constantScore().boost(1.0f));
         }).toPredicate();
     }
 
@@ -26,9 +28,11 @@ public class SearchQueryConstructor implements IQueryConstructor<SearchDTO> {
         return f.bool(b -> {
             b.must(f.bool(q -> {
                 q.must(f.match().field("title").matching(config.getQuery())
-                        .constantScore().boost(6.0f));
-                q.should(f.match().field("description.shortDescription").matching(config.getQuery()));
-                q.should(f.match().field("description.longDescription").matching(config.getQuery()));
+                        .constantScore().boost(2.0f));
+                q.should(f.match().field("description.shortDescription").matching(config.getQuery())
+                        .constantScore().boost(1.0f));
+                q.should(f.match().field("description.longDescription").matching(config.getQuery())
+                        .constantScore().boost(1.0f));
             }));
             if (config.getRangePrice() != null && config.getRangePrice().isValid()) {
                 b.must(f.range().field("price").between(config.getRangePrice().getPriceMin(), config.getRangePrice().getPriceMax()));

@@ -105,8 +105,6 @@
             <artifactId>hibernate-ehcache</artifactId>
             <version>${hibernate.ehcache.version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-mapper-orm</artifactId>
