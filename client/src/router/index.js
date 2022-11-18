@@ -105,8 +105,10 @@ router.beforeEach((to, from) => {
   }
 });
 
+let facetPages = ['/search', '/category']
+
 router.beforeEach((to, from) => {
-  if((from.path.includes('/search') || to.path.includes('/search') && to.path !== from.path)){
+  if(facetPages.some(path => !path.includes(to.path) && to.path !== from.path)){
     store.commit('setOptions', [])
   }
 });

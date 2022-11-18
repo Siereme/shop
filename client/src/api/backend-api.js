@@ -164,7 +164,6 @@ let searchCategory = (request) => {
 }
 
 let searchCategoryByOptions = (options) => {
-    console.log(options)
     return axiosApi({
         method: 'post',
         url: '/search/category/options',

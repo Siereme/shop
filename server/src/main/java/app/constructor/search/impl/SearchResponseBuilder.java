@@ -21,14 +21,12 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
     @Autowired
     private ProductOptionRepository optionRepo;
     private T response;
-    private final List<OptionValue> optionValues = new ArrayList<>();
     private final List<OptionValueDTO> checkedOptionValues = new ArrayList<>();
     private RangePriceDTO fullRangePrice;
 
     @Override
     public SearchResponseBuilder<T> create(T response) {
         this.response = response;
-        optionValues.clear();
         checkedOptionValues.clear();
         fullRangePrice = new RangePriceDTO();
         return this;
@@ -40,9 +38,8 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
         return this;
     }
 
-    @Override
-    public SearchResponseBuilder<T> setFullRangePrices(List<Double> prices) {
-        fullRangePrice = prices.stream()
+    private RangePriceDTO getRangePrice(List<Double> prices){
+        return prices.stream()
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),
                         list -> {
@@ -51,33 +48,30 @@ public class SearchResponseBuilder<T extends ISearchResponse> implements ISearch
                             return new RangePriceDTO(priceMin, priceMax, priceMin, priceMax);
                         }
                 ));
+    }
+
+    @Override
+    public SearchResponseBuilder<T> setFullRangePrices(List<Double> prices) {
+        fullRangePrice = getRangePrice(prices);
         return this;
     }
 
     @Override
     public SearchResponseBuilder<T> setRangePrice(RangePriceDTO rangePriceDTO) {
         RangePriceDTO rangePrice;
-        if (rangePriceDTO != null && rangePriceDTO.isValid()) {
+        if(rangePriceDTO == null || !rangePriceDTO.isValid()){
+            List<Double> prices = response.getProducts().stream()
+                    .map(Product::getPrice)
+                    .collect(Collectors.toList());
+            rangePrice = getRangePrice(prices);
+        }
+        else {
             rangePrice = new RangePriceDTO(
                     Math.max(rangePriceDTO.getRangeMin(), fullRangePrice.getRangeMin()),
                     Math.min(rangePriceDTO.getRangeMax(), fullRangePrice.getRangeMax()),
                     Math.max(rangePriceDTO.getPriceMin(), fullRangePrice.getPriceMin()),
                     Math.min(rangePriceDTO.getPriceMax(), fullRangePrice.getPriceMax())
             );
-        } else {
-            rangePrice = response.getProducts().stream()
-                    .collect(Collectors.collectingAndThen(
-                            Collectors.toList(),
-                            list -> {
-                                int minPrice = list.stream()
-                                        .map(product -> product.getPrice().intValue())
-                                        .min(Integer::compareTo).orElse(0);
-                                int maxPrice = list.stream()
-                                        .map(product -> product.getPrice().intValue())
-                                        .max(Integer::compareTo).orElse(0);
-                                return new RangePriceDTO(minPrice, maxPrice, minPrice, maxPrice);
-                            }
-                    ));
         }
         response.setRangePrice(rangePrice);
         return this;

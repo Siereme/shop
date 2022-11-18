@@ -35,7 +35,8 @@ public class SearchQueryConstructor implements IQueryConstructor<SearchDTO> {
                         .constantScore().boost(1.0f));
             }));
             if (config.getRangePrice() != null && config.getRangePrice().isValid()) {
-                b.must(f.range().field("price").between(config.getRangePrice().getPriceMin(), config.getRangePrice().getPriceMax()));
+                b.must(f.range().field("price")
+                        .between(config.getRangePrice().getPriceMin(), config.getRangePrice().getPriceMax()));
             }
             if (config.getOptions() != null && !config.getOptions().isEmpty()) {
                 for (OptionDTO option : config.getOptions()) {
