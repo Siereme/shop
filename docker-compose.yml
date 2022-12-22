@@ -39,7 +39,7 @@ services:
       - server
   client:
     build:
-      context: ./client
+      context: frontend
       dockerfile: client.dockerfile
     environment:
       PORT: 4000
