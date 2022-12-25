@@ -1,31 +1,32 @@
 package com.shop.orderserver.service.builder;
 
+import com.shop.orderserver.dto.LineItemDTO;
 import com.shop.orderserver.dto.UserDTO;
 import com.shop.orderserver.model.IOrder;
 import com.shop.orderserver.model.OrderLineItem;
+import com.shop.orderserver.model.OrderLineItems;
+import com.shop.orderserver.model.payment.Payment;
 import com.shop.orderserver.model.receipt.receiptDetail.ReceiptDetail;
+import com.shop.orderserver.model.status.OrderStatus;
+import com.shop.orderserver.model.userDetails.UserDetails;
+import com.shop.orderserver.utils.constant.OrderStatuses;
 
 import java.util.List;
 
 public interface IOrderBuilder<R extends IOrder, U extends UserDTO> {
 
-    void create();
+    UserDetails getUserDetails(U user);
 
-    void setUserDetails(U user);
+    ReceiptDetail getReceiptDetail(ReceiptDetail receiptDetail);
 
-    void setReceiptDetail(ReceiptDetail receiptDetail);
+    OrderLineItems getLineItems(List<LineItemDTO> lineItemsIds);
 
-    void setLineItems(List<OrderLineItem> lineItems);
+    Payment getPayment(Payment payment);
 
-    void setPayment(long paymentId);
+    OrderStatus getStatus(Payment payment);
+    OrderStatus getStatus(OrderStatuses statusType);
 
-    void setStatus();
-
-    void setStatus(String statusType);
-
-    void setTotal();
-
-    R getOrder();
+    double getTotal(List<OrderLineItem> lineItems);
 
     void clearShoppingCart(long customerId);
 

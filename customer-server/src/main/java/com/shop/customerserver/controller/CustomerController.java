@@ -1,5 +1,6 @@
 package com.shop.customerserver.controller;
 
+import com.shop.customerserver.dto.CustomerDTO;
 import com.shop.customerserver.exception.CustomerAlreadyExistsException;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.model.ICustomer;
@@ -60,7 +61,7 @@ public class CustomerController {
     }
 
     @PostMapping(value = "/add", consumes = {"application/json"})
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customerDTO) {
+    public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         try {
             ICustomer customer = customerService.createCustomer(customerDTO);
             return ResponseEntity.ok().body(customer);
@@ -80,7 +81,7 @@ public class CustomerController {
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customer customerDTO) {
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         try {
             Customer customer = customerService.updateCustomer(customerDTO);
 //            AuthenticationUserResponse response = authService.createToken(user);

@@ -1,5 +1,6 @@
 package com.shop.customerserver.utils.validation;
 
+import com.shop.customerserver.dto.CustomerDTO;
 import com.shop.customerserver.exception.CustomerAlreadyExistsException;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.repository.CustomerRepository;
@@ -19,7 +20,7 @@ public class CustomerValidation {
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
-    public void verifyCustomerCreate(Customer customer) {
+    public void verifyCustomerCreate(CustomerDTO customer) {
         Map<String, String> messages = new HashMap<>();
 
         customerRepo.findByEmail(customer.getEmail())

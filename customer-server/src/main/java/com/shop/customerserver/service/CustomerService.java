@@ -1,5 +1,6 @@
 package com.shop.customerserver.service;
 
+import com.shop.customerserver.dto.CustomerDTO;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.repository.CustomerRepository;
 import com.shop.customerserver.service.builder.CustomerFactory;
@@ -25,25 +26,22 @@ public class CustomerService implements ICustomerService<Customer> {
     private final CustomerFactory customerFactory;
     private final CustomerValidation customerValidation;
 
-    public CustomerRole getCustomerRole(Customer customer) {
-        return customer.getRole() != null && customer.getRole().getName() != null
-                ? CustomerRole.valueOf(customer.getRole().getName())
-                : CustomerRole.USER;
+    public CustomerRole getCustomerRole(CustomerDTO customer) {
+        return customer.getRole() != null ? customer.getRole() : CustomerRole.USER;
     }
 
-    public Customer createCustomer(Customer customer) {
+    public Customer createCustomer(CustomerDTO customer) {
         customerValidation.verifyCustomerCreate(customer);
         CustomerRole role = getCustomerRole(customer);
-        ICustomerConstructor<Customer> constructor = customerFactory.getFactory(role);
+        ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(role);
         Customer newCustomer = customerRepo.save(constructor.createCustomer(customer));
         restTemplate.postForLocation(ServiceUrl.CART_USER_ADD + newCustomer.getId(), null);
         return newCustomer;
     }
 
     public Customer createAnonymousCustomer() {
-        Customer customer = new Customer();
-        ICustomerConstructor<Customer> constructor = customerFactory.getFactory(CustomerRole.ANONYMOUS);
-        Customer newCustomer = customerRepo.save(constructor.createCustomer(customer));
+        ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(CustomerRole.ANONYMOUS);
+        Customer newCustomer = customerRepo.save(constructor.createCustomer(new CustomerDTO()));
         restTemplate.postForLocation(ServiceUrl.CART_USER_ADD + newCustomer.getId(), null);
         return newCustomer;
     }
@@ -54,9 +52,9 @@ public class CustomerService implements ICustomerService<Customer> {
         return !count.equals(0L);
     }
 
-    public Customer updateCustomer(Customer customer) {
+    public Customer updateCustomer(CustomerDTO customer) {
         CustomerRole role = getCustomerRole(customer);
-        ICustomerConstructor<Customer> constructor = customerFactory.getFactory(role);
+        ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(role);
         return constructor.updateCustomer(customer);
     }
 

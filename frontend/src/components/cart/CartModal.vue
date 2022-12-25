@@ -1,8 +1,8 @@
 <template>
-    <div class="cart-modal-container" v-if="carts.length">
+    <div class="cart-modal-container" v-if="cartProducts.length">
           <div class="cart-modal">
             <div class="cart-modal-products">
-                <CartModalProduct v-for="cart in carts" :key="cart.id" :cart="cart" />
+                <CartModalProduct v-for="product in cartProducts" :key="product.article" :product="product" />
             </div>
             <div class="cart-modal-bottom">
                 <div class="cart-modal-total">
@@ -35,7 +35,7 @@ export default defineComponent({
 
         let cartTotal = computed(() => store.state.cart.cartTotal)
 
-        let carts = computed(() => store.state.cart.cartProducts)
+        let cartProducts = computed(() => store.state.cart.cartProducts)
 
         let redirectToCheckout = () => {
             store.commit('setCartModalShown', false)
@@ -44,7 +44,7 @@ export default defineComponent({
 
         return {
             cartTotal,
-            carts,
+            cartProducts,
             redirectToCheckout
         }
     }

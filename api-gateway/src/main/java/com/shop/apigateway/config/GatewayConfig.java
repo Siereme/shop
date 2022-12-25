@@ -21,6 +21,7 @@ public class GatewayConfig {
                 .route("order", r -> r.path("/api/v1/order/**").filters(f -> f.filter(filter)).uri("lb://order-server"))
                 .route("customer", r -> r.path("/api/v1/customer/**").filters(f -> f.filter(filter)).uri("lb://customer-server"))
                 .route("shopping-cart", r -> r.path("/api/v1/shopping-cart/**").filters(f -> f.filter(filter)).uri("lb://shopping-cart-server"))
+                .route("static", r -> r.path("/assets/**").filters(f -> f.filter(filter)).uri("lb://static-server"))
                 .build();
     }
 

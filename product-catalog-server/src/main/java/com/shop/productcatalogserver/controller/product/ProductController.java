@@ -48,10 +48,20 @@ public class ProductController {
         }
     }
 
-    @GetMapping(value = "/article/{article}")
-    public ResponseEntity<?> findByArticle(@PathVariable Long article) {
+    @PostMapping(value = "/skus")
+    public ResponseEntity<?> findBySkus(@RequestBody List<Long> lineItemsIds) {
         try {
-            ILineItemDTO product = productRepo.findByArticle(article);
+            List<ILineItemDTO> lineItems = productRepo.findAllBySku(lineItemsIds);
+            return ResponseEntity.ok().body(lineItems);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/sku/{sku}")
+    public ResponseEntity<?> findByArticle(@PathVariable Long sku) {
+        try {
+            ILineItemDTO product = productRepo.findBySku(sku);
             return ResponseEntity.ok().body(product);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());

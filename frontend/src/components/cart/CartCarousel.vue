@@ -1,8 +1,8 @@
 <template>
   <div class="cart-carousel">
     <div class="cart-carousel_container" @click.stop="handleCart(-1)">
-        <div class="cart-carousel_decrement" :class="{'cart-carousel_button-disable': cartCount <= 1}">-</div>
-        <input type="text" class="cart-carousel_field" :value="cartCount" @click.stop="" @input.stop="handleFieldInput($event)">
+        <div class="cart-carousel_decrement" :class="{'cart-carousel_button-disable': productQuantity <= 1}">-</div>
+        <input type="text" class="cart-carousel_field" :value="productQuantity" @click.stop="" @input.stop="handleFieldInput($event)">
         <div class="cart-carousel_increment" @click.stop="handleCart(1)">+</div>
     </div>
     <div class="cart-carousel_delete" @click="deleteProduct()">
@@ -23,41 +23,41 @@ import {ref} from 'vue'
 export default defineComponent({
     name: 'CartCarousel',
     props: {
-        cart: {
+      product: {
             default: () => {}
-        }
+      }
     },
     setup(props) {
       const store = useStore();
       
-      let cartCount = ref(props.cart.count)
+      let productQuantity = ref(props.product.quantity)
 
-      let handleCart = (count) => {
-          if(+cartCount.value + +count >= 1){
-              cartCount.value = +cartCount.value + +count
-              api.addCartProduct(props.cart.product.id, cartCount.value)
+      let handleCart = (quantity) => {
+          if(+productQuantity.value + +quantity >= 1){
+              productQuantity.value = +productQuantity.value + +quantity
+              api.addCartProduct(props.product.article, productQuantity.value)
           }
       }
 
       let handleFieldInput = (event) => {
-        var count = event.target.value
-        if(!isNaN(count) && +count >= 1){
-            cartCount.value = count
-            api.addCartProduct(props.cart.product.id, +count)
+        var quantity = event.target.value
+        if(!isNaN(quantity) && +quantity >= 1){
+            productQuantity.value = quantity
+            api.addCartProduct(props.product.article, +quantity)
         } else {
-            cartCount.value = 1
-            api.addCartProduct(props.cart.product.id, 1)
+            productQuantity.value = 1
+            api.addCartProduct(props.product.article, 1)
         }
       }
 
       let deleteProduct = () => {
-        store.commit('removeCartProduct', props.cart.product.id)
+        store.commit('removeCartProduct', props.product.article)
         store.commit('setCartModalShown', store.getters.getCartCount() > 0)
-        api.removeCartProduct(props.cart.product.id)
+        api.removeCartProduct(props.product.article)
       }
 
       return {
-        cartCount,
+        productQuantity,
         handleCart,
         handleFieldInput,
         deleteProduct

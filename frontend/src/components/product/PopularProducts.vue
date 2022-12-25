@@ -16,9 +16,7 @@ export default defineComponent({
         ProductSnippet: ProductSnippetVue
     },
     props: {
-        products: {
-            default: () => {}
-        }
+        products: Array
     }
 })
 </script>

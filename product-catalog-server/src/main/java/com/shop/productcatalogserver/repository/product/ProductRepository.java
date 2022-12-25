@@ -59,5 +59,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "where c.path like :path%")
     Page<IProductDTO> findByPathWithCategoryIds(String path, Pageable page);
 
-    ILineItemDTO findByArticle(Long article);
+    ILineItemDTO findBySku(Long sku);
+
+    @Query(value = "select distinct p from Product p " +
+            "where p.sku in :skus")
+    List<ILineItemDTO> findAllBySku(List<Long> skus);
 }

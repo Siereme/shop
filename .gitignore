@@ -1,4 +1,4 @@
 .idea
 target/
-src/main/java/Product/
-src/main/java/OptionValue/
+Product
+OptionValue

@@ -39,7 +39,7 @@ public class ProductService implements IProductService<Product> {
     public Product addProduct(ProductDTO productDTO) {
         Product product = new Product();
 
-        product.setArticle(productDTO.getArticle());
+        product.setSku(productDTO.getSku());
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
         product.setImageLink(productDTO.getImageLink());

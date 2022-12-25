@@ -29,7 +29,7 @@ export default defineComponent({
         var button = event.target.closest('.cart-button')
         if(button && !button.classList.contains('in-cart')){
           button.classList.add('in-cart')
-          api.addCartProduct(props.productId, 1)
+          api.addCartProduct(props.article, 1)
         }
       }
 

@@ -9,14 +9,14 @@ export default {
         getCartProducts: (state) => () => {
             return state.cartProducts
         },
-        checkCartProduct: (state) => (productId) => {
-            return state.cartProducts.find(cartItem => cartItem.product.id === productId)
+        checkCartProduct: (state) => (article) => {
+            return state.cartProducts.find(product => product.article === article)
         },
         getCartCount: (state) => () => {
             return state.cartCount
         },
         getCartTotal: (state) => () => {
-            return state.cartProducts.reduce((total, cart) => total += cart.product.price * cart.count, 0)
+            return state.cartProducts.reduce((total, cart) => total += cart.price * cart.count, 0)
         },
         getCartModalShown: (state) => () => {
             return state.cartModalShown
@@ -29,9 +29,9 @@ export default {
         setCartProduct: (state, product) => {
             state.cartProducts.push(product)
         },
-        removeCartProduct: (state, productId) => {
+        removeCartProduct: (state, article) => {
             state.cartCount--
-            state.cartProducts = state.cartProducts.filter(cart => cart.product.id !== productId)
+            state.cartProducts = state.cartProducts.filter(product => product.article !== article)
         },
         setCartModalShown: (state, shown) => {
             state.cartModalShown = shown

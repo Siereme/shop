@@ -1,5 +1,6 @@
 package com.shop.customerserver.service.builder;
 
+import com.shop.customerserver.dto.CustomerDTO;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.model.role.Role;
 import com.shop.customerserver.repository.CustomerRepository;
@@ -11,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityNotFoundException;
 
-public abstract class AbstractCustomerConstructor implements ICustomerConstructor<Customer> {
+public abstract class AbstractCustomerConstructor implements ICustomerConstructor<Customer, CustomerDTO> {
 
     @Autowired
     protected CustomerRepository customerRepo;
@@ -21,26 +22,39 @@ public abstract class AbstractCustomerConstructor implements ICustomerConstructo
     protected PasswordEncoder passwordEncoder;
 
     @Override
-    public abstract Customer createCustomer(Customer customer);
+    public abstract Customer createCustomer(CustomerDTO customer);
 
     @Override
-    public abstract Customer createCustomer(Customer customer, CustomerStatus status);
+    public Customer createCustomer(CustomerDTO customerDTO, CustomerStatus status) {
+        Customer customer = new Customer();
+        customer.setName(customerDTO.getName());
+        customer.setSurname(customerDTO.getSurname());
+        customer.setPatronymic(customerDTO.getPatronymic());
+        customer.setPhone(customerDTO.getPhone());
+        customer.setEmail(customerDTO.getEmail());
+        customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
+        Role role = roleRepo.findByName(customerDTO.getRole().name())
+                .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
+        customer.setRole(role);
+        customer.setStatus(status);
+        return customer;
+    }
 
     @Override
-    public Customer updateCustomer(Customer customer) {
-        Customer newCustomer = customerRepo.findById(customer.getId())
+    public Customer updateCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerRepo.findById(customerDTO.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer is not found"));
 
-        newCustomer.setName(customer.getName());
-        newCustomer.setSurname(customer.getSurname());
-        newCustomer.setPatronymic(customer.getPatronymic());
-        newCustomer.setPhone(customer.getPhone());
-        newCustomer.setEmail(customer.getEmail());
-        Role role = roleRepo.findByName(customer.getRole().getName())
+        customer.setName(customerDTO.getName());
+        customer.setSurname(customerDTO.getSurname());
+        customer.setPatronymic(customerDTO.getPatronymic());
+        customer.setPhone(customerDTO.getPhone());
+        customer.setEmail(customerDTO.getEmail());
+        Role role = roleRepo.findByName(customerDTO.getRole().name())
                 .orElseThrow(() -> new EntityNotFoundException("Role is not found"));
-        newCustomer.setRole(role);
-        newCustomer.setStatus(customer.getStatus());
-        return newCustomer;
+        customer.setRole(role);
+        customer.setStatus(customerDTO.getStatus());
+        return customer;
     }
 
     @Override

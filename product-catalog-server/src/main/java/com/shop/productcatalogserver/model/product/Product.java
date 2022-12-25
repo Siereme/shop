@@ -32,8 +32,8 @@ public class Product implements IProduct {
     @Column(name = "product_id")
     private Long id;
 
-    @Column(name = "article_id")
-    private Long article;
+    @Column(name = "sku")
+    private Long sku;
 
     @FullTextField
     @Column(name = "name")

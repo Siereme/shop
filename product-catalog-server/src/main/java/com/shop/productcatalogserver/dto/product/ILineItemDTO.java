@@ -1,7 +1,7 @@
 package com.shop.productcatalogserver.dto.product;
 
 public interface ILineItemDTO {
-    long getArticle();
+    long getSku();
 
     String getName();
 
@@ -9,7 +9,7 @@ public interface ILineItemDTO {
 
     Double getPrice();
 
-    void setArticle(long article);
+    void setSku(long article);
 
     void setName(String name);
 

@@ -15,7 +15,6 @@ const userRole = computed(() => store.getters.getUserRole())
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: Home
   },
   {

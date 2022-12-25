@@ -1,19 +1,19 @@
 <template>
   <div class="cart-modal-product-item">
       <div class="product-image-wrapper">
-        <img :src="cart.imageLink || '/assets/img/plugs/not_found.png'" alt="" class="product-image">
+        <img :src="product.imageLink || '/assets/img/plugs/not_found.png'" alt="" class="product-image">
       </div>
       <div class="product-main">
         <div class="product-main__title">
-          <a href="#">{{cart.title}}</a>
+          <a href="#">{{product.name}}</a>
         </div>
         <div class="product-main__price">
           <div class="product-main__price-actual">
-            {{cart.price}} ₽
+            {{product.price}} ₽
           </div>
         </div>
       </div>
-      <CartCarousel :cart="cart" />
+      <CartCarousel :product="product" />
   </div>
 </template>
 
@@ -24,7 +24,7 @@ import CartCarouselVue from '../cart/CartCarousel.vue'
 export default defineComponent({
     name: "CartModalProduct",
     props: {
-        cart: {
+        product: {
             default: () => { }
         }
     },

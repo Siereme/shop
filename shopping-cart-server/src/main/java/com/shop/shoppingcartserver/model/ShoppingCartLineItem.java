@@ -14,7 +14,7 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 public class ShoppingCartLineItem {
 
-    private long article;
+    private long sku;
 
     private String name;
 

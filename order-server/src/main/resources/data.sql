@@ -25,9 +25,9 @@ INSERT INTO orders (id, customer_id, country, city, street, building, flat, name
 INSERT INTO orders (id, customer_id, country, city, street, building, flat, name, surname, patronymic, email, phone, receipt_id, payment_id, status_id, total) VALUES (3, 2, 'Россия', 'Москва', 'ул. Пушкина', '22А', '', 'User1', 'User1', 'User1', 'userdetails1@mail.com', '+79999999997', 1, 2, 3, 194500);
 alter sequence orders_id_seq restart with 4;
 
-INSERT INTO order_line_items (order_id, article, name, price, imagelink, quantity) VALUES (1, 1123, 'product1', 1000, '', 10);
-INSERT INTO order_line_items (order_id, article, name, price, imagelink, quantity) VALUES (1, 34324, 'product2', 1000, '', 10);
-INSERT INTO order_line_items (order_id, article, name, price, imagelink, quantity) VALUES (2, 1123, 'product1', 1000, '', 10);
-INSERT INTO order_line_items (order_id, article, name, price, imagelink, quantity) VALUES (2, 34324, 'product2', 1000, '', 100);
+INSERT INTO order_line_items (order_id, sku, name, price, imagelink, quantity) VALUES (1, 1123, 'product1', 1000, '', 10);
+INSERT INTO order_line_items (order_id, sku, name, price, imagelink, quantity) VALUES (1, 34324, 'product2', 1000, '', 10);
+INSERT INTO order_line_items (order_id, sku, name, price, imagelink, quantity) VALUES (2, 1123, 'product1', 1000, '', 10);
+INSERT INTO order_line_items (order_id, sku, name, price, imagelink, quantity) VALUES (2, 34324, 'product2', 1000, '', 100);
 
 

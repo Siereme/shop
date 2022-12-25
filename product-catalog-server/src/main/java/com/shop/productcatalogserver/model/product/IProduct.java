@@ -9,7 +9,7 @@ public interface IProduct {
 
     Long getId();
 
-    Long getArticle();
+    Long getSku();
 
     String getName();
 
@@ -23,7 +23,7 @@ public interface IProduct {
 
     void setId(Long id);
 
-    void setArticle(Long article);
+    void setSku(Long sku);
 
     void setName(String name);
 

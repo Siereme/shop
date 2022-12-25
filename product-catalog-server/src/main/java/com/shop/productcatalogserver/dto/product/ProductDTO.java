@@ -14,7 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ProductDTO {
 
-    private Long article;
+    private Long sku;
     private String name;
     private Double price;
     private String imageLink;

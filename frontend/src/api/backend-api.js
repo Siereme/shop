@@ -269,28 +269,28 @@ let loadCartProducts = () =>  {
     })
 }
 
-let addCartProduct = (productId, count) =>  {
+let addCartProduct = (article, quantity) =>  {
     const userId = store.getters.getUserId()
     return axiosApi({
         method: 'post',
-        url: `/shopping-cart/add?userId=${userId}&productId=${productId}&count=${count}`
+        url: `/shopping-cart/add?customerId=${userId}&article=${article}&count=${quantity}`
     })
     .then(res => {
-        store.commit('setCartProducts', res.data.cartItems ?? [])
+        store.commit('setCartProducts', res.data.cartLineItems.lineItems ?? [])
         store.commit('setCartCount', res.data.count ?? 0)
         store.commit('setCartTotal', res.data.total ?? 0)
         return res
     })
 }
 
-let removeCartProduct = (productId) =>  {
+let removeCartProduct = (article) =>  {
     const userId = store.getters.getUserId()
     return axiosApi({
         method: 'post',
-        url: `/shopping-cart/delete?userId=${userId}&productId=${productId}`
+        url: `/shopping-cart/delete?customerId=${userId}&article=${article}`
     })
     .then(res => {
-        store.commit('setCartProducts', res.data.cartItems ?? [])
+        store.commit('setCartProducts', res.data.cartLineItems.lineItems ?? [])
         store.commit('setCartCount', res.data.count ?? 0)
         store.commit('setCartTotal', res.data.total ?? 0)
         return res

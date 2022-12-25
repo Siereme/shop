@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Embeddable
@@ -19,6 +20,6 @@ public class OrderLineItems {
 
     @ElementCollection
     @CollectionTable(name = "order_line_items")
-    private List<OrderLineItem> lineItems;
+    private List<OrderLineItem> lineItems = new ArrayList<>();
 
 }
