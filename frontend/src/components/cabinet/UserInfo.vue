@@ -1,8 +1,8 @@
 <template>
-    <div class="user-info">
-        <StepUserInfo :user="userForm" :isDisabled="isDisabled" :errorMessages="messages" />
-        <button class="user-info__edit-button" v-if="isDisabled" @click="handleDisabled(false)">Редактировать</button>
-        <button class="user-info__save-button" v-if="!isDisabled" @click="saveUser()">Сохранить</button>
+    <div class="userDTO-info">
+        <StepUserInfo :userDTO="userForm" :isDisabled="isDisabled" :errorMessages="messages" />
+        <button class="userDTO-info__edit-button" v-if="isDisabled" @click="handleDisabled(false)">Редактировать</button>
+        <button class="userDTO-info__save-button" v-if="!isDisabled" @click="saveUser()">Сохранить</button>
     </div>
 </template>
 
@@ -48,8 +48,8 @@ export default defineComponent({
 </script>
 
 <style>
-.user-info__edit-button,
-.user-info__save-button{
+.userDTO-info__edit-button,
+.userDTO-info__save-button{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -70,7 +70,7 @@ export default defineComponent({
     border: 1px solid transparent;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
-.user-info .checkout__step-body:not(.is-disabled) .field-control__label {
+.userDTO-info .checkout__step-body:not(.is-disabled) .field-control__label {
     border-color: #36d146;
 }
 </style>

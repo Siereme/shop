@@ -1,7 +1,7 @@
 <template>
     <div class="registration-container" v-if="shown">
         <div class="modal-title">Регистрация</div>
-        <StepUserInfo :user="user" :shownPassword="true" :errorMessages="messages" />
+        <StepUserInfo :userDTO="userDTO" :shownPassword="true" :errorMessages="messages" />
         <div class="modal-submit" @click="handleRegistration()">Зарегестрироваться</div>
         <div class="switch-modal-button" @click="showLogin()">Войти</div>
     </div>
@@ -29,7 +29,7 @@ export default defineComponent({
 
         let showLogin = () => store.commit('setShownAuthModal', 'login')
 
-        let user = ref({})
+        let userDTO = ref({})
 
         let messages = ref({})
 
@@ -42,7 +42,7 @@ export default defineComponent({
         let handleRegistration = () => {
             passwordValidation()
                 ? null
-                : api.createUser(user.value)
+                : api.createUser(userDTO.value)
                 .then(res => {
                     if(res.status === 200){
                         store.commit('setShownAuthModal', 'login')
@@ -52,11 +52,11 @@ export default defineComponent({
 
         let passwordValidation = () => {
             var messagesObj = {}
-            if(!user.value.password || !user.value.repeatPassword){
+            if(!userDTO.value.password || !userDTO.value.repeatPassword){
                 messagesObj.password = errorMessages.password
                 messagesObj.repeatPassword = errorMessages.repeatPassword
             }            
-            else if(user.value.password !== user.value.repeatPassword){
+            else if(userDTO.value.password !== userDTO.value.repeatPassword){
                 messagesObj.password = errorMessages.unRepeated
                 messagesObj.repeatPassword = errorMessages.unRepeated
             }
@@ -64,7 +64,7 @@ export default defineComponent({
         }
 
         return {
-            user,
+            userDTO,
             messages,
             showLogin,
             handleRegistration

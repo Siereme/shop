@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <div class="checkout__step-body">
-                            <StepUserInfo :user="userForm" :errorMessages="errorMessages" />
+                            <StepUserInfo :userDTO="userForm" :errorMessages="errorMessages" />
                         </div>
                     </div>
                     <div class="checkout__step">
@@ -89,9 +89,9 @@ export default defineComponent({
             return store.state.cart.cartTotal
         })
 
-        let user = computed(() => store.state.user.user)
-        let userForm = ref(user.value && user.value.status !== 'ANONYMOUS' ? Object.assign({}, user.value) : {})
-        let userSend = ref(user.value)
+        let userDTO = computed(() => store.state.userDTO.userDTO)
+        let userForm = ref(userDTO.value && userDTO.value.status !== 'ANONYMOUS' ? Object.assign({}, userDTO.value) : {})
+        let userSend = ref(userDTO.value)
         
         let receiptWrapper = ref({})
         let paymentWrapper = ref({})
@@ -111,7 +111,7 @@ export default defineComponent({
         }
 
         let createOrder = () => ({
-            'user': getUserData(),
+            'userDTO': getUserData(),
             'receiptDetail': receiptWrapper.value.getReceiptDetail(),
             'payment': paymentWrapper.value.getPayment()
         })
@@ -139,7 +139,7 @@ export default defineComponent({
         let handleReceiptError = flag => shownReceiptError.value = flag ?? false
 
         return {
-            user,
+            userDTO,
             userForm,
             orderTotal,
             paymentWrapper,
@@ -313,7 +313,7 @@ h1 {
     justify-content: center;
     height: 34px;
     padding: 0 20px 1px;
-    user-select: none;
+    userDTO-select: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
     text-align: center;
     vertical-align: middle;

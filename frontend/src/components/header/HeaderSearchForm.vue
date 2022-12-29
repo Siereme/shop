@@ -92,10 +92,10 @@ a {
     margin: -1px -1px -1px 0;
     padding: 0;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    -webkit-userDTO-select: none;
+    -moz-userDTO-select: none;
+    -ms-userDTO-select: none;
+    userDTO-select: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
     text-align: center;
     vertical-align: middle;

@@ -119,7 +119,7 @@ a {
     border: 1px solid #ced8e1;
     border-radius: 4px;
     background-color: transparent;
-    user-select: none;
+    userDTO-select: none;
 }
 .cart-carousel_field{
     flex: 1 1 auto;

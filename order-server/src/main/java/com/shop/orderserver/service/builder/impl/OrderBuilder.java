@@ -18,22 +18,21 @@ import com.shop.orderserver.utils.constant.OrderPayments;
 import com.shop.orderserver.utils.constant.OrderStatuses;
 import com.shop.orderserver.utils.constant.ServiceUrl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class OrderBuilder implements IOrderBuilder<Order, UserDTO> {
 
-    private final RestTemplate restTemplate;
+    private final WebClient.Builder webClientBuilder;
     private final ReceiptRepository receiptRepo;
     private final PaymentRepository paymentRepo;
     private final OrderStatusRepository statusRepo;
@@ -65,17 +64,36 @@ public class OrderBuilder implements IOrderBuilder<Order, UserDTO> {
 
     @Override
     public OrderLineItems getLineItems(List<LineItemDTO> lineItemsDTO) {
-        List<Long> lineItemsIds = lineItemsDTO.stream().map(LineItemDTO::getSku).collect(Collectors.toList());
-        OrderLineItem[] lineItemsArray = restTemplate.postForObject(ServiceUrl.CATALOG_PRODUCT_SKUS,
-                lineItemsIds, OrderLineItem[].class);
+        List<String> skus = lineItemsDTO.stream()
+                .map(LineItemDTO::getSku)
+                .map(String::valueOf)
+                .collect(Collectors.toList());
 
-        List<OrderLineItem> lineItems = Arrays.stream(Objects.requireNonNull(lineItemsArray))
-                .peek(item -> {
-                    int quantity = lineItemsDTO.stream()
-                            .filter(itemDTO -> itemDTO.getSku() == item.getSku())
-                            .findFirst().orElseGet(LineItemDTO::new).getQuantity();
-                    item.setQuantity(quantity);
-                }).collect(Collectors.toList());
+//        List<OrderLineItem> lineItems = webClientBuilder.build()
+//                .post().uri(uriBuilder -> uriBuilder
+//                        .path(ServiceUrl.CATALOG_PRODUCT_SKUS)
+//                        .queryParams(queryParams)
+//                        .build())
+//                .retrieve()
+//                .bodyToMono(new ParameterizedTypeReference<List<OrderLineItem>>() {})
+//                .block();
+
+        List<OrderLineItem> lineItems = webClientBuilder.build()
+                .post().uri(ServiceUrl.CATALOG_PRODUCT_SKUS,
+                        uriBuilder ->
+                                uriBuilder.queryParam("skus", skus).build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<OrderLineItem>>() {})
+                .block();
+        Optional.ofNullable(lineItems)
+                        .orElseThrow(() -> new EntityNotFoundException("Order Line Items is not found"));
+
+        lineItems.forEach(item -> {
+                int quantity = lineItemsDTO.stream()
+                        .filter(itemDTO -> itemDTO.getSku() == item.getSku())
+                        .findFirst().orElseGet(LineItemDTO::new).getQuantity();
+                item.setQuantity(quantity);
+        });
 
         return new OrderLineItems(lineItems);
     }
@@ -109,7 +127,8 @@ public class OrderBuilder implements IOrderBuilder<Order, UserDTO> {
 
     @Override
     public void clearShoppingCart(long customerId) {
-        restTemplate.delete(ServiceUrl.CART_CLEAR + customerId);
+        webClientBuilder.build()
+                        .delete().uri(ServiceUrl.CART_CLEAR + customerId);
     }
 
 }

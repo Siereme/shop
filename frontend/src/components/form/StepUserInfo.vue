@@ -1,5 +1,5 @@
 <template>
-    <div class="step-user-info" :class="{'is-disabled': isDisabled}">
+    <div class="step-userDTO-info" :class="{'is-disabled': isDisabled}">
         <div class="fields-group" ref="contacts">
             <FieldInput :isDisabled="isDisabled"
                 :placeholder="'Телефон'"  :type="'phone'" :value="userData.phone ?? ''"
@@ -63,7 +63,7 @@ export default defineComponent({
         shownPassword: {
             default: () => {}
         },
-        user: {
+        userDTO: {
             default: () => {}
         },
         errorMessages: {
@@ -75,11 +75,11 @@ export default defineComponent({
         let contacts = ref(null)
         let fullName = ref(null)
         let passwords = ref(null)
-        let userData = ref(props.user)
+        let userData = ref(props.userDTO)
 
         watch(
-            () => props.user,
-            user => userData.value = user
+            () => props.userDTO,
+            userDTO => userData.value = userDTO
         )
 
         watch(

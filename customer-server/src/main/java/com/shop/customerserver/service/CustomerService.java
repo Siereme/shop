@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -20,8 +21,7 @@ import javax.persistence.EntityNotFoundException;
 @Transactional
 @RequiredArgsConstructor
 public class CustomerService implements ICustomerService<Customer> {
-
-    private final RestTemplate restTemplate;
+    private final WebClient.Builder webClientBuilder;
     private final CustomerRepository customerRepo;
     private final CustomerFactory customerFactory;
     private final CustomerValidation customerValidation;
@@ -35,14 +35,18 @@ public class CustomerService implements ICustomerService<Customer> {
         CustomerRole role = getCustomerRole(customer);
         ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(role);
         Customer newCustomer = customerRepo.save(constructor.createCustomer(customer));
-        restTemplate.postForLocation(ServiceUrl.CART_USER_ADD + newCustomer.getId(), null);
+        webClientBuilder.build()
+                .post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId())
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
         return newCustomer;
     }
 
     public Customer createAnonymousCustomer() {
         ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(CustomerRole.ANONYMOUS);
         Customer newCustomer = customerRepo.save(constructor.createCustomer(new CustomerDTO()));
-        restTemplate.postForLocation(ServiceUrl.CART_USER_ADD + newCustomer.getId(), null);
+        webClientBuilder.build().post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId());
         return newCustomer;
     }
 

@@ -4,7 +4,7 @@
         <div class="personal-cabinet-container">
             <div class="cabinet-menu">
                 <div class="cabinet-menu-list">
-                    <router-link class="cabinet-menu-item" to="/cabinet/user">Личные данные</router-link>
+                    <router-link class="cabinet-menu-item" to="/cabinet/userDTO">Личные данные</router-link>
                     <router-link class="cabinet-menu-item" to="/cabinet/orders-history">История заказов</router-link>
                     <div class="cabinet-menu-item" @click="handleLogout()">Выйти</div>
                 </div>

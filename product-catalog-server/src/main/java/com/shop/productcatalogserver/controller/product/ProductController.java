@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -49,9 +50,9 @@ public class ProductController {
     }
 
     @PostMapping(value = "/skus")
-    public ResponseEntity<?> findBySkus(@RequestBody List<Long> lineItemsIds) {
+    public ResponseEntity<?> findBySkus(@RequestParam List<Long> sku) {
         try {
-            List<ILineItemDTO> lineItems = productRepo.findAllBySku(lineItemsIds);
+            List<ILineItemDTO> lineItems = productRepo.findAllBySku(sku);
             return ResponseEntity.ok().body(lineItems);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());

@@ -111,7 +111,7 @@ a {
     border-color: #0595e6;
     background-color: #0595e6;
     cursor: pointer;
-    user-select: none;
+    userDTO-select: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
     text-align: center;
     vertical-align: middle;

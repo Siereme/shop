@@ -71,7 +71,7 @@ a {
     padding: 0!important;
     color: #fff;
     background-color: #0595e6;
-    user-select: none;
+    userDTO-select: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
     cursor: pointer;
     border: 1px solid transparent;

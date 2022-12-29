@@ -8,7 +8,7 @@ import com.shop.shoppingcartserver.utils.constant.ServiceUrl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class ShoppingCartService implements IShoppingCartService {
 
     private final ShoppingCartRepository cartRepo;
-    private final RestTemplate restTemplate;
+    private final WebClient.Builder webClientBuilder;
 
 
     public ShoppingCart setCartItem(Long customerId, Long sku, int quantity) {
@@ -39,10 +39,11 @@ public class ShoppingCartService implements IShoppingCartService {
             return cart;
         }
 
-        ShoppingCartLineItem cartLineItem = restTemplate.getForEntity(
-                ServiceUrl.PRODUCT_SKU +  sku,
-                ShoppingCartLineItem.class
-        ).getBody();
+        ShoppingCartLineItem cartLineItem = webClientBuilder.build()
+                        .get().uri(ServiceUrl.PRODUCT_SKU + sku)
+                        .retrieve()
+                        .bodyToMono(ShoppingCartLineItem.class)
+                        .block();
         Optional.ofNullable(cartLineItem)
                 .orElseThrow(() -> new EntityNotFoundException("Product is not found"));
         cartLineItem.setQuantity(quantity);

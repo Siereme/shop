@@ -51,7 +51,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<?> addToCart(Long customerId, Long sku, int count) {
+    public ResponseEntity<?> addToCart(@RequestParam Long customerId, @RequestParam Long sku, @RequestParam int count) {
         try {
             ShoppingCart cartItem = cartService.setCartItem(customerId, sku, count);
             return ResponseEntity.ok().body(cartItem);

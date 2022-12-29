@@ -3,13 +3,13 @@
         <div class="modal-title">Вход</div>
         <div class="fields-wrapper" ref="fields">
             <FieldInput :placeholder="'Email'" 
-                :type="'email'" :value="user.email ?? ''" 
-                :setFieldValue="(event) => handleForm.setEmail(event.target, user)"
+                :type="'email'" :value="userDTO.email ?? ''"
+                :setFieldValue="(event) => handleForm.setEmail(event.target, userDTO)"
                 :clearValidation="(event) => handleForm.clearValidationError(event.target)"
             />
             <FieldInput :placeholder="'Пароль'" 
-                :type="'password'" :value="user.password ?? ''" 
-                :setFieldValue="(event) => handleForm.setFieldValue(event.target, user)"
+                :type="'password'" :value="userDTO.password ?? ''"
+                :setFieldValue="(event) => handleForm.setFieldValue(event.target, userDTO)"
                 :clearValidation="(event) => handleForm.clearValidationError(event.target)"
             />
         </div>
@@ -41,12 +41,12 @@ export default defineComponent({
         const store = useStore()
         const router = useRouter()
 
-        let user = ref({})
+        let userDTO = ref({})
         let messages = ref({})
         let fields = ref({})
 
         let handleLogin = () => {
-            api.login(user.value.email, user.value.password)
+            api.login(userDTO.value.email, userDTO.value.password)
             .then(res => {
                 if(res.status === 200){
                     store.commit('setShownAuthModal', 'hide')
@@ -72,7 +72,7 @@ export default defineComponent({
         let showRegistration = () => store.commit('setShownAuthModal', 'registration')
 
         return {
-            user,
+            userDTO,
             handleForm,
             messages,
             fields,
