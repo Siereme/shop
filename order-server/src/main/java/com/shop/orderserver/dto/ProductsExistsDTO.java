@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineItemDTO {
+public class ProductsExistsDTO {
 
-    long sku;
-    int quantity;
+    List<Long> exists;
+    List<Long> notExists;
 
 }

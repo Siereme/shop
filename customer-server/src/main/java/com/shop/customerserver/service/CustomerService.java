@@ -9,13 +9,13 @@ import com.shop.customerserver.utils.constant.CustomerRole;
 import com.shop.customerserver.utils.constant.ServiceUrl;
 import com.shop.customerserver.utils.validation.CustomerValidation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Duration;
 
 @Service
 @Transactional
@@ -39,14 +39,20 @@ public class CustomerService implements ICustomerService<Customer> {
                 .post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId())
                 .retrieve()
                 .bodyToMono(Void.class)
-                .block();
+                .then()
+                .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(100)));
         return newCustomer;
     }
 
     public Customer createAnonymousCustomer() {
         ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(CustomerRole.ANONYMOUS);
         Customer newCustomer = customerRepo.save(constructor.createCustomer(new CustomerDTO()));
-        webClientBuilder.build().post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId());
+        webClientBuilder.build()
+                .post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId())
+                .retrieve()
+                .bodyToMono(Void.class)
+                .then()
+                .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(100)));
         return newCustomer;
     }
 

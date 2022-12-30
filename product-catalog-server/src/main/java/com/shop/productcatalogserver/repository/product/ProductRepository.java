@@ -64,4 +64,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query(value = "select distinct p from Product p " +
             "where p.sku in :skus")
     List<ILineItemDTO> findAllBySku(List<Long> skus);
+
+    @Query(value = "select distinct p.sku from Product p " +
+            "where p.sku in :skus")
+    List<Long> checkExists(List<Long> skus);
 }

@@ -38,27 +38,15 @@ public class AuthenticationService {
     @Value("${jwt.refreshHeader}")
     private String refreshHeader;
 
-    public AuthenticationResponse login(String email, String password) throws JwtAuthenticationException {
+    public AuthenticationResponse login(String email, String password) {
         UserDetails userDetails;
         try {
-            if (userDetailsManager.userExists(email)) {
-                userDetails = userDetailsManager.loadUserByUsername(email);
-            } else {
-                UserDTO user = webClientBuilder.build()
-                        .get().uri(ServiceUrl.CUSTOMER_GET_EMAIL + email)
-                        .retrieve().bodyToMono(UserDTO.class).block();
-                Optional.ofNullable(user)
-                        .orElseThrow(() -> new JwtAuthenticationException("User not found"));
-                userDetails = UserDetailsImpl.fromUser(user);
-            }
+            userDetails = userDetailsManager.loadUserByUsername(email);
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
         }
 
         userValidation.validateLogin(userDetails, email, password);
-        if(!userDetailsManager.userExists(userDetails.getUsername())){
-            userDetailsManager.createUser(userDetails);
-        }
 
         Map<String, String> claims = jwtTokenProvider.createClaims(userDetails);
         String accessToken = jwtTokenProvider.createAccessToken(email, claims);
@@ -72,13 +60,12 @@ public class AuthenticationService {
                 .put().uri(ServiceUrl.CUSTOMER_UPDATE)
                 .body(BodyInserters.fromValue(user))
                 .retrieve().bodyToMono(UserDTO.class).block();
-        Optional.ofNullable(userDTO)
-                .orElseThrow(() -> new JwtAuthenticationException("User not found"));
 
-        UserDetails userDetails = UserDetailsImpl.fromUser(userDTO);
+        UserDetails userDetails = Optional.ofNullable(userDTO)
+                .map(UserDetailsImpl::fromUser)
+                .orElseThrow(() -> new JwtAuthenticationException("User update exception"));
         try {
-            String email = user.get("lastEmail");
-            userDetailsManager.deleteUser(email);
+            userDetailsManager.deleteUser(user.get("lastEmail"));
             userDetailsManager.createUser(userDetails);
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
@@ -95,10 +82,10 @@ public class AuthenticationService {
         UserDTO user = webClientBuilder.build()
                 .get().uri(ServiceUrl.CUSTOMER_ADD_ANONYMOUS)
                 .retrieve().bodyToMono(UserDTO.class).block();
-        Optional.ofNullable(user)
-                .orElseThrow(() -> new JwtAuthenticationException("Error when creating an anonymous user"));
 
-        UserDetails userDetails = UserDetailsImpl.fromUser(user);
+        UserDetails userDetails = Optional.ofNullable(user)
+                .map(UserDetailsImpl::fromUser)
+                .orElseThrow(() -> new JwtAuthenticationException("Error creating an anonymous user"));
         userDetailsManager.createUser(userDetails);
 
         Map<String, String> claims = jwtTokenProvider.createClaims(userDetails);
@@ -113,10 +100,10 @@ public class AuthenticationService {
                 .post().uri(ServiceUrl.CUSTOMER_ADD)
                 .body(BodyInserters.fromValue(user))
                 .retrieve().bodyToMono(UserDTO.class).block();
-        Optional.ofNullable(userDTO)
-                .orElseThrow(() -> new JwtAuthenticationException("User not found"));
 
-        UserDetails userDetails = UserDetailsImpl.fromUser(userDTO);
+        UserDetails userDetails = Optional.ofNullable(userDTO)
+                .map(UserDetailsImpl::fromUser)
+                .orElseThrow(() -> new JwtAuthenticationException("User creation error"));
         try {
             userDetailsManager.createUser(userDetails);
         } catch (UsernameNotFoundException e) {
@@ -131,7 +118,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse refreshAuthentication(Jwt jwt, Principal principal) {
-        if(!jwtTokenProvider.validateRefreshToken(jwt)){
+        if (!jwtTokenProvider.validateRefreshToken(jwt)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
         }
 

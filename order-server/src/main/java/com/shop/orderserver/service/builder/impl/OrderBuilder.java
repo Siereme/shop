@@ -1,6 +1,6 @@
 package com.shop.orderserver.service.builder.impl;
 
-import com.shop.orderserver.dto.LineItemDTO;
+import com.shop.orderserver.dto.ProductsExistsDTO;
 import com.shop.orderserver.dto.UserDTO;
 import com.shop.orderserver.model.Order;
 import com.shop.orderserver.model.OrderLineItem;
@@ -18,14 +18,14 @@ import com.shop.orderserver.utils.constant.OrderPayments;
 import com.shop.orderserver.utils.constant.OrderStatuses;
 import com.shop.orderserver.utils.constant.ServiceUrl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -63,37 +63,23 @@ public class OrderBuilder implements IOrderBuilder<Order, UserDTO> {
     }
 
     @Override
-    public OrderLineItems getLineItems(List<LineItemDTO> lineItemsDTO) {
-        List<String> skus = lineItemsDTO.stream()
-                .map(LineItemDTO::getSku)
+    public OrderLineItems getLineItems(List<OrderLineItem> lineItems) {
+        List<String> skus = lineItems.stream()
+                .map(OrderLineItem::getSku)
                 .map(String::valueOf)
                 .collect(Collectors.toList());
 
-//        List<OrderLineItem> lineItems = webClientBuilder.build()
-//                .post().uri(uriBuilder -> uriBuilder
-//                        .path(ServiceUrl.CATALOG_PRODUCT_SKUS)
-//                        .queryParams(queryParams)
-//                        .build())
-//                .retrieve()
-//                .bodyToMono(new ParameterizedTypeReference<List<OrderLineItem>>() {})
-//                .block();
-
-        List<OrderLineItem> lineItems = webClientBuilder.build()
-                .post().uri(ServiceUrl.CATALOG_PRODUCT_SKUS,
+        ProductsExistsDTO productsExists = webClientBuilder.build()
+                .post().uri(ServiceUrl.CATALOG_PRODUCT_EXISTS,
                         uriBuilder ->
-                                uriBuilder.queryParam("skus", skus).build())
+                                uriBuilder.queryParam("sku", skus).build())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<OrderLineItem>>() {})
+                .bodyToMono(ProductsExistsDTO.class)
                 .block();
-        Optional.ofNullable(lineItems)
-                        .orElseThrow(() -> new EntityNotFoundException("Order Line Items is not found"));
 
-        lineItems.forEach(item -> {
-                int quantity = lineItemsDTO.stream()
-                        .filter(itemDTO -> itemDTO.getSku() == item.getSku())
-                        .findFirst().orElseGet(LineItemDTO::new).getQuantity();
-                item.setQuantity(quantity);
-        });
+        if (productsExists == null || !productsExists.getNotExists().isEmpty()) {
+            throw new EntityNotFoundException("Order Line Items is not found");
+        }
 
         return new OrderLineItems(lineItems);
     }
@@ -128,7 +114,12 @@ public class OrderBuilder implements IOrderBuilder<Order, UserDTO> {
     @Override
     public void clearShoppingCart(long customerId) {
         webClientBuilder.build()
-                        .delete().uri(ServiceUrl.CART_CLEAR + customerId);
+                .delete()
+                .uri(ServiceUrl.CART_CLEAR + customerId)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .then()
+                .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(100)));
     }
 
 }

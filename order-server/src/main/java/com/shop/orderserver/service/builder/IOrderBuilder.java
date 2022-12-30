@@ -1,6 +1,5 @@
 package com.shop.orderserver.service.builder;
 
-import com.shop.orderserver.dto.LineItemDTO;
 import com.shop.orderserver.dto.UserDTO;
 import com.shop.orderserver.model.IOrder;
 import com.shop.orderserver.model.OrderLineItem;
@@ -19,11 +18,12 @@ public interface IOrderBuilder<R extends IOrder, U extends UserDTO> {
 
     ReceiptDetail getReceiptDetail(ReceiptDetail receiptDetail);
 
-    OrderLineItems getLineItems(List<LineItemDTO> lineItemsIds);
+    OrderLineItems getLineItems(List<OrderLineItem> lineItemsIds);
 
     Payment getPayment(Payment payment);
 
     OrderStatus getStatus(Payment payment);
+
     OrderStatus getStatus(OrderStatuses statusType);
 
     double getTotal(List<OrderLineItem> lineItems);

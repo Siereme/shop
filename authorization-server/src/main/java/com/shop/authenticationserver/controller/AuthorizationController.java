@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -27,33 +28,53 @@ public class AuthorizationController {
     private final AuthenticationService authService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestParam String email, @RequestParam String password) throws JwtAuthenticationException {
-        AuthenticationResponse response = authService.login(email, password);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
+        try {
+            AuthenticationResponse response = authService.login(email, password);
+            return ResponseEntity.ok().body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @PutMapping(path = "/login/update")
-    public ResponseEntity<AuthenticationResponse> updateLogin(@RequestBody Map<String, String> user) throws JwtAuthenticationException {
-        AuthenticationResponse response = authService.loginUpdate(user);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> updateLogin(@RequestBody Map<String, String> user) throws JwtAuthenticationException {
+        try {
+            AuthenticationResponse response = authService.loginUpdate(user);
+            return ResponseEntity.ok().body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/login/anonymous")
-    public ResponseEntity<AuthenticationResponse> anonymousAuthenticate() throws JwtAuthenticationException {
-        AuthenticationResponse response = authService.loginAnonymous();
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> anonymousAuthenticate() throws JwtAuthenticationException {
+        try {
+            AuthenticationResponse response = authService.loginAnonymous();
+            return ResponseEntity.ok().body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @PostMapping(path = "/registration")
-    public ResponseEntity<AuthenticationResponse> registration(@RequestBody Map<String, String> user) throws JwtAuthenticationException {
-        AuthenticationResponse response = authService.registration(user);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> registration(@RequestBody Map<String, String> user) throws JwtAuthenticationException {
+        try {
+            AuthenticationResponse response = authService.registration(user);
+            return ResponseEntity.ok().body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/refresh")
-    public ResponseEntity<AuthenticationResponse> refreshAuthenticate(@AuthenticationPrincipal Jwt jwt, Principal principal) {
-        AuthenticationResponse response = authService.refreshAuthentication(jwt, principal);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> refreshAuthenticate(@AuthenticationPrincipal Jwt jwt, Principal principal) {
+        try {
+            AuthenticationResponse response = authService.refreshAuthentication(jwt, principal);
+            return ResponseEntity.ok().body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
 //    @PostMapping(value = "/logout")

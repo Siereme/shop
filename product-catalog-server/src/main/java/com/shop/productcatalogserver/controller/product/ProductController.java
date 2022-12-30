@@ -3,6 +3,7 @@ package com.shop.productcatalogserver.controller.product;
 import com.shop.productcatalogserver.dto.category.CategoryPathDTO;
 import com.shop.productcatalogserver.dto.product.ILineItemDTO;
 import com.shop.productcatalogserver.dto.product.ProductDTO;
+import com.shop.productcatalogserver.dto.product.ProductsExistsDTO;
 import com.shop.productcatalogserver.model.product.Product;
 import com.shop.productcatalogserver.repository.product.ProductRepository;
 import com.shop.productcatalogserver.service.product.ProductService;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -64,6 +64,16 @@ public class ProductController {
         try {
             ILineItemDTO product = productRepo.findBySku(sku);
             return ResponseEntity.ok().body(product);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/exists")
+    public ResponseEntity<?> isExists(@RequestParam List<Long> sku) {
+        try {
+            ProductsExistsDTO productsExists = productService.isExists(sku);
+            return ResponseEntity.ok().body(productsExists);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }

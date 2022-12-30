@@ -2,6 +2,7 @@ package com.shop.productcatalogserver.service.product;
 
 import com.shop.productcatalogserver.dto.product.IProductDTO;
 import com.shop.productcatalogserver.dto.product.ProductDTO;
+import com.shop.productcatalogserver.dto.product.ProductsExistsDTO;
 import com.shop.productcatalogserver.model.category.Category;
 import com.shop.productcatalogserver.model.product.Product;
 import com.shop.productcatalogserver.model.product.description.ProductDescription;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -113,5 +115,12 @@ public class ProductService implements IProductService<Product> {
 
     public Page<IProductDTO> findByPathWithCategoryIds(String path, Pageable page) {
         return productRepo.findByPathWithCategoryIds(path, page);
+    }
+
+    @Override
+    public ProductsExistsDTO isExists(List<Long> sku) {
+        List<Long> exists = productRepo.checkExists(sku);
+        sku.removeAll(exists);
+        return new ProductsExistsDTO(exists, sku);
     }
 }

@@ -7,6 +7,7 @@ import com.shop.orderserver.repository.OrderRepository;
 import com.shop.orderserver.service.builder.IOrderManager;
 import com.shop.orderserver.service.builder.OrderFactory;
 import com.shop.orderserver.utils.constant.ServiceUrl;
+import com.shop.orderserver.utils.validation.CustomerValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,17 +21,13 @@ public class OrderService implements IOrderService<Order> {
     private final OrderRepository orderRepo;
     private final OrderFactory orderFactory;
 
+    private final CustomerValidation customerValidation;
+
 
     @Transactional
     public Order createOrder(OrderDTO orderDTO) {
         UserDTO user = orderDTO.getUser();
-
-        Boolean isExist = webClientBuilder.build()
-                .get().uri(ServiceUrl.CUSTOMER_EXIST + user.getId())
-                .retrieve()
-                .bodyToMono(Boolean.class)
-                .block();
-        if (Boolean.FALSE.equals(isExist)) {
+        if (!customerValidation.isValidCustomer(user.getEmail())) {
             throw new IllegalStateException("Customer is not found");
         }
 

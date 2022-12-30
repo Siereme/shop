@@ -6,5 +6,6 @@ public interface ServiceUrl {
     String CART_CLEAR = "http://shopping-cart-server:8080/api/v1/shopping-cart/clear/id/";
 
     String CATALOG_PRODUCT_SKUS = "http://product-server:8080/api/v1/product-catalog/product/skus";
+    String CATALOG_PRODUCT_EXISTS = "http://product-server:8080/api/v1/product-catalog/product/exists";
 
 }

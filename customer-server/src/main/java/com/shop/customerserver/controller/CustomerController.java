@@ -1,25 +1,18 @@
 package com.shop.customerserver.controller;
 
-import com.shop.customerserver.dto.AuthenticationCustomerResponse;
 import com.shop.customerserver.dto.CustomerDTO;
 import com.shop.customerserver.dto.UserDetailsDTO;
 import com.shop.customerserver.exception.CustomerAlreadyExistsException;
 import com.shop.customerserver.model.Customer;
-import com.shop.customerserver.model.ICustomer;
 import com.shop.customerserver.repository.CustomerRepository;
 import com.shop.customerserver.service.CustomerService;
-import com.shop.customerserver.utils.constant.ServiceUrl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityNotFoundException;
@@ -30,7 +23,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/")
-@Slf4j
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -66,11 +58,10 @@ public class CustomerController {
                     .orElseThrow(() -> new EntityNotFoundException("Customer is not found"));
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
         } catch (EntityNotFoundException e) {
-            log.debug("User get by email error {}", e.getMessage());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
-    
+
     @GetMapping(value = "/exist/{id}")
     public ResponseEntity<?> isExist(@PathVariable Long id) {
         try {
