@@ -10,8 +10,8 @@
 
 <script>
 import { defineComponent, onMounted } from 'vue'
-// import auth from "@/utils/authorization"
-import api from "@/api/backend-api"
+import auth from "@/utils/authorization"
+// import api from "@/api/backend-api"
 import {useStore} from "vuex"
 import {computed} from 'vue'
 import Header from "./components/header/Header.vue"
@@ -29,11 +29,11 @@ export default defineComponent({
   },
   setup() {
     onMounted(() => {
-      // auth.handleAuthInit()
+      auth.handleAuthInit()
       var userDTO = {"id":1,"name":"0cf7015d-c321-48fa-a99f-df3f2ea7853c","surname":"f2231eb5-3fd7-43c2-a673-72811123e750","patronymic":"6f2fef22-c888-489d-8fa0-b8175892ee0e","email":"9cfa8698-c119-4c3e-84f4-9148bc0a2501","password":"$2a$12$gIo6A.9S6WG2P8juBnuYde0SD7UDI39IswflIznzi/A8IuV8BD2E.","phone":"94a8300d-9fce-4de8-b803-d1570d870f3c","role":{"id":3,"name":"ANONYMOUS"},"status":"ANONYMOUS"}
       store.commit('setUser', userDTO)
-      api.loadMain()
-      api.loadCartProducts()
+      // api.loadMain()
+      // api.loadCartProducts()
     })
 
 

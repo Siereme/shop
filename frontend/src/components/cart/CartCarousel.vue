@@ -35,7 +35,7 @@ export default defineComponent({
       let handleCart = (quantity) => {
           if(+productQuantity.value + +quantity >= 1){
               productQuantity.value = +productQuantity.value + +quantity
-              api.addCartProduct(props.product.article, productQuantity.value)
+              api.addCartProduct(props.product.sku, productQuantity.value)
           }
       }
 
@@ -43,17 +43,17 @@ export default defineComponent({
         var quantity = event.target.value
         if(!isNaN(quantity) && +quantity >= 1){
             productQuantity.value = quantity
-            api.addCartProduct(props.product.article, +quantity)
+            api.addCartProduct(props.product.sku, +quantity)
         } else {
             productQuantity.value = 1
-            api.addCartProduct(props.product.article, 1)
+            api.addCartProduct(props.product.sku, 1)
         }
       }
 
       let deleteProduct = () => {
-        store.commit('removeCartProduct', props.product.article)
+        store.commit('removeCartProduct', props.product.sku)
         store.commit('setCartModalShown', store.getters.getCartCount() > 0)
-        api.removeCartProduct(props.product.article)
+        api.removeCartProduct(props.product.sku)
       }
 
       return {

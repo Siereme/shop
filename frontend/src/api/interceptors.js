@@ -28,7 +28,7 @@ const setup = (store) => {
         })()
 
         if (accessToken && accessTokenExcludeUrls.every(url => !config.url.includes(url))) {
-          config.headers[headerAccessToken] = accessToken
+          config.headers['Authorization'] = 'Bearer ' + accessToken
         }
         if(refreshToken && config.url.includes('/refresh')){
           config.headers[headerRefreshToken] = refreshToken

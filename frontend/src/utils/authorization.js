@@ -8,12 +8,16 @@ const handleAuth = async () => {
     let token = cookies.getCookie(headerAccessToken)
     if(!token){
         return await Promise.resolve(api.loginAnonymous())
-    } else {
-        return await Promise.resolve(api.authInfo(token))
-    }
+    } 
+    // else {
+    //     return await Promise.resolve(api.authInfo(token))
+    // }
 }
 
-const handleAuthInit = () => handleAuth().then(() => api.loadMain())
+const handleAuthInit = () => handleAuth().then(() => {
+    api.loadMain()
+    api.loadCartProducts()
+})
 
 export default {
     handleAuthInit

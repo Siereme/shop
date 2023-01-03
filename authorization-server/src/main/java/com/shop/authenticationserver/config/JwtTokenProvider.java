@@ -32,6 +32,9 @@ public class JwtTokenProvider {
     @Value("${jwt.tokenType}")
     private String tokenType;
 
+    @Value("${app.auth-server}")
+    private String authServer;
+
 
     public String createAccessToken(String subject, Map<String, String> claims) {
         Date now = new Date();
@@ -71,7 +74,7 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         claims.put("authorities", authorities);
-        claims.put("iss", "http://localhost:9000");
+        claims.put("iss", authServer);
         return claims;
     }
 

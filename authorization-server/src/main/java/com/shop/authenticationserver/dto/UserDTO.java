@@ -1,10 +1,8 @@
 package com.shop.authenticationserver.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.authenticationserver.utils.constant.UserStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
@@ -13,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
@@ -24,6 +23,7 @@ public class UserDTO {
     private UserStatus status;
 
 
+    @JsonIgnore
     public List<SimpleGrantedAuthority> getAuthorities() {
         return getPermissions().stream()
                 .map(SimpleGrantedAuthority::new)

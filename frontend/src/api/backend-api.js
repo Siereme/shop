@@ -12,11 +12,7 @@ let headerRefreshToken = store.getters.getHeaderRefreshToken()
 let login = (email, password) => {
     return axiosApi({
         method: 'post',
-        url: '/auth/login',
-        data : {
-            "email": email,
-            "password": password
-        }
+        url: `/auth/login?email=${email}&password=${password}`,
     })
     .then(res => {
         store.commit('setUser', res.data.user)
@@ -31,10 +27,11 @@ let login = (email, password) => {
 let loginAnonymous = () => {
     return axiosApi({
         method: 'post',
-        url: '/auth/login-anonymous'
+        url: '/auth/login/anonymous'
     })
     .then(res => {
         store.commit('setUser', res.data.user)
+        console.log(res.data)
         store.commit('setAccessToken', res.data.accessToken)
         store.commit('setRefreshToken', res.data.refreshToken)
         cookies.setCookie(headerAccessToken, res.data.accessToken)
@@ -269,11 +266,11 @@ let loadCartProducts = () =>  {
     })
 }
 
-let addCartProduct = (article, quantity) =>  {
+let addCartProduct = (sku, count) =>  {
     const userId = store.getters.getUserId()
     return axiosApi({
         method: 'post',
-        url: `/shopping-cart/add?customerId=${userId}&article=${article}&count=${quantity}`
+        url: `/shopping-cart/add?customerId=${userId}&sku=${sku}&count=${count}`
     })
     .then(res => {
         store.commit('setCartProducts', res.data.cartLineItems.lineItems ?? [])
@@ -283,11 +280,11 @@ let addCartProduct = (article, quantity) =>  {
     })
 }
 
-let removeCartProduct = (article) =>  {
+let removeCartProduct = (sku) =>  {
     const userId = store.getters.getUserId()
     return axiosApi({
         method: 'post',
-        url: `/shopping-cart/delete?customerId=${userId}&article=${article}`
+        url: `/shopping-cart/delete?customerId=${userId}&sku=${sku}`
     })
     .then(res => {
         store.commit('setCartProducts', res.data.cartLineItems.lineItems ?? [])

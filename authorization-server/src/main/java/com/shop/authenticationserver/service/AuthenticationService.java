@@ -52,7 +52,11 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.createAccessToken(email, claims);
         String refreshToken = jwtTokenProvider.createRefreshToken(email, claims);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        UserDTO userDTO = UserDTO.builder()
+                .email(userDetails.getUsername())
+                .password(userDetails.getPassword())
+                .build();
+        return new AuthenticationResponse(accessToken, refreshToken, userDTO);
     }
 
     public AuthenticationResponse loginUpdate(Map<String, String> user) throws JwtAuthenticationException {
@@ -75,24 +79,24 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.createAccessToken(userDetails.getUsername(), claims);
         String refreshToken = jwtTokenProvider.createRefreshToken(userDetails.getUsername(), claims);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(accessToken, refreshToken, userDTO);
     }
 
     public AuthenticationResponse loginAnonymous() throws JwtAuthenticationException {
-        UserDTO user = webClientBuilder.build()
+        UserDTO userDTO = webClientBuilder.build()
                 .get().uri(ServiceUrl.CUSTOMER_ADD_ANONYMOUS)
                 .retrieve().bodyToMono(UserDTO.class).block();
 
-        UserDetails userDetails = Optional.ofNullable(user)
+        UserDetails userDetails = Optional.ofNullable(userDTO)
                 .map(UserDetailsImpl::fromUser)
                 .orElseThrow(() -> new JwtAuthenticationException("Error creating an anonymous user"));
         userDetailsManager.createUser(userDetails);
 
         Map<String, String> claims = jwtTokenProvider.createClaims(userDetails);
-        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), claims);
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail(), claims);
+        String accessToken = jwtTokenProvider.createAccessToken(userDTO.getEmail(), claims);
+        String refreshToken = jwtTokenProvider.createRefreshToken(userDTO.getEmail(), claims);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(accessToken, refreshToken, userDTO);
     }
 
     public AuthenticationResponse registration(Map<String, String> user) throws JwtAuthenticationException {
@@ -114,7 +118,7 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.createAccessToken(userDetails.getUsername(), claims);
         String refreshToken = jwtTokenProvider.createRefreshToken(userDetails.getUsername(), claims);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(accessToken, refreshToken, userDTO);
     }
 
     public AuthenticationResponse refreshAuthentication(Jwt jwt, Principal principal) {
@@ -133,6 +137,10 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.createAccessToken(principal.getName(), claims);
         String refreshToken = jwtTokenProvider.createRefreshToken(principal.getName(), claims);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        UserDTO userDTO = UserDTO.builder()
+                .email(userDetails.getUsername())
+                .password(userDetails.getPassword())
+                .build();
+        return new AuthenticationResponse(accessToken, refreshToken, userDTO);
     }
 }

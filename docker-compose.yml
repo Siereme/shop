@@ -2,52 +2,146 @@ version: "3.8"
 
 services:
   db:
-    image: postgres
+    image: postgres:latest
     restart: always
     env_file: ./.env
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_ROOT_PASSWORD
-      - POSTGRES_DB=$POSTGRES_DATABASE
+      - POSTGRES_MULTIPLE_DATABASES=$POSTGRES_MULTIPLE_DATABASES
     ports:
       - "5433:5433"
-    volumes:
-      - db:/data/postgres
-  server:
-    build:
-      context: ./server
-      dockerfile: server.dockerfile
+  discovery-server:
+    image: siereme/discovery-server:latest
+    container_name: discovery-server
     restart: always
+    ports:
+      - "8761:8761"
     environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:postgresql://db:$POSTGRES_DOCKER_PORT/$POSTGRES_DATABASE",
-        "spring.datasource.username" : "$POSTGRES_USER",
-        "spring.datasource.password" : "$POSTGRES_ROOT_PASSWORD"
-      }'
+      - SPRING_PROFILES_ACTIVE=docker
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
+  api-gateway:
+    image: siereme/api-gateway:latest
+    container_name: api-gateway
+    restart: always
     ports:
       - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - API_GATEWAY_PORT=$API_GATEWAY_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
     depends_on:
-      - db
-  proxy:
-    image: nginx:1.23
-    restart: unless-stopped
+      - discovery-server
+  auth-server:
+    image: siereme/authentication-server:latest
+    container_name: auth-server
+    restart: always
     ports:
-      - "8090:8090"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - "9000:9000"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - AUTH_SERVER_PORT=$AUTH_SERVER_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
     depends_on:
-      - server
+      - discovery-server
+      - api-gateway
+  customer-server:
+    image: siereme/customer-server:latest
+    container_name: customer-server
+    restart: always
+    ports:
+      - "8091:8091"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - CUSTOMER_SERVER_PORT=$CUSTOMER_SERVER_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
+      - AUTH_SERVER_URL=http://auth-server:9000
+      - CUSTOMER_DB_URL=jdbc:postgresql://db:5432/shop_customer
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_ROOT_PASSWORD=$POSTGRES_ROOT_PASSWORD
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - auth-server
+  order-server:
+    image: siereme/order-server:latest
+    container_name: order-server
+    restart: always
+    ports:
+      - "8092:8092"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - ORDER_SERVER_PORT=$ORDER_SERVER_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
+      - AUTH_SERVER_URL=http://auth-server:9000
+      - ORDER_DB_URL=jdbc:postgresql://db:5432/shop_order
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_ROOT_PASSWORD=$POSTGRES_ROOT_PASSWORD
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - auth-server
+  product-catalog-server:
+    image: siereme/product-catalog-server:latest
+    container_name: product-catalog-server
+    restart: always
+    ports:
+      - "8093:8093"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - CATALOG_SERVER_PORT=$CATALOG_SERVER_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
+      - AUTH_SERVER_URL=http://auth-server:9000
+      - CATALOG_DB_URL=jdbc:postgresql://db:5432/shop_product_catalog
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_ROOT_PASSWORD=$POSTGRES_ROOT_PASSWORD
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - auth-server
+  shopping-cart-server:
+    image: siereme/shopping-cart-server:latest
+    container_name: shopping-cart-server
+    restart: always
+    ports:
+      - "8094:8094"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - CART_SERVER_PORT=$CART_SERVER_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
+      - AUTH_SERVER_URL=http://auth-server:9000
+      - CART_DB_URL=jdbc:postgresql://db:5432/shop_shopping_cart
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_ROOT_PASSWORD=$POSTGRES_ROOT_PASSWORD
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - auth-server
+  static-resource-server:
+    image: siereme/static-resource-server:latest
+    container_name: static-resource-server
+    restart: always
+    ports:
+      - "8095:8095"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - STATIC_SERVER_PORT=$STATIC_SERVER_PORT
+      - DISCOVERY_SERVER_PORT=$DISCOVERY_SERVER_PORT
+    depends_on:
+      - discovery-server
+      - api-gateway
   client:
     build:
-      context: frontend
-      dockerfile: client.dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     environment:
       PORT: 4000
-      PROXY_API: http://proxy:$NGINX_PROXY_PORT/
+      PROXY_API: http://api-gateway:8080/
     ports:
       - "4000:4000"
     command: npm run serve
     depends_on:
-      - server
-volumes:
-  db:
+      - discovery-server
+      - api-gateway
