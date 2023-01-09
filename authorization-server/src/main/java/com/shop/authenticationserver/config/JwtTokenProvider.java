@@ -80,8 +80,8 @@ public class JwtTokenProvider {
 
     public boolean validateAccessToken(Jwt jwt) {
         String type = jwt.getClaims().get(tokenType).toString();
-        LocalDateTime expiration = LocalDateTime.parse(jwt.getClaims().get("exp").toString());
-        return accessHeader.equals(type) && LocalDateTime.now().isBefore(expiration);
+        Date expiration = Date.from((Instant) jwt.getClaims().get("exp"));
+        return accessHeader.equals(type) && expiration.after(new Date());
     }
 
     public boolean validateRefreshToken(Jwt jwt) {

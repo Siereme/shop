@@ -8,7 +8,7 @@
             <a href="#">{{product.name}}</a>
         </div>
         <div class="product-snippet__main-bottom">
-            <SnippetCartButton :article="product.article" />
+            <SnippetCartButton :sku="product.sku" />
             <div class="product-snippet-price">{{product.price}} ₽</div>
         </div>
     </div>

@@ -43,11 +43,11 @@ export default defineComponent({
             passwordValidation()
                 ? null
                 : api.createUser(userDTO.value)
-                .then(res => {
-                    if(res.status === 200){
-                        store.commit('setShownAuthModal', 'login')
-                    }
-                }).catch(res => messages.value = res.response.data)
+                    .then(res => {
+                        if(res.status === 200){
+                            store.commit('setShownAuthModal', 'login')
+                        }
+                    }).catch(res => messages.value = res.response.data)
         }
 
         let passwordValidation = () => {

@@ -9,8 +9,8 @@ export default {
         getCartProducts: (state) => () => {
             return state.cartProducts
         },
-        checkCartProduct: (state) => (article) => {
-            return state.cartProducts.find(product => product.article === article)
+        checkCartProduct: (state) => (sku) => {
+            return state.cartProducts.find(product => product.sku === sku)
         },
         getCartCount: (state) => () => {
             return state.cartCount
@@ -29,9 +29,9 @@ export default {
         setCartProduct: (state, product) => {
             state.cartProducts.push(product)
         },
-        removeCartProduct: (state, article) => {
+        removeCartProduct: (state, sku) => {
             state.cartCount--
-            state.cartProducts = state.cartProducts.filter(product => product.article !== article)
+            state.cartProducts = state.cartProducts.filter(product => product.sku !== sku)
         },
         setCartModalShown: (state, shown) => {
             state.cartModalShown = shown

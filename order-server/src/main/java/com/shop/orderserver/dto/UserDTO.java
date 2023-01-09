@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,14 +16,19 @@ public class UserDTO {
 
     private Long id;
 
+    @NotBlank(message = "Имя является обязательным")
     private String name;
 
+    @NotBlank(message = "Фамилия является обязательной")
     private String surname;
 
+    @NotBlank(message = "Отчество является обязательным")
     private String patronymic;
 
+    @NotBlank(message = "Email является обязательным")
     private String email;
 
+    @NotBlank(message = "Пароль является обязательным")
     private String phone;
 
     private UserRole role;

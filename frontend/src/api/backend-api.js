@@ -31,7 +31,6 @@ let loginAnonymous = () => {
     })
     .then(res => {
         store.commit('setUser', res.data.user)
-        console.log(res.data)
         store.commit('setAccessToken', res.data.accessToken)
         store.commit('setRefreshToken', res.data.refreshToken)
         cookies.setCookie(headerAccessToken, res.data.accessToken)
@@ -71,17 +70,14 @@ let logout = () => {
     })
 }
 
-let authInfo = (token) => {
+let authInfo = () => {
     return axiosApi({
         method: 'get',
-        url: '/auth/info',
-        headers: {
-            [headerAccessToken]: token
-        }
+        url: '/customer/user-details/info',
     })
     .then(res => {
-        store.commit('setAccessToken', res.data.accessToken)
-        store.commit('setUser', res.data.user)
+        // store.commit('setAccessToken', res.data.accessToken)
+        store.commit('setUser', res.data)
         return res
     })
 }
@@ -91,7 +87,6 @@ let loadMain = () => {
         method: 'post',
         url: '/product-catalog/main/main-page',
         data: {
-            'userId': store.getters.getUserId(),
             'withCategories': true,
             'categoryLevel': 1,
             'withShoppingCart': true,
@@ -102,23 +97,21 @@ let loadMain = () => {
     .then(res => {
         store.commit('setCategories', res.data.categories)
         store.commit('setPopularProducts', res.data.productsPopular)
-        // store.commit('setCart', res.data.shoppingCart)
-        // store.commit('setOrders', [...res.data.orders])
     })
 }
 
 let createUser = (user) => {
     return axiosApi({
         method: 'post',
-        url: '/user/add',
+        url: '/auth/registration',
         data: user
     })
 }
 
 let updateUser = (user) => {
     return axiosApi({
-        method: 'post',
-        url: '/user/update',
+        method: 'put',
+        url: '/auth/login/update',
         data: user
     })
     .then(res => {
@@ -322,7 +315,7 @@ let createOrder = (order) => {
 let getPayments = () => {
     return axiosApi({
         method: 'get',
-        url: `/payment/all`
+        url: `/order/payment/all`
     })
     .then(res => {
         store.commit('setPayments', res.data)
@@ -333,7 +326,7 @@ let getPayments = () => {
 let getReceipts = () => {
     return axiosApi({
         method: 'get',
-        url: `/receipt/all`
+        url: `/order/receipt/all`
     })
     .then(res => {
         store.commit('setReceipts', res.data)
@@ -344,7 +337,7 @@ let getReceipts = () => {
 let getShopAddress = () => {
     return axiosApi({
         method: 'get',
-        url: `/shop-address/all`
+        url: `/order/shop-address/all`
     })
     .then(res => {
         store.commit('setShopAddress', res.data)

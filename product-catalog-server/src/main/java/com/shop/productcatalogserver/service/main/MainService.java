@@ -21,9 +21,6 @@ public class MainService implements IMainService {
     private ProductService productService;
 
     public MainResponse getByConfig(MainConfigDTO config) {
-        if (config.getUserId() == null) {
-            throw new IllegalArgumentException("User id is not set");
-        }
 
         MainResponse response = new MainResponse();
 
@@ -32,19 +29,6 @@ public class MainService implements IMainService {
                     .orElseThrow(() -> new EntityNotFoundException("Categories is not found"));
             response.setCategories(categories);
         }
-
-//        if (config.isWithShoppingCart()) {
-//            ShoppingCart shoppingCart = cartRepo.findByUserId(config.getUserId())
-//                    .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
-//            response.setShoppingCart(shoppingCart);
-//        }
-
-//        if (config.isWithOrders()) {
-//            List<Order> orders = orderRepo.findAllByUserId(config.getUserId()).stream()
-//                    .filter(Objects::nonNull)
-//                    .collect(Collectors.toList());
-//            response.setOrders(orders);
-//        }
 
         if (config.isWithProductsPopular()) {
             List<Product> products = productService.getPopular();

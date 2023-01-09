@@ -9,7 +9,8 @@ import com.shop.customerserver.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,30 +64,30 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(value = "/exist/{id}")
-    public ResponseEntity<?> isExist(@PathVariable Long id) {
+    @GetMapping(value = "/user-details/info")
+    public ResponseEntity<?> getUserDetailsById(@AuthenticationPrincipal Jwt jwt, Principal principal) {
         try {
-            boolean isExist = customerService.isExist(id);
-            return ResponseEntity.ok().body(isExist);
+            Customer customer = customerService.info(jwt, principal);
+            return ResponseEntity.ok().body(new CustomerDTO(customer));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    @PostMapping(value = "/add", consumes = {"application/json"})
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerDTO customerDTO, JwtAuthenticationToken auth) {
+    @PostMapping(value = "/user-details/anonymous")
+    public ResponseEntity<?> addAnonymousCustomer() {
         try {
-            Customer customer = customerService.createCustomer(customerDTO);
+            Customer customer = customerService.createAnonymousCustomer();
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    @GetMapping(value = "/user-details/anonymous")
-    public ResponseEntity<?> addAnonymousCustomer() {
+    @PostMapping(value = "/add", consumes = {"application/json"})
+    public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         try {
-            Customer customer = customerService.createAnonymousCustomer();
+            Customer customer = customerService.createCustomer(customerDTO);
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -97,6 +99,16 @@ public class CustomerController {
         try {
             Customer customer = customerService.updateCustomer(customerDTO);
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/exist/{id}")
+    public ResponseEntity<?> isExist(@PathVariable Long id) {
+        try {
+            boolean isExist = customerService.isExist(id);
+            return ResponseEntity.ok().body(isExist);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }

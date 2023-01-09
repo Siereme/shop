@@ -2,7 +2,7 @@
     <div class="order-summary" v-if="products.length">
         <div class="order-summary-container">
             <div class="order-summary__cart">
-                <CartModalProduct v-for="product in products" :key="product.id" :cart="product" />
+                <CartModalProduct v-for="product in products" :key="product.sku" :product="product" />
             </div>
             <div class="order-summary__info">
                 <div class="order-summary__info-row">

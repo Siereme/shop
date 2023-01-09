@@ -12,7 +12,7 @@
             {{product.price}} ₽
           </div>
         </div>
-        <CartButton :productId="product.id" />
+        <CartButton :sku="product.sku" />
       </div>
   </div>
 </template>

@@ -14,22 +14,22 @@ import {computed} from 'vue'
 export default defineComponent({
     name: 'CartButton',
     props: {
-        productId: {
+      sku: {
             default: () => {}
-        }
+      }
     },
     setup(props) {
       const store = useStore();
 
       let isCartProduct = computed(() => checkCartProduct())
 
-      let checkCartProduct = () => store.getters.checkCartProduct(props.productId)
+      let checkCartProduct = () => store.getters.checkCartProduct(props.sku)
 
       let addToCart = (event) => {
         var button = event.target.closest('.cart-button')
         if(button && !button.classList.contains('in-cart')){
           button.classList.add('in-cart')
-          api.addCartProduct(props.article, 1)
+          api.addCartProduct(props.sku, 1)
         }
       }
 

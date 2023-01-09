@@ -9,7 +9,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class MainConfigDTO {
 
-    private Long userId;
     private boolean withCategories;
     private int categoryLevel;
     private boolean withShoppingCart;

@@ -1,10 +1,6 @@
 export default {
     state: {
-        user: {
-            id: 1,
-            email: "admin@mail.com",
-            password: "admin",
-        }
+        user: {}
     },
     getters: {
         getUser: (state) => () => {
@@ -29,7 +25,10 @@ export default {
             return state.user?.status
         },
         getUserRole: (state) => () => {
-            return state.user?.role?.name
+            return state.user?.role
+        },
+        getUserPermissions: (state) => () => {
+            return state.user?.permissions
         }
     },
     mutations: {

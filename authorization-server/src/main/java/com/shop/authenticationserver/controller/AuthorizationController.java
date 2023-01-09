@@ -3,6 +3,7 @@ package com.shop.authenticationserver.controller;
 
 import com.shop.authenticationserver.dto.AuthenticationResponse;
 import com.shop.authenticationserver.exception.JwtAuthenticationException;
+import com.shop.authenticationserver.exception.UserAlreadyExistsException;
 import com.shop.authenticationserver.exception.UserPersistenceException;
 import com.shop.authenticationserver.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class AuthorizationController {
             AuthenticationResponse response = authService.login(email, password);
             return ResponseEntity.ok().body(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -43,7 +44,7 @@ public class AuthorizationController {
             AuthenticationResponse response = authService.loginUpdate(user);
             return ResponseEntity.ok().body(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -53,7 +54,7 @@ public class AuthorizationController {
             AuthenticationResponse response = authService.loginAnonymous();
             return ResponseEntity.ok().body(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -63,7 +64,7 @@ public class AuthorizationController {
             AuthenticationResponse response = authService.registration(user);
             return ResponseEntity.ok().body(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -76,6 +77,7 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
 
 //    @PostMapping(value = "/logout")
 //    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -97,8 +99,8 @@ public class AuthorizationController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UserPersistenceException.class)
-    public Map<String, String> handleUserAlreadyExistsExceptions(UserPersistenceException ex) {
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public Map<String, String> handleUserAlreadyExistsExceptions(UserAlreadyExistsException ex) {
         return ex.getMessages();
     }
 

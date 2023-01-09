@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,14 +29,15 @@ public class ShoppingCartService implements IShoppingCartService {
         ShoppingCart cart = cartRepo.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
 
+        List<ShoppingCartLineItem> lineItems = cart.getCartLineItems().getLineItems();
 
-        ShoppingCartLineItem cartProductItem = cart.getCartLineItems().getLineItems().stream()
+        ShoppingCartLineItem cartProductItem = lineItems.stream()
                 .filter(item -> Objects.equals(item.getSku(), sku))
                 .findFirst().orElse(null);
 
         if (cartProductItem != null) {
             cartProductItem.setQuantity(quantity);
-            cart.setTotal(calculateTotal(cart.getCartLineItems().getLineItems()));
+            cart.setTotal(calculateTotal(lineItems));
             return cart;
         }
 
@@ -48,18 +50,19 @@ public class ShoppingCartService implements IShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException("Product is not found"));
         cartLineItem.setQuantity(quantity);
 
-        cart.getCartLineItems().getLineItems().add(cartLineItem);
-        cart.setCount(cart.getCartLineItems().getLineItems().size());
-        cart.setTotal(calculateTotal(cart.getCartLineItems().getLineItems()));
+        lineItems.add(cartLineItem);
+        cart.setCount(lineItems.size());
+        cart.setTotal(calculateTotal(lineItems));
         return cart;
     }
 
     public ShoppingCart removeCartItem(Long customerId, Long sku) {
         ShoppingCart cart = cartRepo.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
-        cart.getCartLineItems().getLineItems().removeIf(cartItem -> Objects.equals(cartItem.getSku(), sku));
-        cart.setTotal(calculateTotal(cart.getCartLineItems().getLineItems()));
-        cart.setCount(cart.getCartLineItems().getLineItems().size());
+        List<ShoppingCartLineItem> lineItems = cart.getCartLineItems().getLineItems();
+        lineItems.removeIf(cartItem -> Objects.equals(cartItem.getSku(), sku));
+        cart.setTotal(calculateTotal(lineItems));
+        cart.setCount(lineItems.size());
         return cart;
     }
 
@@ -72,7 +75,6 @@ public class ShoppingCartService implements IShoppingCartService {
     public void clearByUserId(Long customerId) {
         ShoppingCart shoppingCart = cartRepo.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
-
         shoppingCart.clear();
     }
 

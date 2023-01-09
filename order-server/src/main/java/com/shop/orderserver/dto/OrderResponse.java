@@ -10,15 +10,9 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class OrderResponse {
 
-    String token;
     Order order;
 
     public OrderResponse(Order order) {
-        this.order = order;
-    }
-
-    public OrderResponse(String token, Order order) {
-        this.token = token;
         this.order = order;
     }
 

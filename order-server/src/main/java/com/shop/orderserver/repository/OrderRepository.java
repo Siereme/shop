@@ -22,5 +22,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "left join fetch o.status " +
             "where o.customerId = :id")
     List<Order> findAllByUserId(Long id);
-
 }

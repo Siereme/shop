@@ -5,9 +5,13 @@ import com.shop.customerserver.exception.CustomerAlreadyExistsException;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +23,12 @@ public class CustomerValidation {
     private CustomerRepository customerRepo;
     @Autowired
     protected PasswordEncoder passwordEncoder;
+
+    @Value("${jwt.tokenType}")
+    private String tokenType;
+
+    @Value("${jwt.accessHeader}")
+    private String accessHeader;
 
     public void verifyCustomerCreate(CustomerDTO customer) {
         Map<String, String> messages = new HashMap<>();
@@ -45,6 +55,12 @@ public class CustomerValidation {
         if (!messages.isEmpty()) {
             throw new CustomerAlreadyExistsException(messages);
         }
+    }
+
+    public boolean validateAccessToken(Jwt jwt) {
+        String type = jwt.getClaims().get(tokenType).toString();
+        Date expiration = Date.from((Instant) jwt.getClaims().get("exp"));
+        return accessHeader.equals(type) && expiration.after(new Date());
     }
 
 }

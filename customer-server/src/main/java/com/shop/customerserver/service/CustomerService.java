@@ -9,12 +9,16 @@ import com.shop.customerserver.utils.constant.CustomerRole;
 import com.shop.customerserver.utils.constant.ServiceUrl;
 import com.shop.customerserver.utils.validation.CustomerValidation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.util.retry.Retry;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.time.Duration;
 
 @Service
@@ -51,8 +55,7 @@ public class CustomerService implements ICustomerService<Customer> {
                 .post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId())
                 .retrieve()
                 .bodyToMono(Void.class)
-                .then()
-                .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(100)));
+                .block();
         return newCustomer;
     }
 
@@ -62,11 +65,22 @@ public class CustomerService implements ICustomerService<Customer> {
         return !count.equals(0L);
     }
 
+    @Override
+    public Customer info(Jwt jwt, Principal principal) {
+        if (!customerValidation.validateAccessToken(jwt)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid access token");
+        }
+
+        return customerRepo.findByEmail(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Customer is not found"));
+    }
+
     public Customer updateCustomer(CustomerDTO customer) {
         CustomerRole role = getCustomerRole(customer);
         ICustomerConstructor<Customer, CustomerDTO> constructor = customerFactory.getFactory(role);
         return constructor.updateCustomer(customer);
     }
+
 
     public Customer findById(Long id) {
         return customerRepo.findById(id)

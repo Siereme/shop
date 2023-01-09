@@ -4,7 +4,7 @@
         <div class="personal-cabinet-container">
             <div class="cabinet-menu">
                 <div class="cabinet-menu-list">
-                    <router-link class="cabinet-menu-item" to="/cabinet/userDTO">Личные данные</router-link>
+                    <router-link class="cabinet-menu-item" to="/cabinet/user">Личные данные</router-link>
                     <router-link class="cabinet-menu-item" to="/cabinet/orders-history">История заказов</router-link>
                     <div class="cabinet-menu-item" @click="handleLogout()">Выйти</div>
                 </div>
@@ -18,7 +18,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import api from "@/api/backend-api"
 import auth from "@/utils/authorization"
 import {computed} from 'vue'
 import {useStore} from "vuex"
@@ -35,7 +34,7 @@ export default defineComponent({
         let order = computed(() => store.getters.getLastOrder())
 
         let handleLogout = () => {
-            api.logout()
+            auth.handleLogout()
             .then(res => {
                 if(res.status === 200){
                     router.push("/")

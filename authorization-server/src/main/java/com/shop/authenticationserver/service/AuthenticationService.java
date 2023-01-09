@@ -4,6 +4,7 @@ import com.shop.authenticationserver.config.JwtTokenProvider;
 import com.shop.authenticationserver.dto.AuthenticationResponse;
 import com.shop.authenticationserver.dto.UserDTO;
 import com.shop.authenticationserver.exception.JwtAuthenticationException;
+import com.shop.authenticationserver.exception.UserAlreadyExistsException;
 import com.shop.authenticationserver.model.UserDetailsImpl;
 import com.shop.authenticationserver.utils.constant.ServiceUrl;
 import com.shop.authenticationserver.utils.validation.UserValidation;
@@ -16,8 +17,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Mono;
 
 import java.security.Principal;
 import java.util.Map;
@@ -84,7 +87,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse loginAnonymous() throws JwtAuthenticationException {
         UserDTO userDTO = webClientBuilder.build()
-                .get().uri(ServiceUrl.CUSTOMER_ADD_ANONYMOUS)
+                .post().uri(ServiceUrl.CUSTOMER_ADD_ANONYMOUS)
                 .retrieve().bodyToMono(UserDTO.class).block();
 
         UserDetails userDetails = Optional.ofNullable(userDTO)
@@ -103,7 +106,10 @@ public class AuthenticationService {
         UserDTO userDTO = webClientBuilder.build()
                 .post().uri(ServiceUrl.CUSTOMER_ADD)
                 .body(BodyInserters.fromValue(user))
-                .retrieve().bodyToMono(UserDTO.class).block();
+                .retrieve()
+                .onStatus(HttpStatus::isError, ClientResponse::createException)
+                .bodyToMono(UserDTO.class)
+                .block();
 
         UserDetails userDetails = Optional.ofNullable(userDTO)
                 .map(UserDetailsImpl::fromUser)
@@ -137,10 +143,12 @@ public class AuthenticationService {
         String accessToken = jwtTokenProvider.createAccessToken(principal.getName(), claims);
         String refreshToken = jwtTokenProvider.createRefreshToken(principal.getName(), claims);
 
-        UserDTO userDTO = UserDTO.builder()
-                .email(userDetails.getUsername())
-                .password(userDetails.getPassword())
-                .build();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(userDetails.getUsername());
+        userDTO.setPassword(userDetails.getPassword());
+        userDTO.setPermissionsByAuthorities(userDetails.getAuthorities());
+
         return new AuthenticationResponse(accessToken, refreshToken, userDTO);
     }
+
 }

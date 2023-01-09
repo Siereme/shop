@@ -38,7 +38,7 @@ export default defineComponent({
 
       let showAuthModal = () => store.commit('setShownAuthModal', 'login')
 
-      let handleCabinetClick = () => title.value === 'Войти' ? showAuthModal() : router.replace({path: '/cabinet/userDTO'})
+      let handleCabinetClick = () => title.value === 'Войти' ? showAuthModal() : router.replace({path: '/cabinet/user'})
 
       return {
         shown,

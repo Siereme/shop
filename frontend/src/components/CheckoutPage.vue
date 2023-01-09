@@ -89,7 +89,7 @@ export default defineComponent({
             return store.state.cart.cartTotal
         })
 
-        let userDTO = computed(() => store.state.userDTO.userDTO)
+        let userDTO = computed(() => store.state.user.user)
         let userForm = ref(userDTO.value && userDTO.value.status !== 'ANONYMOUS' ? Object.assign({}, userDTO.value) : {})
         let userSend = ref(userDTO.value)
         
@@ -110,10 +110,19 @@ export default defineComponent({
             return Object.assign({}, userSend.value)
         }
 
+        let getOrderLineItems = products => products.map(product => ({
+            "sku": product.sku,
+            "name": product.name,
+            "imageLink": product.imageLink,
+            "price": product.price,
+            "quantity": product.quantity
+        }))
+
         let createOrder = () => ({
-            'userDTO': getUserData(),
+            'user': getUserData(),
             'receiptDetail': receiptWrapper.value.getReceiptDetail(),
-            'payment': paymentWrapper.value.getPayment()
+            'payment': paymentWrapper.value.getPayment(),
+            'lineItems': getOrderLineItems(store.state.cart.cartProducts)
         })
 
         let sendOrder = () => {

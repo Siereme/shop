@@ -132,7 +132,7 @@ services:
     depends_on:
       - discovery-server
       - api-gateway
-  client:
+  frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
