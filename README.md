@@ -14,6 +14,7 @@ Application consists of the following components:
 - Spring Boot 2.6.6 / backend application
   - Maven
   - PostgreSQL
+  - Spring Cloud
   - Spring Data
   - Spring Security
   - Hibernate Ehcache
