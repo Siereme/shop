@@ -15,7 +15,7 @@ let login = (email, password) => {
         url: `/auth/login?email=${email}&password=${password}`,
     })
     .then(res => {
-        store.commit('setUser', res.data.user)
+        authInfo()
         store.commit('setAccessToken', res.data.accessToken)
         store.commit('setRefreshToken', res.data.refreshToken)
         cookies.setCookie(headerAccessToken, res.data.accessToken)
@@ -73,10 +73,9 @@ let logout = () => {
 let authInfo = () => {
     return axiosApi({
         method: 'get',
-        url: '/customer/user-details/info',
+        url: '/customer/info',
     })
     .then(res => {
-        // store.commit('setAccessToken', res.data.accessToken)
         store.commit('setUser', res.data)
         return res
     })

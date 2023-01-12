@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthenticationService {
 
@@ -107,7 +109,6 @@ public class AuthenticationService {
                 .post().uri(ServiceUrl.CUSTOMER_ADD)
                 .body(BodyInserters.fromValue(user))
                 .retrieve()
-                .onStatus(HttpStatus::isError, ClientResponse::createException)
                 .bodyToMono(UserDTO.class)
                 .block();
 

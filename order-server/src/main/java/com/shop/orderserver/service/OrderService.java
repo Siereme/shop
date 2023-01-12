@@ -23,9 +23,9 @@ public class OrderService implements IOrderService<Order> {
 
     public Order createOrder(OrderDTO orderDTO) {
         UserDTO user = orderDTO.getUser();
-//        if (!customerValidation.isValidCustomer(user.getEmail())) {
-//            throw new IllegalStateException("Customer is not found");
-//        }
+        if (!customerValidation.isValidCustomer(user.getLastEmail())) {
+            throw new IllegalStateException("Customer is not found");
+        }
 
         IOrderManager<Order> constructor = orderFactory.getFactory(user.getRole());
         Order order = constructor.construct(orderDTO);

@@ -30,6 +30,8 @@ public class CustomerDTO implements ICustomerDTO {
     private String patronymic;
     @NotBlank(message = "Email является обязательным")
     private String email;
+
+    private String lastEmail;
     @NotBlank(message = "Пароль является обязательным")
     private String password;
     @NotBlank(message = "Телефон является обязательным")

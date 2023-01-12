@@ -22,13 +22,18 @@ export default defineComponent({
         const store = useStore()     
         
         let userForm = ref(Object.assign({}, store.getters.getUser()))
+        let getUserForm = () => {
+            userForm.value.lastEmail = store.getters.getUserEmail()
+            return Object.assign({}, userForm.value)
+        }
+
         let isDisabled = ref(true)
         let messages = ref({})
 
         let handleDisabled = flag => isDisabled.value = flag
 
         let saveUser = () => {
-            api.updateUser(userForm.value)
+            api.updateUser(getUserForm())
             .then(res => {
                 if(res.status === 200){
                     handleDisabled(true)

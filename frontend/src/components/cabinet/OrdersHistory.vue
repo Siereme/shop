@@ -1,6 +1,6 @@
 <template>
     <div class="orders-history">
-        <OrderSummary v-for="order in orders.reverse()" :key="order.id" :products="order.orderItems" :status="order.status" :payment="order.payment" :total="order.total" />
+        <OrderSummary v-for="order in orders.reverse()" :key="order.id" :products="order.orderLineItems.lineItems" :status="order.status" :payment="order.payment" :total="order.total" />
     </div>
 </template>
 

@@ -91,7 +91,7 @@ export default defineComponent({
 
         let userDTO = computed(() => store.state.user.user)
         let userForm = ref(userDTO.value && userDTO.value.status !== 'ANONYMOUS' ? Object.assign({}, userDTO.value) : {})
-        let userSend = ref(userDTO.value)
+        let userSend = ref(Object.assign({}, userDTO.value))
         
         let receiptWrapper = ref({})
         let paymentWrapper = ref({})
@@ -104,6 +104,7 @@ export default defineComponent({
         let getUserData = () => {
             userSend.value.phone = userForm.value.phone
             userSend.value.email = userForm.value.email
+            userSend.value.lastEmail = userDTO.value.email
             userSend.value.surname = userForm.value.surname
             userSend.value.name = userForm.value.name
             userSend.value.patronymic = userForm.value.patronymic
@@ -322,7 +323,7 @@ h1 {
     justify-content: center;
     height: 34px;
     padding: 0 20px 1px;
-    userDTO-select: none;
+    user-select: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
     text-align: center;
     vertical-align: middle;

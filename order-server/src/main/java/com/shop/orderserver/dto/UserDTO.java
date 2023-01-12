@@ -28,6 +28,9 @@ public class UserDTO {
     @NotBlank(message = "Email является обязательным")
     private String email;
 
+    @NotBlank(message = "Email является обязательным")
+    private String lastEmail;
+
     @NotBlank(message = "Пароль является обязательным")
     private String phone;
 

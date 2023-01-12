@@ -118,8 +118,7 @@ public class OrderBuilder implements IOrderBuilder<Order, UserDTO> {
                 .uri(ServiceUrl.CART_CLEAR + customerId)
                 .retrieve()
                 .bodyToMono(Void.class)
-                .then()
-                .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(100)));
+                .block();
     }
 
 }

@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user-details/**").permitAll()
+                .antMatchers("/add/anonymous").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

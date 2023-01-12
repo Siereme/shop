@@ -53,18 +53,7 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(value = "/user-details/email/{email}")
-    public ResponseEntity<?> getUserDetailsById(@PathVariable String email) {
-        try {
-            Customer customer = customerRepo.findByEmail(email)
-                    .orElseThrow(() -> new EntityNotFoundException("Customer is not found"));
-            return ResponseEntity.ok().body(new UserDetailsDTO(customer));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }
-
-    @GetMapping(value = "/user-details/info")
+    @GetMapping(value = "/info")
     public ResponseEntity<?> getUserDetailsById(@AuthenticationPrincipal Jwt jwt, Principal principal) {
         try {
             Customer customer = customerService.info(jwt, principal);
@@ -74,7 +63,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping(value = "/user-details/anonymous")
+    @PostMapping(value = "/add/anonymous")
     public ResponseEntity<?> addAnonymousCustomer() {
         try {
             Customer customer = customerService.createAnonymousCustomer();
