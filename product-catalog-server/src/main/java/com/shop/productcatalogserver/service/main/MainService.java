@@ -8,11 +8,13 @@ import com.shop.productcatalogserver.repository.category.CategoryRepository;
 import com.shop.productcatalogserver.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Transactional
 public class MainService implements IMainService {
 
     @Autowired

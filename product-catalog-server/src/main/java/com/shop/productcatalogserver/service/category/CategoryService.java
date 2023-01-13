@@ -17,10 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
 @Service
+@Transactional
 public class CategoryService implements ICategoryService<Category> {
 
     private static final Logger logger = Logger.getLogger(CategoryService.class);

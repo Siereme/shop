@@ -91,7 +91,6 @@ export default defineComponent({
 
         let userDTO = computed(() => store.state.user.user)
         let userForm = ref(userDTO.value && userDTO.value.status !== 'ANONYMOUS' ? Object.assign({}, userDTO.value) : {})
-        let userSend = ref(Object.assign({}, userDTO.value))
         
         let receiptWrapper = ref({})
         let paymentWrapper = ref({})
@@ -102,13 +101,18 @@ export default defineComponent({
 
 
         let getUserData = () => {
-            userSend.value.phone = userForm.value.phone
-            userSend.value.email = userForm.value.email
-            userSend.value.lastEmail = userDTO.value.email
-            userSend.value.surname = userForm.value.surname
-            userSend.value.name = userForm.value.name
-            userSend.value.patronymic = userForm.value.patronymic
-            return Object.assign({}, userSend.value)
+            let userSend = {}
+            userSend.id = userDTO.value.id
+            userSend.name = userForm.value.name
+            userSend.surname = userForm.value.surname
+            userSend.patronymic = userForm.value.patronymic
+            userSend.email = userForm.value.email
+            userSend.lastEmail = store.getters.getUserEmail()
+            userSend.password = userForm.value.password
+            userSend.phone = userForm.value.phone
+            userSend.role = store.getters.getUserRole()         
+            userSend.status = store.getters.getUserStatus()
+            return userSend
         }
 
         let getOrderLineItems = products => products.map(product => ({

@@ -2,7 +2,7 @@ package com.shop.customerserver.controller;
 
 import com.shop.customerserver.dto.CustomerDTO;
 import com.shop.customerserver.dto.UserDetailsDTO;
-import com.shop.customerserver.exception.CustomerAlreadyExistsException;
+import com.shop.customerserver.exception.CustomerValidationException;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.repository.CustomerRepository;
 import com.shop.customerserver.service.CustomerService;
@@ -38,7 +38,7 @@ public class CustomerController {
             List<Customer> customers = customerRepo.findAll();
             return ResponseEntity.ok().body(customers);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -49,7 +49,7 @@ public class CustomerController {
                     .orElseThrow(() -> new EntityNotFoundException("Customer is not found"));
             return ResponseEntity.ok().body(customer);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class CustomerController {
             Customer customer = customerService.info(jwt, principal);
             return ResponseEntity.ok().body(new CustomerDTO(customer));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class CustomerController {
             Customer customer = customerService.createAnonymousCustomer();
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class CustomerController {
             Customer customer = customerService.createCustomer(customerDTO);
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class CustomerController {
             Customer customer = customerService.updateCustomer(customerDTO);
             return ResponseEntity.ok().body(new UserDetailsDTO(customer));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -99,26 +99,25 @@ public class CustomerController {
             boolean isExist = customerService.isExist(id);
             return ResponseEntity.ok().body(isExist);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<CustomerValidationException> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return errors;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomerValidationException(errors));
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(CustomerAlreadyExistsException.class)
-    public Map<String, String> handleUserAlreadyExistsExceptions(CustomerAlreadyExistsException ex) {
-        return ex.getMessages();
+
+    @ExceptionHandler(CustomerValidationException.class)
+    public ResponseEntity<CustomerValidationException> handleUserAlreadyExistsExceptions(CustomerValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex);
     }
 
 }

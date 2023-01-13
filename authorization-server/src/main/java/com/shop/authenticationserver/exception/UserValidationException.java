@@ -3,13 +3,14 @@ package com.shop.authenticationserver.exception;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserAlreadyExistsException extends RuntimeException {
+public class UserValidationException extends RuntimeException {
     Map<String, String> messages = new HashMap<>();
 
-    public UserAlreadyExistsException() {
+    public UserValidationException() {
+        messages.put("email", "Пользователя с таким email не существует");
     }
 
-    public UserAlreadyExistsException(Map<String, String> messages) {
+    public UserValidationException(Map<String, String> messages) {
         this.messages = messages;
     }
 

@@ -4,6 +4,7 @@ import com.shop.shoppingcartserver.model.ShoppingCart;
 import com.shop.shoppingcartserver.repository.ShoppingCartRepository;
 import com.shop.shoppingcartserver.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class ShoppingCartController {
             List<ShoppingCart> carts = cartRepo.findAll();
             return ResponseEntity.ok().body(carts);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -36,7 +37,7 @@ public class ShoppingCartController {
                     .orElseThrow(() -> new EntityNotFoundException("Shopping cart is not found"));
             return ResponseEntity.ok().body(cart);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -46,7 +47,7 @@ public class ShoppingCartController {
             ShoppingCart shoppingCart = cartService.setCart(id);
             return ResponseEntity.ok().body(shoppingCart);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -56,7 +57,7 @@ public class ShoppingCartController {
             ShoppingCart cartItem = cartService.setCartItem(customerId, sku, count);
             return ResponseEntity.ok().body(cartItem);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -66,7 +67,7 @@ public class ShoppingCartController {
             ShoppingCart shoppingCart = cartService.removeCartItem(customerId, sku);
             return ResponseEntity.ok().body(shoppingCart);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -76,7 +77,7 @@ public class ShoppingCartController {
             cartService.clearByUserId(id);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

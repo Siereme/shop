@@ -1,7 +1,7 @@
 package com.shop.customerserver.utils.validation;
 
 import com.shop.customerserver.dto.CustomerDTO;
-import com.shop.customerserver.exception.CustomerAlreadyExistsException;
+import com.shop.customerserver.exception.CustomerValidationException;
 import com.shop.customerserver.model.Customer;
 import com.shop.customerserver.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class CustomerValidation {
                 .ifPresent(verifyUserPhone -> messages.put("phone", "Пользователь с таким телефоном уже существует"));
 
         if (!messages.isEmpty()) {
-            throw new CustomerAlreadyExistsException(messages);
+            throw new CustomerValidationException(messages);
         }
     }
 
@@ -53,7 +53,7 @@ public class CustomerValidation {
         }
 
         if (!messages.isEmpty()) {
-            throw new CustomerAlreadyExistsException(messages);
+            throw new CustomerValidationException(messages);
         }
     }
 

@@ -20,10 +20,8 @@ import com.shop.orderserver.utils.constant.ServiceUrl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.util.retry.Retry;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

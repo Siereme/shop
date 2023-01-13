@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// import {computed} from 'vue';
 import ProductVue from "@/components/product/Product";
 
 export default {
@@ -17,15 +16,7 @@ export default {
       products: {
           default: () => {}
       }
-  },
-  setup() {
-
-    // let shown = computed(() => products && products.length)
-
-    // return {
-    //   shown
-    // }
-  },
+  }
 }
 </script>
 

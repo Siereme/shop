@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
-import reactor.util.retry.Retry;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
-import java.time.Duration;
 
 @Service
 @Transactional
@@ -43,8 +41,7 @@ public class CustomerService implements ICustomerService<Customer> {
                 .post().uri(ServiceUrl.CART_USER_ADD + newCustomer.getId())
                 .retrieve()
                 .bodyToMono(Void.class)
-                .then()
-                .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(100)));
+                .block();
         return newCustomer;
     }
 

@@ -13,8 +13,7 @@ import java.util.UUID;
 
 public final class Jwks {
 
-    private Jwks() {
-    }
+    private Jwks() {}
 
     public static RSAPublicKey publicKey;
     public static RSAPrivateKey privateKey;

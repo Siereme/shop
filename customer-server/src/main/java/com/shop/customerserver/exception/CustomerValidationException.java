@@ -3,13 +3,13 @@ package com.shop.customerserver.exception;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomerAlreadyExistsException extends RuntimeException {
+public class CustomerValidationException extends RuntimeException {
     Map<String, String> messages = new HashMap<>();
 
-    public CustomerAlreadyExistsException() {
+    public CustomerValidationException() {
     }
 
-    public CustomerAlreadyExistsException(Map<String, String> messages) {
+    public CustomerValidationException(Map<String, String> messages) {
         this.messages = messages;
     }
 

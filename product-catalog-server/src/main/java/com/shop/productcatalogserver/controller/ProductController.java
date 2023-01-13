@@ -1,4 +1,4 @@
-package com.shop.productcatalogserver.controller.product;
+package com.shop.productcatalogserver.controller;
 
 import com.shop.productcatalogserver.dto.category.CategoryPathDTO;
 import com.shop.productcatalogserver.dto.product.ILineItemDTO;
@@ -8,6 +8,7 @@ import com.shop.productcatalogserver.model.product.Product;
 import com.shop.productcatalogserver.repository.product.ProductRepository;
 import com.shop.productcatalogserver.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class ProductController {
             Product product = productRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Product is not found"));
             return ResponseEntity.ok().body(product);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -45,7 +46,7 @@ public class ProductController {
             List<Product> products = productRepo.findAllById(ids);
             return ResponseEntity.ok().body(products);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -55,7 +56,7 @@ public class ProductController {
             List<ILineItemDTO> lineItems = productRepo.findAllBySku(sku);
             return ResponseEntity.ok().body(lineItems);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -65,7 +66,7 @@ public class ProductController {
             ILineItemDTO product = productRepo.findBySku(sku);
             return ResponseEntity.ok().body(product);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -75,7 +76,7 @@ public class ProductController {
             ProductsExistsDTO productsExists = productService.isExists(sku);
             return ResponseEntity.ok().body(productsExists);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -85,7 +86,7 @@ public class ProductController {
             List<Product> products = productService.findByCategoryId(id);
             return ResponseEntity.ok().body(products);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -95,7 +96,7 @@ public class ProductController {
             List<Product> products = productService.findByCategoryPath(categoryDTO.getPath(), categoryDTO.getDepth());
             return ResponseEntity.ok().body(products);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -105,7 +106,7 @@ public class ProductController {
             List<Product> products = productService.getPopular();
             return ResponseEntity.ok().body(products);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -115,7 +116,7 @@ public class ProductController {
             Product product = productService.addProduct(productDTO);
             return ResponseEntity.ok().body(product);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -125,7 +126,7 @@ public class ProductController {
             productService.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

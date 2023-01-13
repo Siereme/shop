@@ -2,7 +2,7 @@
     <div class="cart-modal-container" v-if="cartProducts.length">
           <div class="cart-modal">
             <div class="cart-modal-products">
-                <CartModalProduct v-for="product in cartProducts" :key="product.article" :product="product" />
+                <CartModalProduct v-for="product in cartProducts" :key="product.sku" :product="product" />
             </div>
             <div class="cart-modal-bottom">
                 <div class="cart-modal-total">

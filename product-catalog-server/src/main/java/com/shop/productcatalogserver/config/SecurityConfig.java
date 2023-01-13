@@ -15,6 +15,7 @@ public class SecurityConfig {
 
     @Value("${app.auth-server}")
     private String authServer;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

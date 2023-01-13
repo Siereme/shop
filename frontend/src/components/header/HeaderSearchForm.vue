@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import api from "@/api/backend-api"
@@ -23,6 +23,11 @@ export default defineComponent({
       const router = useRouter()
 
       let query = ref(store.state.facet.query ?? '')
+
+      watch(
+            () => store.state.facet.query,
+            newQuery => query.value = newQuery
+        )
 
       let handleSearch = () => {
         store.commit('setIsLoading', true)

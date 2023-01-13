@@ -4,7 +4,7 @@ import com.shop.authenticationserver.config.JwtTokenProvider;
 import com.shop.authenticationserver.dto.AuthenticationResponse;
 import com.shop.authenticationserver.dto.UserDTO;
 import com.shop.authenticationserver.exception.JwtAuthenticationException;
-import com.shop.authenticationserver.exception.UserAlreadyExistsException;
+import com.shop.authenticationserver.exception.UserValidationException;
 import com.shop.authenticationserver.model.UserDetailsImpl;
 import com.shop.authenticationserver.utils.constant.ServiceUrl;
 import com.shop.authenticationserver.utils.validation.UserValidation;
@@ -18,10 +18,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Mono;
 
 import java.security.Principal;
 import java.util.Map;
@@ -48,7 +46,7 @@ public class AuthenticationService {
         try {
             userDetails = userDetailsManager.loadUserByUsername(email);
         } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new UserValidationException();
         }
 
         userValidation.validateLogin(userDetails, email, password);
@@ -72,12 +70,13 @@ public class AuthenticationService {
 
         UserDetails userDetails = Optional.ofNullable(userDTO)
                 .map(UserDetailsImpl::fromUser)
-                .orElseThrow(() -> new JwtAuthenticationException("User update exception"));
+                .orElseThrow(() ->
+                        new JwtAuthenticationException("User update exception", HttpStatus.BAD_REQUEST));
         try {
             userDetailsManager.deleteUser(user.get("lastEmail"));
             userDetailsManager.createUser(userDetails);
         } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User update error");
         }
 
         Map<String, String> claims = jwtTokenProvider.createClaims(userDetails);
@@ -94,7 +93,8 @@ public class AuthenticationService {
 
         UserDetails userDetails = Optional.ofNullable(userDTO)
                 .map(UserDetailsImpl::fromUser)
-                .orElseThrow(() -> new JwtAuthenticationException("Error creating an anonymous user"));
+                .orElseThrow(() ->
+                        new JwtAuthenticationException("Error creating an anonymous user", HttpStatus.BAD_REQUEST));
         userDetailsManager.createUser(userDetails);
 
         Map<String, String> claims = jwtTokenProvider.createClaims(userDetails);
@@ -109,16 +109,19 @@ public class AuthenticationService {
                 .post().uri(ServiceUrl.CUSTOMER_ADD)
                 .body(BodyInserters.fromValue(user))
                 .retrieve()
+                .onStatus(HttpStatus::isError,
+                        response -> response.bodyToMono(UserValidationException.class))
                 .bodyToMono(UserDTO.class)
                 .block();
 
         UserDetails userDetails = Optional.ofNullable(userDTO)
                 .map(UserDetailsImpl::fromUser)
-                .orElseThrow(() -> new JwtAuthenticationException("User creation error"));
+                .orElseThrow(() ->
+                        new JwtAuthenticationException("User creation error", HttpStatus.UNAUTHORIZED));
         try {
             userDetailsManager.createUser(userDetails);
         } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User creation error");
         }
 
         Map<String, String> claims = jwtTokenProvider.createClaims(userDetails);

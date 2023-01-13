@@ -31,7 +31,7 @@ const setup = (store) => {
           config.headers['Authorization'] = 'Bearer ' + accessToken
         }
         if(refreshToken && config.url.includes('/refresh')){
-          config.headers[headerRefreshToken] = refreshToken
+          config.headers['Authorization'] = 'Bearer ' + refreshToken
         }
         return config;
       },
@@ -45,7 +45,8 @@ const setup = (store) => {
         const originalRequest = error.config;
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
-          await Promise.resolve(api.refreshAccessToken())          
+          api.refreshAccessToken()
+          .catch(() => api.loginAnonymous())
           return axiosApi(originalRequest);
         }
         return Promise.reject(error);

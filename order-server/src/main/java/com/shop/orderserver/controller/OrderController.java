@@ -36,7 +36,7 @@ public class OrderController {
             List<Order> orders = orderRepo.findAll();
             return ResponseEntity.ok().body(orders);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class OrderController {
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(orders);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ public class OrderController {
             Order order = orderService.createOrder(orderDTO);
             return ResponseEntity.ok().body(new OrderResponse(order));
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class OrderController {
             orderRepo.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

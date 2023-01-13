@@ -3,6 +3,7 @@ import cookies from "./cookies.js"
 import store from "@/store"
 
 let headerAccessToken = store.getters.getHeaderAccessToken()
+let headerRefreshToken = store.getters.getHeaderRefreshToken()
 
 const handleAuth = async () => {
     let token = cookies.getCookie(headerAccessToken)
@@ -18,9 +19,12 @@ const handleAuthInit = () => handleAuth().then(() => {
     api.loadMain().then(() => api.loadCartProducts())
 })
 
-const handleLogout = async () => {
+const handleLogout =  () => {
     cookies.deleteCookie(headerAccessToken)
-    return await handleAuth()
+    cookies.deleteCookie(headerRefreshToken)
+    store.commit('setUser', {})
+    store.commit('setAccessToken', '')
+    store.commit('setRefreshToken', '')
 }
 
 export default {

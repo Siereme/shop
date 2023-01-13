@@ -35,7 +35,7 @@ services:
     depends_on:
       - discovery-server
   auth-server:
-    image: siereme/authentication-server:latest
+    image: siereme/authorization-server:latest
     container_name: auth-server
     restart: always
     ports:

@@ -35,12 +35,7 @@ export default defineComponent({
 
         let handleLogout = () => {
             auth.handleLogout()
-            .then(res => {
-                if(res.status === 200){
-                    router.push("/")
-                    auth.handleAuthInit()
-                }
-            })
+            router.go("/")
         }
 
         return {

@@ -1,4 +1,4 @@
-package com.shop.productcatalogserver.controller.search;
+package com.shop.productcatalogserver.controller;
 
 import com.shop.productcatalogserver.dto.search.SearchCategoryDTO;
 import com.shop.productcatalogserver.dto.search.SearchCategoryResponse;

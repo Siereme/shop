@@ -42,10 +42,10 @@ public class ShoppingCartService implements IShoppingCartService {
         }
 
         ShoppingCartLineItem cartLineItem = webClientBuilder.build()
-                        .get().uri(ServiceUrl.PRODUCT_SKU + sku)
-                        .retrieve()
-                        .bodyToMono(ShoppingCartLineItem.class)
-                        .block();
+                .get().uri(ServiceUrl.PRODUCT_SKU + sku)
+                .retrieve()
+                .bodyToMono(ShoppingCartLineItem.class)
+                .block();
         Optional.ofNullable(cartLineItem)
                 .orElseThrow(() -> new EntityNotFoundException("Product is not found"));
         cartLineItem.setQuantity(quantity);

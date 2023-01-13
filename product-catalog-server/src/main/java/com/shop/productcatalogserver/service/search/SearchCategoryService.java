@@ -12,11 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class SearchCategoryService implements ISearchService<SearchCategoryDTO> {
 
     @Autowired

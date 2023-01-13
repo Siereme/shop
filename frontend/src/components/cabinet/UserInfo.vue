@@ -23,8 +23,18 @@ export default defineComponent({
         
         let userForm = ref(Object.assign({}, store.getters.getUser()))
         let getUserForm = () => {
-            userForm.value.lastEmail = store.getters.getUserEmail()
-            return Object.assign({}, userForm.value)
+            let userSend = {}
+            userSend.id = userForm.value.id
+            userSend.name = userForm.value.name
+            userSend.surname = userForm.value.surname
+            userSend.patronymic = userForm.value.patronymic
+            userSend.email = userForm.value.email
+            userSend.lastEmail = store.getters.getUserEmail()
+            userSend.password = userForm.value.password
+            userSend.phone = userForm.value.phone
+            userSend.role = userForm.value.role            
+            userSend.status = userForm.value.status
+            return userSend
         }
 
         let isDisabled = ref(true)

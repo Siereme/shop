@@ -52,7 +52,6 @@ let refreshAccessToken = () => {
         cookies.setCookie(headerRefreshToken, res.data.refreshToken)
         return res
     })
-    .catch(() => loginAnonymous())
 }
 
 let logout = () => {

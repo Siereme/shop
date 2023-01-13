@@ -1,6 +1,6 @@
 package com.shop.authenticationserver.utils.validation;
 
-import com.shop.authenticationserver.exception.UserPersistenceException;
+import com.shop.authenticationserver.exception.UserValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,13 +20,13 @@ public class UserValidation {
         Map<String, String> messages = new HashMap<>();
 
         if (!Objects.equals(email, user.getUsername())) {
-            messages.put("email", "Пользователя с таким email не существует");
+            messages.put("email", "Неверный email");
         } else if (!passwordEncoder.matches(password, user.getPassword())) {
             messages.put("password", "Неверный пароль");
         }
 
         if (!messages.isEmpty()) {
-            throw new UserPersistenceException(messages);
+            throw new UserValidationException(messages);
         }
     }
 

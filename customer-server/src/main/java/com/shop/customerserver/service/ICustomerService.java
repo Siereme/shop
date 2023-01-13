@@ -6,7 +6,6 @@ import com.shop.customerserver.model.ICustomer;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.security.Principal;
-import java.util.Optional;
 
 public interface ICustomerService<T extends ICustomer> {
 

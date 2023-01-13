@@ -1,4 +1,4 @@
-package com.shop.productcatalogserver.controller.main;
+package com.shop.productcatalogserver.controller;
 
 import com.shop.productcatalogserver.dto.category.CategoryConfigDTO;
 import com.shop.productcatalogserver.dto.category.CategoryResponse;
@@ -32,7 +32,7 @@ public class MainController {
             MainResponse response = mainService.getByConfig(config);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class MainController {
             CategoryResponse category = categoryService.getByConfig(categoryDTO);
             return ResponseEntity.ok().body(category);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
