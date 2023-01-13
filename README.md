@@ -11,9 +11,10 @@ Main application modules:
 - User
 
 Application consists of the following components:
-- Spring Boot 2.6.6 / backend application
+- Spring Boot 2.7.5 / backend application
   - Maven
   - PostgreSQL
+  - Spring Cloud
   - Spring Data
   - Spring Security
   - Hibernate Ehcache
